@@ -210,7 +210,7 @@ async def close(ctx):
 
 
 @bot.command()
-async def trash(ctx):
+async def bin(ctx):
     if ctx.channel.category.name == "📨 INBOX":
         topic = ctx.channel.topic
         guild = bot.get_guild(943556434644328498)
@@ -298,7 +298,7 @@ async def on_reaction_add(reaction, user):
                 await text_channel_replier.set_permissions(msg_owner, view_channel=False)
                 await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                 await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
-                await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{user.id}>\n__(You can use `.trash` command here to close this inbox)__")
+                await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{user.id}>\n__(You can use `.bin` command here to close this inbox)__")
                 #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
                 # await text_channel_replier.set_permissions(role_b, send_messages=False)
@@ -306,7 +306,7 @@ async def on_reaction_add(reaction, user):
                 await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
                 await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                 await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
-                await text_channel_owner.send(f"Someone wants to talk to you about `{db_data['msg_link']}`. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.trash` command here to close this inbox)__")
+                await text_channel_owner.send(f"Someone wants to talk to you about `{db_data['msg_link']}`. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.bin` command here to close this inbox)__")
 
             else:
                 print('Cannot find message id in DataBase!')
