@@ -208,4 +208,4 @@ async def dm(ctx, *, message):
     print("Sent all the server a DM.")
 
 
-bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
+# bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
