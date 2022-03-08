@@ -244,8 +244,8 @@ async def on_reaction_add(reaction, user):
                 user_a = user
                 role_b = discord.utils.get(user.guild.roles, name="Blocked")
                 server = bot.get_guild(943556434644328498)
-                msg_owner = server.get_member(db_data["owner_name"])
-
+                msg_owner = server.get_member(int(db_data["author_id"]))
+                # print(msg_owner)
                 #print(f"msg_owner: {msg_owner}")
                 #print(f"user_a: {user_a}")
 
@@ -279,5 +279,5 @@ async def on_reaction_add(reaction, user):
                 print("0worked")
                 return
     '''
-# token removed
-# bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
+
+bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
