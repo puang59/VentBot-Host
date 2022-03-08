@@ -319,4 +319,4 @@ async def on_reaction_add(reaction, user):
         if reaction.emoji == "❌":
             await cross()
 
-bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
+# bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
