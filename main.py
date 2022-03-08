@@ -188,6 +188,7 @@ async def on_message(msg):
                         em.set_author(
                             name="Stranger", icon_url="https://image.similarpng.com/very-thumbnail/2020/08/Emoji-social-media-Reaction-heart-icon-vector-PNG.png")
                         await chn.send(embed=em)
+                        await msg.add_reaction("<:agree:943603027313565757>")
 
     await bot.process_commands(msg)
 
