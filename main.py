@@ -128,7 +128,10 @@ async def on_message(msg):
                                 post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                         "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                 collection.insert_one(post)
-                                await cofirm.delete()
+                                try:
+                                    await cofirm.delete()
+                                except:
+                                    pass
                                 await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
                                 try:
                                     data = collection.find_one(
@@ -155,7 +158,10 @@ async def on_message(msg):
                                 post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                         "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                 collection.insert_one(post)
-                                await cofirm.delete()
+                                try:
+                                    await cofirm.delete()
+                                except:
+                                    pass
                                 await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
 
                                 try:
@@ -307,7 +313,7 @@ async def on_reaction_add(reaction, user):
                 await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
                 await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                 await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
-                await text_channel_owner.send(f"Someone wants to talk to you about `{db_data['msg_link']}`. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.bin` command here to close this inbox)__")
+                await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.bin` command here to close this inbox)__")
 
             else:
                 print('Cannot find message id in DataBase!')

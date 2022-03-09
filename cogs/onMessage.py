@@ -23,6 +23,7 @@ class onMessage(commands.Cog):
                     categ.channels, topic=str(message.author.id))
                 if not channel:
                     channel = await categ.create_text_channel(name=f"{message.author.discriminator}", topic=str(message.author.id))
+
                     notifyrolesd = discord.utils.get(
                         guild.roles, id=943881256033198130)
                     await channel.send(f"New Mail sent by Anonymous | {notifyrolesd.mention}")
