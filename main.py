@@ -51,16 +51,6 @@ class MyBot(commands.Bot):
             'cogs.onMessage',
         ]
 
-    async def setup_hook(self):
-        self.background_task.start()
-        self.session = aiohttp.ClientSession()
-        for ext in self.initial_extensions:
-            await self.load_extension(ext)
-
-    async def close(self):
-        await super().close()
-        await self.session.close()
-
     async def on_ready(self):
         print('Ready!')
 
