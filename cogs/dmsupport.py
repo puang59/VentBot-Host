@@ -33,22 +33,22 @@ class dmsupport(commands.Cog):
                         guild.roles, id=943881256033198130)
                     await channel.send(f"New Mail sent by Anonymous | {notifyrolesd.mention}")
 
-                    embed = discord.Embed(
-                        description=message.content, colour=0x696969)
-                    embed.set_image(url=f"{link}")
-                    embed.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                    await channel.send(embed=embed)
-                    embeddm = discord.Embed(
-                        description="Your message is successfully sent to the staff team. They'll respond as soon as possible.",
-                        color=discord.Colour.green()
-                    )
-                    embeddm.set_footer(
-                        text="Note: You are totally anonymous and the staff team has no idea about who you are.")
-                    embeddm.set_author(
-                        name="Message Sent", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/640px-Sign-check-icon.png")
-                    dmmsg = await message.author.send(embed=embeddm)
-                    await asyncio.sleep(20)
-                    await dmmsg.delete()
+                embed = discord.Embed(
+                    description=message.content, colour=0x696969)
+                embed.set_image(url=f"{link}")
+                embed.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                await channel.send(embed=embed)
+                embeddm = discord.Embed(
+                    description="Your message is successfully sent to the staff team. They'll respond as soon as possible.",
+                    color=discord.Colour.green()
+                )
+                embeddm.set_footer(
+                    text="Note: You are totally anonymous and the staff team has no idea about who you are.")
+                embeddm.set_author(
+                    name="Message Sent", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/640px-Sign-check-icon.png")
+                dmmsg = await message.author.send(embed=embeddm)
+                await asyncio.sleep(20)
+                await dmmsg.delete()
 
             else:
                 guild = self.bot.get_guild(943556434644328498)
