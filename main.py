@@ -37,22 +37,18 @@ async def status_task():
         await asyncio.sleep(5)
 
 
-async def load_extensions():
+async def load_cogs():
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
             # cut off the .py from the file name
             await bot.load_extension(f"cogs.{filename[:-3]}")
 
 
-class MyBot(commands.Bot):
-    def __init__(self):
-        super().__init__(command_prefix='$')
-        self.initial_extensions = [
-            'cogs.onMessage',
-        ]
-
-    async def on_ready(self):
-        print('Ready!')
+async def main():
+    async with bot:
+        await load_cogs()
+        print("Cogs Loadd\nBot ready!")
+        await bot.start('OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac')
 
 
 '''
@@ -348,17 +344,5 @@ async def on_reaction_add(reaction, user):
         if reaction.emoji == "❌":
             await cross()
 
-bot = MyBot()
-bot.run('OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac')
-
-'''
-async def main():
-    async with bot:
-        await load_extensions()
-        print("Cogs Loaded")
-        bot.loop.create_task(status_task())
-        await bot.start('OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac')
-
 asyncio.run(main())
-'''
 # bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
