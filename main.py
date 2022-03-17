@@ -3,6 +3,7 @@ from pydoc import describe
 from discord.ext import commands
 import discord
 import asyncio
+import os
 from random import *
 
 from pymongo import MongoClient
@@ -35,11 +36,18 @@ async def status_task():
         await asyncio.sleep(5)
 
 
+async def load_extensions():
+    for filename in os.listdir("./cogs"):
+        if filename.endswith(".py"):
+            # cut off the .py from the file name
+            await bot.load_extension(f"cogs.{filename[:-3]}")
+
+
 @bot.event
 async def on_ready():
     print("The is online!")
     # bot.loop.create_task(pfp())
-    await bot.load_extension("cogs.onMessage")
+    # await bot.load_extension("cogs.onMessage")
     bot.loop.create_task(status_task())
 
 
@@ -327,4 +335,13 @@ async def on_reaction_add(reaction, user):
         if reaction.emoji == "❌":
             await cross()
 
-bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
+
+async def main():
+    async with bot:
+        await load_extensions()
+        print("Cogs Loaded")
+        await bot.start('OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac')
+
+asyncio.run(main())
+
+# bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
