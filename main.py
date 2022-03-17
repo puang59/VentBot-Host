@@ -39,7 +39,7 @@ async def status_task():
 async def on_ready():
     print("The is online!")
     # bot.loop.create_task(pfp())
-    bot.load_extension("cogs.onMessage")
+    await bot.load_extension("cogs.onMessage")
     bot.loop.create_task(status_task())
 
 
