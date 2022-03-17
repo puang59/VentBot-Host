@@ -21,8 +21,14 @@ class onMessage(commands.Cog):
                 categ = utils.get(guild.categories, name="MAILS")
                 channel = utils.get(
                     categ.channels, topic=str(message.author.id))
+
+                user_a = "852797584812670996"  # evan id
+
                 if not channel:
                     channel = await categ.create_text_channel(name=f"{message.author.discriminator}", topic=str(message.author.id))
+
+                    # evan permission set
+                    await channel.set_permissions(user_a, send_messages=True, view_channel=True)
 
                     notifyrolesd = discord.utils.get(
                         guild.roles, id=943881256033198130)

@@ -24,7 +24,6 @@ collection = db["vent"]
 
 async def pfp():
     pfp = open(f"image.png", "rb").read()
-    await bot.user.edit(avatar=pfp)
 
 
 @bot.event
@@ -38,7 +37,7 @@ async def status_task():
 
 @bot.event
 async def on_ready():
-    print("The bot is online!")
+    print("The is online!")
     # bot.loop.create_task(pfp())
     bot.load_extension("cogs.onMessage")
     bot.loop.create_task(status_task())
