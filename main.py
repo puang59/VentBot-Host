@@ -1,6 +1,7 @@
 from cgitb import text
 from pydoc import describe
-from discord.ext import commands
+from discord.ext import commands, tasks
+import aiohttp
 import discord
 import asyncio
 import os
@@ -43,12 +44,34 @@ async def load_extensions():
             await bot.load_extension(f"cogs.{filename[:-3]}")
 
 
+class MyBot(commands.Bot):
+    def __init__(self):
+        super().__init__(command_prefix='$')
+        self.initial_extensions = [
+            'cogs.onMessage',
+        ]
+
+    async def setup_hook(self):
+        self.background_task.start()
+        self.session = aiohttp.ClientSession()
+        for ext in self.initial_extensions:
+            await self.load_extension(ext)
+
+    async def close(self):
+        await super().close()
+        await self.session.close()
+
+    async def on_ready(self):
+        print('Ready!')
+
+
+'''
 @bot.event
 async def on_ready():
     print("The is online!")
     # bot.loop.create_task(pfp())
     # await bot.load_extension("cogs.onMessage")
-    bot.loop.create_task(status_task())
+'''
 
 
 @bot.event
@@ -335,13 +358,17 @@ async def on_reaction_add(reaction, user):
         if reaction.emoji == "❌":
             await cross()
 
+bot = MyBot()
+bot.run('OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac')
 
+'''
 async def main():
     async with bot:
         await load_extensions()
         print("Cogs Loaded")
+        bot.loop.create_task(status_task())
         await bot.start('OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac')
 
 asyncio.run(main())
-
+'''
 # bot.run("OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac")
