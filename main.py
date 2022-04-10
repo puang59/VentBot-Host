@@ -50,6 +50,7 @@ async def main():
         print("Cogs Loadd\nBot ready!")
         # await bot.start('OTQ5ODUyMDM3MzIxOTkwMTY2.YiQYpQ.24uOmgwVCWjs5Z4lYzx5Rk3Z4ac')
         # changed token
+        # yes
         await bot.start('OTYyNjAzODQ2Njk2MzM3NDA4.YlJ8sQ.VkZ-uNKB5Z1QCxbguCufUe3wth4')
 
 
