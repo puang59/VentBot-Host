@@ -304,6 +304,8 @@ async def connect(ctx, code):
         await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
         await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.bin` command here to close this inbox)__")
 
+        success_embed = discord.Embed(description=f"`Anonymous private message channel:` <#{text_channel_replier.id}>\nYou can send message there to chat with vent message author.", colour=discord.Colour.green())
+        await ctx.send(embed = success_embed)
     else:
         embed = discord.Embed(description="Cannot find message id in DataBase!", colour=discord.Colour.red())
         await ctx.send(embed = embed)    
