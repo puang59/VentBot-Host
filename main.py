@@ -112,7 +112,7 @@ async def on_message(msg):
                                     else:
                                         role = discord.utils.get(
                                             msg.guild.roles, name="Blocked")
-                                        await member.add_roles(role)
+                                        #await member.add_roles(role)
 
                                     #vent_channel = bot.get_channel(f"{member.name}s vent")
                                     vent_channel = bot.get_channel(943556439195152477)
@@ -265,8 +265,8 @@ async def edit(ctx, code):
     data = collection.find_one({"code": code})
     member = guild.get_member(int(data["author_id"]))
     ch = bot.get_channel(int(data["channel_id"]))
-    role = discord.utils.get(ctx.guild.roles, name="Blocked")
-    await member.remove_roles(role)
+    #role = discord.utils.get(ctx.guild.roles, name="Blocked")
+    #await member.remove_roles(role)
     await ch.set_permissions(member, send_messages=True, view_channel=True)
 
     # deleting message from vent channel
