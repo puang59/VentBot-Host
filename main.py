@@ -116,10 +116,10 @@ async def on_message(msg):
 
                                     #vent_channel = bot.get_channel(f"{member.name}s vent")
                                     vent_channel = bot.get_channel(943556439195152477)
-                                    if msg.author.id == 852797584812670996:
-                                        pass
-                                    else:
-                                        await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
+                                    # if msg.author.id == 852797584812670996:
+                                    #     pass
+                                    # else:
+                                    #     await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
                                     em = discord.Embed(
                                         description=msg.content
                                     )
@@ -152,9 +152,9 @@ async def on_message(msg):
                                         except:
                                             print("DMs closed")
 
-                                        await asyncio.sleep(7200)
-                                        await member.remove_roles(role)
-                                        await msg.channel.set_permissions(member, send_messages=True, view_channel=True)
+                                        # await asyncio.sleep(7200)
+                                        # await member.remove_roles(role)
+                                        # await msg.channel.set_permissions(member, send_messages=True, view_channel=True)
 
                                     global accept
 
@@ -183,9 +183,9 @@ async def on_message(msg):
                                         except:
                                             print("DMs closed")
 
-                                        await asyncio.sleep(7200)
-                                        await member.remove_roles(role)
-                                        await msg.channel.set_permissions(member, send_messages=True, view_channel=True)
+                                        # await asyncio.sleep(7200)
+                                        # await member.remove_roles(role)
+                                        # await msg.channel.set_permissions(member, send_messages=True, view_channel=True)
 
             # Inbox
             if isinstance(msg.channel, discord.TextChannel):
