@@ -95,7 +95,7 @@ async def on_message(msg):
                     if not isinstance(msg.channel, discord.channel.DMChannel):
                         if not msg.channel.category.id == 950646823654137897:
                             if msg.content.startswith(bot.command_prefix):
-                                pass
+                                return
                             if len(msg.clean_content) < 10:
                                 x = await msg.channel.send("<:disagree:943603027854626816> Your message is too small. (Message should have more than 10 characters)")
                                 await asyncio.sleep(10)
