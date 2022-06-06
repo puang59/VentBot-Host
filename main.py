@@ -304,7 +304,7 @@ async def connect(ctx, code):
         await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.bin` command here to close this inbox)__")
 
     else:
-        embed = discord.Embed(description="Cannot find messafe id in DataBase!")
+        embed = discord.Embed(description="Cannot find message id in DataBase!", colour=discord.Colour.red())
         await ctx.send(embed = embed)    
 
 @bot.command(pass_context=True)
