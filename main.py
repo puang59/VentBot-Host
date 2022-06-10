@@ -23,10 +23,8 @@ cluster = MongoClient(
 db = cluster["Discord"]
 collection = db["vent"]
 
-
 async def pfp():
     pfp = open(f"image.png", "rb").read()
-
 
 @bot.event
 async def status_task():
@@ -41,7 +39,6 @@ async def load_cogs():
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
             await bot.load_extension(f"cogs.{filename[:-3]}")
-
 
 async def main():
     async with bot:
@@ -68,7 +65,7 @@ async def on_member_join(member):
             await text_channel.set_permissions(role_b, send_messages=False)
             await text_channel.edit(topic=f"Custom PRIVATE Vent channel for {member.name}")
             await text_channel.edit(slowmode_delay=7200)
-
+             
             em = discord.Embed(
                 description="**Before you proceed:**\nNo one can access this channel even server owners wont have a look on custom private vent channels because we respect privacy. You are here all by yourself so dont worry about getting judged and feel free to vent.\nWhatever you'll vent about here will be posted publicly on <#943556439195152477> channel but no one can know who typed it and what is their identity so feel safe.\n__Once you are done venting out, we will temporarily BLOCK you from sending any message here to avoid spams and trolls.__\n\n**Why keeping us anonymous?**\nWe try our best to help people across the globe to deal with whatever they are going through.\nSince many people on the internet are insecure about getting judged and dealing with toxicity online, we try to minimize it by keeping you anonymous.\n\n**Why are we doing this?**\nWe understand how tough life can get and we understand it can be really difficult for one to go through all the pain and sufferings.\nAll we want is you to move forward in life and this effort is a little push to that. We want to let you know that you are not alone in this game, a lot of people on the world share similar pain. (knowing this definitely helps one to move forward)\n\nSometimes it is better to let your heart cry out loud in a place where no one will judge you, and that is where this server comes in play."
             )
@@ -162,7 +159,7 @@ async def on_message(msg):
                                         em.set_author(name=f"Anonymous (id: {id})", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                         em.set_footer(
                                             text="You can use the command  .connect <id>  in your private channel to reply to this vent and talk to the author anonymously. ID is there on top of this embed.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
-                                        x = await vent_channel.send(embed=em)
+                                        x = await vent_channel.send({id} ,embed=em)
                                         await x.add_reaction('🫂')
                                         post = {"author_id": msg.author.id, "code": f"{msg_code}", "vent_id": f"{id}",
                                                 "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}                                    
