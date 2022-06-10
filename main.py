@@ -159,7 +159,7 @@ async def on_message(msg):
                                         em.set_author(name=f"Anonymous (id: {id})", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                         em.set_footer(
                                             text="You can use the command  .connect <id>  in your private channel to reply to this vent and talk to the author anonymously. ID is there on top of this embed.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
-                                        x = await vent_channel.send({id} ,embed=em)
+                                        x = await vent_channel.send(f"{id}" ,embed=em)
                                         await x.add_reaction('🫂')
                                         post = {"author_id": msg.author.id, "code": f"{msg_code}", "vent_id": f"{id}",
                                                 "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}                                    
