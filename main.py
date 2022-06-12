@@ -340,7 +340,7 @@ async def on_raw_reaction_add(payload):
                 #role_b = discord.utils.get(user.guild.roles, name="Blocked")
                 server = bot.get_guild(94355643464328498)
                 msg_owner = server.get_member(int(db_data["author_id"]))
-                if server.get_member(msg_owner) is None: 
+                if server.get_member(int(db_data["author_id"])) is None: 
                     user_a.send("Vent message owner not found! They probably left the server.")
                 else:
                     pass
