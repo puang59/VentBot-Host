@@ -326,43 +326,44 @@ async def on_reaction_add(reaction, user):
 
 @bot.event
 async def on_raw_reaction_add(payload):
-    if payload.emoji.name == "💬":
-        channel = bot.get_channel(payload.channel_id)
-        message = channel.get_partial_message(payload.message_id)
-        await message.remove_reaction(payload.emoji ,payload.member)
-        if collection.find_one({"msg_id": payload.message_id}):
-            db_data = collection.find_one({"msg_id": payload.message_id})
-            #guild = payload.guild_id
-            guild = bot.get_guild(payload.guild_id)
-            user_a = payload.member
-            #role_b = discord.utils.get(user.guild.roles, name="Blocked")
-            server = bot.get_guild(943556434644328498)
-            msg_owner = server.get_member(int(db_data["author_id"]))
-            # print(msg_owner)
-            #print(f"msg_owner: {msg_owner}")
-            #print(f"user_a: {user_a}")
+    if not payload.member.bot:
+        if payload.emoji.name == "💬":
+            channel = bot.get_channel(payload.channel_id)
+            message = channel.get_partial_message(payload.message_id)
+            await message.remove_reaction(payload.emoji ,payload.member)
+            if collection.find_one({"msg_id": payload.message_id}):
+                db_data = collection.find_one({"msg_id": payload.message_id})
+                #guild = payload.guild_id
+                guild = bot.get_guild(payload.guild_id)
+                user_a = payload.member
+                #role_b = discord.utils.get(user.guild.roles, name="Blocked")
+                server = bot.get_guild(943556434644328498)
+                msg_owner = server.get_member(int(db_data["author_id"]))
+                # print(msg_owner)
+                #print(f"msg_owner: {msg_owner}")
+                #print(f"user_a: {user_a}")
 
-            categ = discord.utils.get(guild.categories, name="📨 INBOX")
+                categ = discord.utils.get(guild.categories, name="📨 INBOX")
 
-            text_channel_replier = await categ.create_text_channel(f"{payload.member.discriminator}")
+                text_channel_replier = await categ.create_text_channel(f"{payload.member.discriminator}")
 
-            await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
-            await text_channel_replier.set_permissions(msg_owner, view_channel=False)
-            await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-            await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>\n__(You can use `.bin` command here to close this inbox)__")
-            #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
+                await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
+                await text_channel_replier.set_permissions(msg_owner, view_channel=False)
+                await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>\n__(You can use `.bin` command here to close this inbox)__")
+                #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
-            # await text_channel_replier.set_permissions(role_b, send_messages=False)
-            text_channel_owner = await categ.create_text_channel(f"{payload.member.discriminator}")
+                # await text_channel_replier.set_permissions(role_b, send_messages=False)
+                text_channel_owner = await categ.create_text_channel(f"{payload.member.discriminator}")
 
-            await text_channel_owner.set_permissions(user_a, view_channel=False)
-            await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
-            await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-            await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
-            await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
-            await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.bin` command here to close this inbox)__")
+                await text_channel_owner.set_permissions(user_a, view_channel=False)
+                await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
+                await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
+                await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
+                await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.bin` command here to close this inbox)__")
 
-        else:
-            print('Cannot find message id in DataBase!')
+            else:
+                print('Cannot find message id in DataBase!')
 
 asyncio.run(main())
