@@ -100,8 +100,8 @@ async def on_message(msg):
                                     characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
                                     msg_code = "".join(choice(characters)
                                                     for x in range(randint(4, 10)))
-                                    id = "".join(choice(characters)
-                                                    for x in range(randint(4, 10)))
+                                    #id = "".join(choice(characters)
+                                    #                for x in range(randint(4, 10)))
 
                                     member = msg.author
                                     if msg.author.id == 852797584812670996:
@@ -156,13 +156,13 @@ async def on_message(msg):
                                     global accept
 
                                     async def accept():
-                                        em.set_author(name=f"Anonymous (id: {id})", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                         em.set_footer(
-                                            text="You can use the command  .connect <id>  in your private channel to reply to this vent and talk to the author anonymously. ID is there on top of this embed.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
-                                        x = await vent_channel.send(f"{id}" ,embed=em)
+                                            text="You can click on speech-bubble emoji to reply to this vent and talk to the author anonymously.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
+                                        x = await vent_channel.send(embed=em)
                                         await x.add_reaction('🫂')
-                                        post = {"author_id": msg.author.id, "code": f"{msg_code}", "vent_id": f"{id}",
-                                                "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}                                    
+                                        await x.add_reaction('💬')
+                                        post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                         collection.insert_one(post)
                                         try:
                                             await cofirm.delete()
@@ -179,10 +179,6 @@ async def on_message(msg):
                                             await msg.author.send("<:agree:943603027313565757> Things went right! Stay strong, we believe in you. ᕦ(ò_óˇ)ᕤ", embed=emdm)
                                         except:
                                             print("DMs closed")
-
-                                        # await asyncio.sleep(7200)
-                                        # await member.remove_roles(role)
-                                        # await msg.channel.set_permissions(member, send_messages=True, view_channel=True)
 
             # Inbox
             if isinstance(msg.channel, discord.TextChannel):
@@ -321,15 +317,52 @@ async def dm(ctx, *, message):
 @bot.event
 async def on_reaction_add(reaction, user):
     if not user.bot:
-        if reaction.emoji == "💬":
-            await reaction.remove(user)
-
-    if not user.bot:
         if reaction.emoji == "📩":
             await accept()
 
     if not user.bot:
         if reaction.emoji == "❌":
             await cross()
+
+@bot.event
+async def on_raw_reaction_add(payload):
+    if payload.emoji.name == "💬":
+        channel = bot.get_channel(payload.channel_id)
+        message = channel.get_partial_message(payload.message_id)
+        await message.remove_reaction(payload.emoji ,payload.member)
+        if collection.find_one({"msg_id": payload.message_id}):
+            db_data = collection.find_one({"msg_id": payload.message_id})
+            #guild = payload.guild_id
+            guild = bot.get_guild(payload.guild_id)
+            user_a = payload.member
+            #role_b = discord.utils.get(user.guild.roles, name="Blocked")
+            server = bot.get_guild(943556434644328498)
+            msg_owner = server.get_member(int(db_data["author_id"]))
+            # print(msg_owner)
+            #print(f"msg_owner: {msg_owner}")
+            #print(f"user_a: {user_a}")
+
+            categ = discord.utils.get(guild.categories, name="📨 INBOX")
+
+            text_channel_replier = await categ.create_text_channel(f"{payload.member.discriminator}")
+
+            await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
+            await text_channel_replier.set_permissions(msg_owner, view_channel=False)
+            await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+            await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>\n__(You can use `.bin` command here to close this inbox)__")
+            #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
+
+            # await text_channel_replier.set_permissions(role_b, send_messages=False)
+            text_channel_owner = await categ.create_text_channel(f"{payload.member.discriminator}")
+
+            await text_channel_owner.set_permissions(user_a, view_channel=False)
+            await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
+            await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+            await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
+            await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
+            await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.bin` command here to close this inbox)__")
+
+        else:
+            print('Cannot find message id in DataBase!')
 
 asyncio.run(main())
