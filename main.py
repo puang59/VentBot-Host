@@ -336,7 +336,6 @@ async def on_raw_reaction_add(payload):
                 db_data = collection.find_one({"msg_id": payload.message_id})
                 #guild = payload.guild_id
                 guild = bot.get_guild(payload.guild_id)
-                if guild.get_member()
                 user_a = payload.member
                 #role_b = discord.utils.get(user.guild.roles, name="Blocked")
                 server = bot.get_guild(94355643464328498)
