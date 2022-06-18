@@ -89,6 +89,17 @@ async def on_member_remove(member):
         await channel.delete()
 
 @bot.event
+async def on_user_update(before, after):
+    guild = bot.get_guild(943556434644328498)
+    if before.username != after.username: 
+        try: 
+            channel = discord.utils.get(guild.channels, name=f'{before.username}s-vent-{before.discriminator}')
+            await channel.edit(name=f'{after.username}s-vent-{after.discriminator}')
+        except: 
+            channel = discord.utils.get(guild.channels, name=f'{before.username}s-vent')
+            await channel.edit(name=f'{after.username}s-vent-{after.discriminator}')
+
+@bot.event
 async def on_message(msg):
     if not msg.author.bot:
         if not msg.author.id == 943928873412870154:
@@ -375,9 +386,10 @@ async def on_raw_reaction_add(payload):
                     #print(f"msg_owner: {msg_owner}")
                     #print(f"user_a: {user_a}")
 
-                    categ = discord.utils.get(guild.categories, name="📨 INBOX")
+                    categOwner = discord.utils.get(guild.categories, name="📨 INBOX")
+                    categReplier = discord.utils.get(guild.categories, name="💬 MESSAGES")
 
-                    text_channel_replier = await categ.create_text_channel(f"{payload.member.discriminator}")
+                    text_channel_replier = await categReplier.create_text_channel(f"{payload.member.discriminator}")
 
                     await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
                     await text_channel_replier.set_permissions(msg_owner, view_channel=False)
@@ -386,7 +398,7 @@ async def on_raw_reaction_add(payload):
                     #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
                     # await text_channel_replier.set_permissions(role_b, send_messages=False)
-                    text_channel_owner = await categ.create_text_channel(f"{payload.member.discriminator}")
+                    text_channel_owner = await categOwner.create_text_channel(f"{payload.member.discriminator}")
 
                     await text_channel_owner.set_permissions(user_a, view_channel=False)
                     await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
