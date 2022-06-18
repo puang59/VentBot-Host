@@ -60,7 +60,7 @@ async def on_member_join(member):
 
             categ = discord.utils.get(guild.categories, name="PRIVATE SPACE")
             #text_channel = await categ.create_text_channel(f"{member.name}s vent")
-            text_channel = await categ.create_text_channel(f"{member.name} vent {member.discriminator}")
+            text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}")
             await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
             await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
             await text_channel.set_permissions(role_b, send_messages=False)
@@ -81,8 +81,12 @@ async def on_member_join(member):
 @bot.event
 async def on_member_remove(member):
     guild = bot.get_guild(943556434644328498)
-    channel = discord.utils.get(guild.channels, name=f'{member.name}-vent-{member.discriminator}')
-    await channel.delete()
+    try: 
+        channel = discord.utils.get(guild.channels, name=f'{member.name}s-vent-{member.discriminator}')
+        await channel.delete()
+    except: 
+        channel = discord.utils.get(guild.channels, name=f'{member.name}s-vent')
+        await channel.delete()
 
 @bot.event
 async def on_message(msg):
