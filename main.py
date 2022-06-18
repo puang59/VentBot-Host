@@ -93,7 +93,7 @@ async def on_user_update(before, after):
     guild = bot.get_guild(943556434644328498)
     if before.name != after.name: 
         try: 
-            channel = discord.utils.get(guild.channels, name=f'{before.username}s-vent-{before.discriminator}')
+            channel = discord.utils.get(guild.channels, name=f'{before.name}s-vent-{before.discriminator}')
             await channel.edit(name=f'{after.name}s-vent-{after.discriminator}')
         except: 
             channel = discord.utils.get(guild.channels, name=f'{before.username}s-vent')
