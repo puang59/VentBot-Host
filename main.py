@@ -73,7 +73,7 @@ async def on_member_join(member):
                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
             ema.set_footer(
                 text="Note: We dont save your details and message in any separate database.")
-            await text_channel.send(f"{member.mention}")
+            await text_channel.send(f"Welome {member.mention}!  (≧◡≦)")
             a = await text_channel.send(embed=ema)
             await a.add_reaction('🔍')
 
@@ -334,7 +334,7 @@ async def on_raw_reaction_add(payload):
             await txt.add_reaction('⬅️')
         if payload.emoji.name == '⬅️':
             ema = discord.Embed(
-                description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
+                description="1) Make your text fit in one single message because you will be locked out for \n`2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
             )
             ema.set_author(name="Instruction: ",
                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
