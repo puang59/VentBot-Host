@@ -200,7 +200,7 @@ async def on_message(msg):
             # Inbox
             if isinstance(msg.channel, discord.TextChannel):
                 if msg.channel.category is not None:
-                    if msg.channel.category.id == 950646823654137897:
+                    if msg.channel.category.id == 950646823654137897 or msg.channel.category.id == 987696864960860171:
                         if not msg.author.bot:
                             if msg.content.startswith("."):
                                 pass
