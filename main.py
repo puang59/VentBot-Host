@@ -70,7 +70,7 @@ async def on_member_join(member):
                 description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
             )
             ema.set_author(name="Instruction: ",
-                           icon_url="ventLogo.jpg")
+                           icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
             ema.set_footer(
                 text="Note: We dont save your details and message in any separate database.")
             await text_channel.send(f"{member.mention}")
@@ -327,7 +327,7 @@ async def on_raw_reaction_add(payload):
                 description="No one can access this channel even server owners wont have a look on custom private vent channels because we respect privacy. You are here all by yourself so dont worry about getting judged and feel free to vent.\nWhatever you'll vent about here will be posted publicly on <#943556439195152477> channel but no one can know who typed it and what is their identity so feel safe.\n__Once you are done venting out, we will temporarily BLOCK you from sending any message here to avoid spams and trolls.__\n\n**Why keeping us anonymous?**\nWe try our best to help people across the globe to deal with whatever they are going through.\nSince many people on the internet are insecure about getting judged and dealing with toxicity online, we try to minimize it by keeping you anonymous.\n\n**Why are we doing this?**\nWe understand how tough life can get and we understand it can be really difficult for one to go through all the pain and sufferings.\nAll we want is you to move forward in life and this effort is a little push to that. We want to let you know that you are not alone in this game, a lot of people on the world share similar pain. (knowing this definitely helps one to move forward)\n\nSometimes it is better to let your heart cry out loud in a place where no one will judge you, and that is where this server comes in play."
             )
             em.set_author(name="Information: ",
-                          icon_url="ventLogo.jpg")
+                          icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
             txt = await channel.fetch_message(payload.message.id)
             await txt.edit(embed=em)
             await txt.add_reaction('⬅️')
@@ -336,7 +336,7 @@ async def on_raw_reaction_add(payload):
                 description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
             )
             ema.set_author(name="Instruction: ",
-                           icon_url="ventLogo.jpg")
+                           icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
             ema.set_footer(
                 text="Note: We dont save your details and message in any separate database.")
             txt = await channel.fetch_message(payload.message.id)
