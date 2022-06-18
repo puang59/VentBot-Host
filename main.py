@@ -91,13 +91,13 @@ async def on_member_remove(member):
 @bot.event
 async def on_user_update(before, after):
     guild = bot.get_guild(943556434644328498)
-    if before.username != after.username: 
+    if before.name != after.name: 
         try: 
             channel = discord.utils.get(guild.channels, name=f'{before.username}s-vent-{before.discriminator}')
-            await channel.edit(name=f'{after.username}s-vent-{after.discriminator}')
+            await channel.edit(name=f'{after.name}s-vent-{after.discriminator}')
         except: 
             channel = discord.utils.get(guild.channels, name=f'{before.username}s-vent')
-            await channel.edit(name=f'{after.username}s-vent-{after.discriminator}')
+            await channel.edit(name=f'{after.name}s-vent-{after.discriminator}')
 
 @bot.event
 async def on_message(msg):
