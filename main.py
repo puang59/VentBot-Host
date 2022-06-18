@@ -59,7 +59,8 @@ async def on_member_join(member):
             role_b = discord.utils.get(member.guild.roles, name="Blocked")
 
             categ = discord.utils.get(guild.categories, name="PRIVATE SPACE")
-            text_channel = await categ.create_text_channel(f"{member.name}s vent")
+            #text_channel = await categ.create_text_channel(f"{member.name}s vent")
+            text_channel = await categ.create_text_channel(f"{member.name} vent {member.discriminator}")
             await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
             await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
             await text_channel.set_permissions(role_b, send_messages=False)
@@ -73,9 +74,15 @@ async def on_member_join(member):
                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
             ema.set_footer(
                 text="Note: We dont save your details and message in any separate database.")
-            await text_channel.send(f"Welome {member.mention}!  (≧◡≦)")
+            await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
             a = await text_channel.send(embed=ema)
             await a.add_reaction('🔍')
+
+@bot.event
+async def on_member_remove(member):
+    guild = bot.get_guild(943556434644328498)
+    channel = discord.utils.get(guild.channels, name=f'{member.name}-vent-{member.discriminator}')
+    await channel.delete()
 
 @bot.event
 async def on_message(msg):
