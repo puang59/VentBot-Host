@@ -328,7 +328,8 @@ async def on_raw_reaction_add(payload):
             )
             em.set_author(name="Information: ",
                           icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
-            txt = await channel.fetch_message(payload.message.id)
+            channel = bot.get_channel(payload.channel_id)
+            txt = await channel.fetch_message(payload.message_id)
             await txt.edit(embed=em)
             await txt.add_reaction('⬅️')
         if payload.emoji.name == '⬅️':
@@ -339,7 +340,8 @@ async def on_raw_reaction_add(payload):
                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
             ema.set_footer(
                 text="Note: We dont save your details and message in any separate database.")
-            txt = await channel.fetch_message(payload.message.id)
+            channel = bot.get_channel(payload.channel_id)
+            txt = await channel.fetch_message(payload.message_id) 
             await txt.edit(embed=ema)
             await txt.add_reaction('🔍')
         if payload.emoji.name == "💬":
