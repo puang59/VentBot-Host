@@ -104,98 +104,99 @@ async def on_message(msg):
     if not msg.author.bot:
         if not msg.author.id == 943928873412870154:
             if not msg.author.id == 852797584812670996:
-                if msg.channel.id != 943556439195152477:
-                    if not isinstance(msg.channel, discord.channel.DMChannel):
-                        if not msg.channel.category.id == 950646823654137897:
-                            if not msg.content.startswith(bot.command_prefix): #checking if msg is a commands
-                                if len(msg.clean_content) < 10:
-                                    x = await msg.channel.send("<:disagree:943603027854626816> Your message is too small. (Message should have more than 10 characters)")
-                                    await asyncio.sleep(10)
-                                    await x.delete()
-                                else:
-                                    characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-                                    msg_code = "".join(choice(characters)
-                                                    for x in range(randint(4, 10)))
-                                    #id = "".join(choice(characters)
-                                    #                for x in range(randint(4, 10)))
-
-                                    member = msg.author
-                                    if msg.author.id == 852797584812670996:
-                                        pass
+                if msg.channel.category.name != "📨 INBOX" or msg.channel.category.name != "💬 MESSAGES":
+                    if msg.channel.id != 943556439195152477:
+                        if not isinstance(msg.channel, discord.channel.DMChannel):
+                            if not msg.channel.category.id == 950646823654137897:
+                                if not msg.content.startswith(bot.command_prefix): #checking if msg is a commands
+                                    if len(msg.clean_content) < 10:
+                                        x = await msg.channel.send("<:disagree:943603027854626816> Your message is too small. (Message should have more than 10 characters)")
+                                        await asyncio.sleep(10)
+                                        await x.delete()
                                     else:
-                                        role = discord.utils.get(
-                                            msg.guild.roles, name="Blocked")
-                                        #await member.add_roles(role)
+                                        characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+                                        msg_code = "".join(choice(characters)
+                                                        for x in range(randint(4, 10)))
+                                        #id = "".join(choice(characters)
+                                        #                for x in range(randint(4, 10)))
 
-                                    #vent_channel = bot.get_channel(f"{member.name}s vent")
-                                    vent_channel = bot.get_channel(943556439195152477)
-                                    # if msg.author.id == 852797584812670996:
-                                    #     pass
-                                    # else:
-                                    #     await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
-                                    em = discord.Embed(
-                                        description=msg.content
-                                    )
-
-                                    cofirm = await msg.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `X` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
-                                    await cofirm.add_reaction("📩")
-                                    await cofirm.add_reaction("❌")
-
-                                    global cross
-
-                                    async def cross():
-                                        em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                                        x = await vent_channel.send(embed=em)
-                                        await x.add_reaction('🫂')
-                                        post = {"author_id": msg.author.id, "code": f"{msg_code}",
-                                                "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                        collection.insert_one(post)
-                                        try:
-                                            await cofirm.delete()
-                                        except:
+                                        member = msg.author
+                                        if msg.author.id == 852797584812670996:
                                             pass
-                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
-                                        try:
-                                            data = collection.find_one(
-                                                {"code": msg_code})
-                                            link = data["msg_link"]
-                                            emdm = discord.Embed(
-                                                description=f"||{msg_code}|| - {link}")
-                                            await msg.author.send("<:agree:943603027313565757> Things went right! Stay strong, we believe in you. ᕦ(ò_óˇ)ᕤ", embed=emdm)
-                                        except:
-                                            print("DMs closed")
+                                        else:
+                                            role = discord.utils.get(
+                                                msg.guild.roles, name="Blocked")
+                                            #await member.add_roles(role)
 
-                                        # await asyncio.sleep(7200)
-                                        # await member.remove_roles(role)
-                                        # await msg.channel.set_permissions(member, send_messages=True, view_channel=True)
+                                        #vent_channel = bot.get_channel(f"{member.name}s vent")
+                                        vent_channel = bot.get_channel(943556439195152477)
+                                        # if msg.author.id == 852797584812670996:
+                                        #     pass
+                                        # else:
+                                        #     await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
+                                        em = discord.Embed(
+                                            description=msg.content
+                                        )
 
-                                    global accept
+                                        cofirm = await msg.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `X` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+                                        await cofirm.add_reaction("📩")
+                                        await cofirm.add_reaction("❌")
 
-                                    async def accept():
-                                        em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                                        em.set_footer(
-                                            text="You can click on speech-bubble emoji to reply to this vent and talk to the author anonymously.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
-                                        x = await vent_channel.send(embed=em)
-                                        await x.add_reaction('🫂')
-                                        await x.add_reaction('💬')
-                                        post = {"author_id": msg.author.id, "code": f"{msg_code}",
-                                                "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                        collection.insert_one(post)
-                                        try:
-                                            await cofirm.delete()
-                                        except:
-                                            pass
-                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
+                                        global cross
 
-                                        try:
-                                            data = collection.find_one(
-                                                {"code": msg_code})
-                                            link = data["msg_link"]
-                                            emdm = discord.Embed(
-                                                description=f"||{msg_code}|| - {link}")
-                                            await msg.author.send("<:agree:943603027313565757> Things went right! Stay strong, we believe in you. ᕦ(ò_óˇ)ᕤ", embed=emdm)
-                                        except:
-                                            print("DMs closed")
+                                        async def cross():
+                                            em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                            x = await vent_channel.send(embed=em)
+                                            await x.add_reaction('🫂')
+                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                    "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                            collection.insert_one(post)
+                                            try:
+                                                await cofirm.delete()
+                                            except:
+                                                pass
+                                            await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
+                                            try:
+                                                data = collection.find_one(
+                                                    {"code": msg_code})
+                                                link = data["msg_link"]
+                                                emdm = discord.Embed(
+                                                    description=f"||{msg_code}|| - {link}")
+                                                await msg.author.send("<:agree:943603027313565757> Things went right! Stay strong, we believe in you. ᕦ(ò_óˇ)ᕤ", embed=emdm)
+                                            except:
+                                                print("DMs closed")
+
+                                            # await asyncio.sleep(7200)
+                                            # await member.remove_roles(role)
+                                            # await msg.channel.set_permissions(member, send_messages=True, view_channel=True)
+
+                                        global accept
+
+                                        async def accept():
+                                            em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                            em.set_footer(
+                                                text="You can click on speech-bubble emoji to reply to this vent and talk to the author anonymously.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
+                                            x = await vent_channel.send(embed=em)
+                                            await x.add_reaction('🫂')
+                                            await x.add_reaction('💬')
+                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                    "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                            collection.insert_one(post)
+                                            try:
+                                                await cofirm.delete()
+                                            except:
+                                                pass
+                                            await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
+
+                                            try:
+                                                data = collection.find_one(
+                                                    {"code": msg_code})
+                                                link = data["msg_link"]
+                                                emdm = discord.Embed(
+                                                    description=f"||{msg_code}|| - {link}")
+                                                await msg.author.send("<:agree:943603027313565757> Things went right! Stay strong, we believe in you. ᕦ(ò_óˇ)ᕤ", embed=emdm)
+                                            except:
+                                                print("DMs closed")
 
             # Inbox
             if isinstance(msg.channel, discord.TextChannel):
