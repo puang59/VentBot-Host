@@ -202,7 +202,7 @@ async def on_message(msg):
 
             await bot.process_commands(msg)
 
-
+#hm
 @bot.command()
 async def close(ctx):
     if ctx.channel.category.name == "MAILS":
