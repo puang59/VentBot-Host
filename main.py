@@ -51,7 +51,7 @@ async def main():
 @bot.event
 async def on_member_join(member):
     if not prof.find_one({"user": member.id}):
-        post = {"user": member.id, "name": member.name, "reputation": 0}
+        post = {"user": member.id, "reputation": 0}
         prof.insert_one(post)
 
     if member.guild.id == 943556434644328498:
@@ -164,13 +164,13 @@ async def on_message(msg):
                 if prof.find_one({"user": msg.author.id}):
                     prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 5}})
                 else: 
-                    post = {"user": msg.author.id, "name": msg.author.name, "reputation": 5}
+                    post = {"user": msg.author.id, "reputation": 5}
                     prof.insert_one(post)
             else: 
                 if prof.find_one({"user": msg.author.id}):
                     prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 1}})
                 else: 
-                    post = {"user": msg.author.id, "name": msg.author.name, "reputation": 1}
+                    post = {"user": msg.author.id, "reputation": 1}
                     prof.insert_one(post)
 
         if not msg.author.id == 943928873412870154:
@@ -486,7 +486,7 @@ async def on_raw_reaction_add(payload):
             if prof.find_one({"user": payload.member.id}):
                 prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
             else: 
-                post = {"user": payload.member.id, "name": payload.member.name,"reputation": 1}
+                post = {"user": payload.member.id, "reputation": 1}
                 prof.insert_one(post)
 
         if payload.emoji.name == "🔍":
@@ -515,7 +515,7 @@ async def on_raw_reaction_add(payload):
             if prof.find_one({"user": payload.member.id}):
                 prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
             else: 
-                post = {"user": payload.member.id, "name": payload.member.name, "reputation": 1}
+                post = {"user": payload.member.id, "reputation": 1}
                 prof.insert_one(post)
 
             channel = bot.get_channel(payload.channel_id)
