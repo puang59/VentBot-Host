@@ -434,25 +434,25 @@ async def lb(ctx):
             member = guild.get_member(result['user'])
             embed_show = "🥇 `" + \
                 "{:,}".format(
-                    result["reputation"]) + " rep` - " + f'{member.mention}' + "\n"
+                    result["reputation"]) + " rep` - " + f'{member.name}' + "\n"
             temp += embed_show
         elif i == 2:
             member = guild.get_member(result['user'])
             embed_show = "🥈 `" + \
                 "{:,}".format(result["reputation"]) + \
-                " rep` - " + f'{member.mention}' + "\n"
+                " rep` - " + f'{member.name}' + "\n"
             temp += embed_show
         elif i == 3:
             member = guild.get_member(result['user'])
             embed_show = "🥉 `" + \
                 "{:,}".format(result["reputation"]) + \
-                " rep` - " + f'{member.mention}' + "\n"
+                " rep` - " + f'{member.name}' + "\n"
             temp += embed_show
         else:
             member = guild.get_member(result['user'])
             embed_show = "<:blank:988101402314297384>  `" + \
                 "{:,}".format(result["reputation"]) + \
-                " rep` - " + f'{member.mention}' + "\n"
+                " rep` - " + f'{member.name}' + "\n"
             temp += embed_show
 
         # Top 10 users
