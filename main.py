@@ -106,8 +106,8 @@ async def on_message(msg):
             if not msg.author.id == 852797584812670996:
                 if msg.channel.id != 943556439195152477:
                     if not isinstance(msg.channel, discord.channel.DMChannel):
-                        if not msg.channel.category.id == 950646823654137897:
-                            if not msg.content.startswith(bot.command_prefix): #checking if msg is a commands
+                        if not msg.channel.category.id == 950646823654137897 or msg.channel.category.id == 987983272069976114 or msg.channel.category.id == 987986457069240401:
+                            if not msg.content.startswith(bot.command_prefix): #checking if msg is a commands 
                                 if len(msg.clean_content) < 10:
                                     x = await msg.channel.send("<:disagree:943603027854626816> Your message is too small. (Message should have more than 10 characters)")
                                     await asyncio.sleep(10)
@@ -200,7 +200,7 @@ async def on_message(msg):
             # Inbox
             if isinstance(msg.channel, discord.TextChannel):
                 if msg.channel.category is not None:
-                    if msg.channel.category.id == 950646823654137897 or msg.channel.category.id == 987696864960860171:
+                    if msg.channel.category.id == 950646823654137897 or msg.channel.category.id == 987983272069976114 or msg.channel.category.id == 987986457069240401: 
                         if not msg.author.bot:
                             if msg.content.startswith("."):
                                 pass
@@ -386,26 +386,69 @@ async def on_raw_reaction_add(payload):
                     #print(f"msg_owner: {msg_owner}")
                     #print(f"user_a: {user_a}")
 
-                    categOwner = discord.utils.get(guild.categories, name="📨 INBOX")
-                    categReplier = discord.utils.get(guild.categories, name="💬 MESSAGES")
+                    try: 
+                        categOwner = discord.utils.get(guild.categories, name="📨 INBOX")
 
-                    text_channel_replier = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+                        text_channel_replier = await categOwner.create_text_channel(f"{payload.member.discriminator}")
 
-                    await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
-                    await text_channel_replier.set_permissions(msg_owner, view_channel=False)
-                    await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                    await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>\n__(You can use `.bin` command here to close this inbox)__")
-                    #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
+                        await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
+                        await text_channel_replier.set_permissions(msg_owner, view_channel=False)
+                        await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                        global binEmbed
+                        binEmbed = discord.Embed(description="Use `.bin` command here to close this inbox", colour=discord.Colour.red())
+                        await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
+                        #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
-                    # await text_channel_replier.set_permissions(role_b, send_messages=False)
-                    text_channel_owner = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+                        # await text_channel_replier.set_permissions(role_b, send_messages=False)
+                        text_channel_owner = await categOwner.create_text_channel(f"{payload.member.discriminator}")
 
-                    await text_channel_owner.set_permissions(user_a, view_channel=False)
-                    await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
-                    await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                    await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
-                    await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
-                    await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>\n__(You can use `.bin` command here to close this inbox)__")
+                        await text_channel_owner.set_permissions(user_a, view_channel=False)
+                        await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
+                        await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                        await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
+                        await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
+                        await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
+                    except:
+                        try: 
+                            categOwner = discord.utils.get(guild.categories, name="📨 INBOX (2)")
+
+                            text_channel_replier = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+
+                            await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
+                            await text_channel_replier.set_permissions(msg_owner, view_channel=False)
+                            await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                            await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
+                            #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
+
+                            # await text_channel_replier.set_permissions(role_b, send_messages=False)
+                            text_channel_owner = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+
+                            await text_channel_owner.set_permissions(user_a, view_channel=False)
+                            await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
+                            await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                            await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
+                            await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
+                            await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
+                        except: 
+                            categOwner = discord.utils.get(guild.categories, name="📨 INBOX (3)")
+
+                            text_channel_replier = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+
+                            await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
+                            await text_channel_replier.set_permissions(msg_owner, view_channel=False)
+                            await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                            await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
+                            #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
+
+                            # await text_channel_replier.set_permissions(role_b, send_messages=False)
+                            text_channel_owner = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+
+                            await text_channel_owner.set_permissions(user_a, view_channel=False)
+                            await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
+                            await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                            await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
+                            await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
+                            await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
 
             else:
                 print('Cannot find message id in DataBase!')
