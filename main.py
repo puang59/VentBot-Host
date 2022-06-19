@@ -386,10 +386,14 @@ async def on_raw_reaction_add(payload):
                     #print(f"msg_owner: {msg_owner}")
                     #print(f"user_a: {user_a}")
 
+                    characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+                    inboxCode = "".join(choice(characters)
+                                    for x in range(randint(2, 5)))
+
                     try: 
                         categOwner = discord.utils.get(guild.categories, name="📨 INBOX")
 
-                        text_channel_replier = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+                        text_channel_replier = await categOwner.create_text_channel(f"{inboxCode}{payload.member.discriminator}")
 
                         await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
                         await text_channel_replier.set_permissions(msg_owner, view_channel=False)
@@ -400,7 +404,7 @@ async def on_raw_reaction_add(payload):
                         #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
                         # await text_channel_replier.set_permissions(role_b, send_messages=False)
-                        text_channel_owner = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+                        text_channel_owner = await categOwner.create_text_channel(f"{inboxCode}{payload.member.discriminator}")
 
                         await text_channel_owner.set_permissions(user_a, view_channel=False)
                         await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
@@ -412,7 +416,7 @@ async def on_raw_reaction_add(payload):
                         try: 
                             categOwner = discord.utils.get(guild.categories, name="📨 INBOX (2)")
 
-                            text_channel_replier = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+                            text_channel_replier = await categOwner.create_text_channel(f"{inboxCode}{payload.member.discriminator}")
 
                             await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
                             await text_channel_replier.set_permissions(msg_owner, view_channel=False)
@@ -421,7 +425,7 @@ async def on_raw_reaction_add(payload):
                             #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
                             # await text_channel_replier.set_permissions(role_b, send_messages=False)
-                            text_channel_owner = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+                            text_channel_owner = await categOwner.create_text_channel(f"{inboxCode}{payload.member.discriminator}")
 
                             await text_channel_owner.set_permissions(user_a, view_channel=False)
                             await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
@@ -432,7 +436,7 @@ async def on_raw_reaction_add(payload):
                         except: 
                             categOwner = discord.utils.get(guild.categories, name="📨 INBOX (3)")
 
-                            text_channel_replier = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+                            text_channel_replier = await categOwner.create_text_channel(f"{inboxCode}{payload.member.discriminator}")
 
                             await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
                             await text_channel_replier.set_permissions(msg_owner, view_channel=False)
@@ -441,7 +445,7 @@ async def on_raw_reaction_add(payload):
                             #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
                             # await text_channel_replier.set_permissions(role_b, send_messages=False)
-                            text_channel_owner = await categOwner.create_text_channel(f"{payload.member.discriminator}")
+                            text_channel_owner = await categOwner.create_text_channel(f"{inboxCode}{payload.member.discriminator}")
 
                             await text_channel_owner.set_permissions(user_a, view_channel=False)
                             await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
