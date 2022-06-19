@@ -144,6 +144,7 @@ async def on_member_remove(member):
     except: 
         channel = discord.utils.get(guild.channels, name=f'{member.name}s-vent')
         await channel.delete()
+        collection.delete_many({'author_id': member.id})
 
 @bot.event
 async def on_user_update(before, after):
