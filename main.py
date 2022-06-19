@@ -48,6 +48,10 @@ async def main():
 
 @bot.event
 async def on_member_join(member):
+    if not collection.find_one({"user": member.id}):
+        post = {"user": member.id, "reputation": 0}
+        collection.insert_one(post)
+
     if member.guild.id == 943556434644328498:
         if collection.find_one({"author_id": member.id}):
             data = collection.find_one({"author_id": member.id})
@@ -152,6 +156,20 @@ async def on_user_update(before, after):
 @bot.event
 async def on_message(msg):
     if not msg.author.bot:
+        if not msg.content.startswith(bot.command_prefix):
+            if msg.channel.category.id == 943581279973167155 or msg.channel.category.id == 987993408138248243 or msg.channel.category.id == 987993582701019166:
+                if collection.find_one({"user": msg.author.id}):
+                    collection.update_one({"user": msg.author.id}, {"$inc": {"reputation": 5}})
+                else: 
+                    post = {"user": msg.author.id, "reputation": 5}
+                    collection.insert_one(post)
+            else: 
+                if collection.find_one({"user": msg.author.id}):
+                    collection.update_one({"user": msg.author.id}, {"$inc": {"reputation": 1}})
+                else: 
+                    post = {"user": msg.author.id, "reputation": 1}
+                    collection.insert_one(post)
+
         if not msg.author.id == 943928873412870154:
             if not msg.author.id == 852797584812670996:
                 if msg.channel.id != 943556439195152477:
@@ -380,6 +398,25 @@ async def dm(ctx, *, message):
             print(f"Couldn't DM {user.name}.")
     print("Sent all the server a DM.")
 
+@bot.command(aliases=["rep"])
+async def reputation(ctx, member: discord.Member = None):
+    if member == None:
+        member = ctx.author
+
+    if collection.find_one({"user": member.id}):
+        results = collection.find_one({"user": member.id})
+        #collection.update_one({"user": member.id}, {"$inc": {"reputation": -int(results["recent"])}})
+
+        #value = random.randint(0, 0xffffff)
+        rep = results["reputation"]
+        embed = discord.Embed(
+            description=f"Server Reputation:```{rep} rep```", colour=discord.Colour.lighter_grey())
+        embed.set_author(name=member.name, icon_url=member.avatar.url)
+        await ctx.send(embed=embed)
+    else:
+        e_txt = await ctx.send("<:disagree:943603027854626816> User not found!")
+        await asyncio.sleep(5)
+        await e_txt.delete()
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -394,6 +431,13 @@ async def on_reaction_add(reaction, user):
 @bot.event
 async def on_raw_reaction_add(payload):
     if not payload.member.bot:
+        if payload.emoji.name == "🫂":
+            if collection.find_one({"user": payload.member.id}):
+                collection.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
+            else: 
+                post = {"user": payload.member.id, "reputation": 1}
+                collection.insert_one(post)
+
         if payload.emoji.name == "🔍":
             em = discord.Embed(
                 description="No one can access this channel even server owners wont have a look on custom private vent channels because we respect privacy. You are here all by yourself so dont worry about getting judged and feel free to vent.\nWhatever you'll vent about here will be posted publicly on <#943556439195152477> channel but no one can know who typed it and what is their identity so feel safe.\n__Once you are done venting out, we will temporarily BLOCK you from sending any message here to avoid spams and trolls.__\n\n**Why keeping us anonymous?**\nWe try our best to help people across the globe to deal with whatever they are going through.\nSince many people on the internet are insecure about getting judged and dealing with toxicity online, we try to minimize it by keeping you anonymous.\n\n**Why are we doing this?**\nWe understand how tough life can get and we understand it can be really difficult for one to go through all the pain and sufferings.\nAll we want is you to move forward in life and this effort is a little push to that. We want to let you know that you are not alone in this game, a lot of people on the world share similar pain. (knowing this definitely helps one to move forward)\n\nSometimes it is better to let your heart cry out loud in a place where no one will judge you, and that is where this server comes in play."
@@ -417,6 +461,12 @@ async def on_raw_reaction_add(payload):
             await txt.edit(embed=ema)
             await txt.add_reaction('🔍')
         if payload.emoji.name == "💬":
+            if collection.find_one({"user": payload.member.id}):
+                collection.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
+            else: 
+                post = {"user": payload.member.id, "reputation": 1}
+                collection.insert_one(post)
+
             channel = bot.get_channel(payload.channel_id)
             message = channel.get_partial_message(payload.message_id)
             await message.remove_reaction(payload.emoji ,payload.member)
@@ -448,7 +498,6 @@ async def on_raw_reaction_add(payload):
                         await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
                         await text_channel_replier.set_permissions(msg_owner, view_channel=False)
                         await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                        global binEmbed
                         binEmbed = discord.Embed(description="Use `.bin` command here to close this inbox", colour=discord.Colour.red())
                         await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
                         #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
@@ -471,6 +520,7 @@ async def on_raw_reaction_add(payload):
                             await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
                             await text_channel_replier.set_permissions(msg_owner, view_channel=False)
                             await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                            binEmbed = discord.Embed(description="Use `.bin` command here to close this inbox", colour=discord.Colour.red())
                             await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
                             #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
@@ -491,6 +541,7 @@ async def on_raw_reaction_add(payload):
                             await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
                             await text_channel_replier.set_permissions(msg_owner, view_channel=False)
                             await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                            binEmbed = discord.Embed(description="Use `.bin` command here to close this inbox", colour=discord.Colour.red())
                             await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
                             #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
@@ -503,7 +554,6 @@ async def on_raw_reaction_add(payload):
                             await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
                             await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
                             await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
-
             else:
                 print('Cannot find message id in DataBase!')
 
