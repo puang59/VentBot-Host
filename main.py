@@ -423,7 +423,7 @@ async def reputation(ctx, member: discord.Member = None):
 
 @bot.command()
 async def lb(ctx):
-    # <:Blank:892122419169480774>
+    # <:blank:988101402314297384> 
     results = prof.find({}).sort("reputation", -1)
     temp = ""
     i = 1
@@ -450,7 +450,7 @@ async def lb(ctx):
             temp += embed_show
         else:
             member = guild.get_member(result['user'])
-            embed_show = "<:Blank:892122419169480774> `" + \
+            embed_show = "<:blank:988101402314297384>  `" + \
                 "{:,}".format(result["reputation"]) + \
                 " rep` - " + f'{member.mention}' + "\n"
             temp += embed_show
