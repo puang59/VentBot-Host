@@ -237,7 +237,7 @@ async def close(ctx):
 
 @bot.command()
 async def bin(ctx):
-    if ctx.channel.category.name == "📨 INBOX":
+    if ctx.channel.category.name == "📨 INBOX" or ctx.channel.category.name == "📨 INBOX (2)" or ctx.channel.category.name == "📨 INBOX (3)":
         topic = ctx.channel.topic
         guild = bot.get_guild(943556434644328498)
         other_chn = guild.get_channel(int(topic))
