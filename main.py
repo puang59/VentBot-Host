@@ -51,7 +51,7 @@ async def main():
 @bot.event
 async def on_member_join(member):
     if not prof.find_one({"user": member.id}):
-        post = {"user": member.id, "reputation": 0}
+        post = {"user": member.id, "name": member.name, "reputation": 0}
         prof.insert_one(post)
 
     if member.guild.id == 943556434644328498:
@@ -163,13 +163,13 @@ async def on_message(msg):
                 if prof.find_one({"user": msg.author.id}):
                     prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 5}})
                 else: 
-                    post = {"user": msg.author.id, "reputation": 5}
+                    post = {"user": msg.author.id, "name": msg.author.name, "reputation": 5}
                     prof.insert_one(post)
             else: 
                 if prof.find_one({"user": msg.author.id}):
                     prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 1}})
                 else: 
-                    post = {"user": msg.author.id, "reputation": 1}
+                    post = {"user": msg.author.id, "name": msg.author.name, "reputation": 1}
                     prof.insert_one(post)
 
         if not msg.author.id == 943928873412870154:
@@ -423,7 +423,7 @@ async def reputation(ctx, member: discord.Member = None):
 @bot.command()
 async def lb(ctx):
     # <:Blank:892122419169480774>
-    results = prof.find({"user"}).sort("reputation", -1)
+    results = prof.find({}).sort("reputation", -1)
     temp = ""
     i = 1
     arg = 10
@@ -431,22 +431,22 @@ async def lb(ctx):
         if i == 1:
             embed_show = "🥇 `" + \
                 "{:,}".format(
-                    result["msg"]) + " messages` - " + str(result["username"]) + "\n"
+                    result["reputation"]) + " rep` - " + f'<@{result["user"]}>' + "\n"
             temp += embed_show
         elif i == 2:
             embed_show = "🥈 `" + \
-                "{:,}".format(result["msg"]) + \
-                " messages` - " + result["username"] + "\n"
+                "{:,}".format(result["reputation"]) + \
+                " messages` - " + f'<@{result["user"]}>' + "\n"
             temp += embed_show
         elif i == 3:
             embed_show = "🥉 `" + \
-                "{:,}".format(result["msg"]) + \
-                " messages` - " + result["username"] + "\n"
+                "{:,}".format(result["reputation"]) + \
+                " messages` - " + f'<@{result["user"]}>' + "\n"
             temp += embed_show
         else:
             embed_show = "<:Blank:892122419169480774> `" + \
-                "{:,}".format(result["msg"]) + \
-                " messages` - " + result["username"] + "\n"
+                "{:,}".format(result["reputation"]) + \
+                " messages` - " + f'<@{result["user"]}>' + "\n"
             temp += embed_show
 
         # Top 10 users
@@ -455,12 +455,12 @@ async def lb(ctx):
         else:
             i += 1
     if temp:
-        embed = discord.Embed(description=f"{temp}", color=0xacbbfe)
-        embed.set_thumbnail(
-            url="https://cdn.discordapp.com/emojis/893402831833423882.png?size=240")
+        embed = discord.Embed(description=f"{temp}", color=0xFFFFFF)
+        #embed.set_thumbnail(
+        #    url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
         #embed.add_field(name=result["username"], value=str(result["msg"]))
-        embed.set_author(name="Most Active CB Members",
-                            icon_url="https://cdn.discordapp.com/icons/679671356593274881/a_4e620e197f8990bca73c885b3b7f1474.png?size=240")
+        embed.set_author(name="Reputation Leaderboard",
+                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
         await ctx.send(embed=embed)
 
 @bot.event
@@ -480,7 +480,7 @@ async def on_raw_reaction_add(payload):
             if prof.find_one({"user": payload.member.id}):
                 prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
             else: 
-                post = {"user": payload.member.id, "reputation": 1}
+                post = {"user": payload.member.id, "name": payload.member.name,"reputation": 1}
                 prof.insert_one(post)
 
         if payload.emoji.name == "🔍":
@@ -509,7 +509,7 @@ async def on_raw_reaction_add(payload):
             if prof.find_one({"user": payload.member.id}):
                 prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
             else: 
-                post = {"user": payload.member.id, "reputation": 1}
+                post = {"user": payload.member.id, "name": payload.member.name, "reputation": 1}
                 prof.insert_one(post)
 
             channel = bot.get_channel(payload.channel_id)
