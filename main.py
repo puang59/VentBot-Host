@@ -18,10 +18,12 @@ bot.remove_command("help")
 global cluster
 global db
 global collection
+global prof
 cluster = MongoClient(
     "mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster["Discord"]
 collection = db["vent"]
+prof = db["ventProf"]
 
 async def pfp():
     pfp = open(f"image.png", "rb").read()
@@ -48,9 +50,9 @@ async def main():
 
 @bot.event
 async def on_member_join(member):
-    if not collection.find_one({"user": member.id}):
+    if not prof.find_one({"user": member.id}):
         post = {"user": member.id, "reputation": 0}
-        collection.insert_one(post)
+        prof.insert_one(post)
 
     if member.guild.id == 943556434644328498:
         if collection.find_one({"author_id": member.id}):
@@ -158,17 +160,17 @@ async def on_message(msg):
     if not msg.author.bot:
         if not msg.content.startswith(bot.command_prefix):
             if msg.channel.category.id == 943581279973167155 or msg.channel.category.id == 987993408138248243 or msg.channel.category.id == 987993582701019166:
-                if collection.find_one({"user": msg.author.id}):
-                    collection.update_one({"user": msg.author.id}, {"$inc": {"reputation": 5}})
+                if prof.find_one({"user": msg.author.id}):
+                    prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 5}})
                 else: 
                     post = {"user": msg.author.id, "reputation": 5}
-                    collection.insert_one(post)
+                    prof.insert_one(post)
             else: 
-                if collection.find_one({"user": msg.author.id}):
-                    collection.update_one({"user": msg.author.id}, {"$inc": {"reputation": 1}})
+                if prof.find_one({"user": msg.author.id}):
+                    prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 1}})
                 else: 
                     post = {"user": msg.author.id, "reputation": 1}
-                    collection.insert_one(post)
+                    prof.insert_one(post)
 
         if not msg.author.id == 943928873412870154:
             if not msg.author.id == 852797584812670996:
@@ -403,8 +405,8 @@ async def reputation(ctx, member: discord.Member = None):
     if member == None:
         member = ctx.author
 
-    if collection.find_one({"user": member.id}):
-        results = collection.find_one({"user": member.id})
+    if prof.find_one({"user": member.id}):
+        results = prof.find_one({"user": member.id})
         #collection.update_one({"user": member.id}, {"$inc": {"reputation": -int(results["recent"])}})
 
         #value = random.randint(0, 0xffffff)
@@ -417,6 +419,49 @@ async def reputation(ctx, member: discord.Member = None):
         e_txt = await ctx.send("<:disagree:943603027854626816> User not found!")
         await asyncio.sleep(5)
         await e_txt.delete()
+
+@bot.command()
+async def lb(ctx):
+    # <:Blank:892122419169480774>
+    results = prof.find({"user"}).sort("reputation", -1)
+    temp = ""
+    i = 1
+    arg = 10
+    for result in results:
+        if i == 1:
+            embed_show = "🥇 `" + \
+                "{:,}".format(
+                    result["msg"]) + " messages` - " + str(result["username"]) + "\n"
+            temp += embed_show
+        elif i == 2:
+            embed_show = "🥈 `" + \
+                "{:,}".format(result["msg"]) + \
+                " messages` - " + result["username"] + "\n"
+            temp += embed_show
+        elif i == 3:
+            embed_show = "🥉 `" + \
+                "{:,}".format(result["msg"]) + \
+                " messages` - " + result["username"] + "\n"
+            temp += embed_show
+        else:
+            embed_show = "<:Blank:892122419169480774> `" + \
+                "{:,}".format(result["msg"]) + \
+                " messages` - " + result["username"] + "\n"
+            temp += embed_show
+
+        # Top 10 users
+        if i == arg:
+            break
+        else:
+            i += 1
+    if temp:
+        embed = discord.Embed(description=f"{temp}", color=0xacbbfe)
+        embed.set_thumbnail(
+            url="https://cdn.discordapp.com/emojis/893402831833423882.png?size=240")
+        #embed.add_field(name=result["username"], value=str(result["msg"]))
+        embed.set_author(name="Most Active CB Members",
+                            icon_url="https://cdn.discordapp.com/icons/679671356593274881/a_4e620e197f8990bca73c885b3b7f1474.png?size=240")
+        await ctx.send(embed=embed)
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -432,11 +477,11 @@ async def on_reaction_add(reaction, user):
 async def on_raw_reaction_add(payload):
     if not payload.member.bot:
         if payload.emoji.name == "🫂":
-            if collection.find_one({"user": payload.member.id}):
-                collection.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
+            if prof.find_one({"user": payload.member.id}):
+                prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
             else: 
                 post = {"user": payload.member.id, "reputation": 1}
-                collection.insert_one(post)
+                prof.insert_one(post)
 
         if payload.emoji.name == "🔍":
             em = discord.Embed(
@@ -461,11 +506,11 @@ async def on_raw_reaction_add(payload):
             await txt.edit(embed=ema)
             await txt.add_reaction('🔍')
         if payload.emoji.name == "💬":
-            if collection.find_one({"user": payload.member.id}):
-                collection.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
+            if prof.find_one({"user": payload.member.id}):
+                prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
             else: 
                 post = {"user": payload.member.id, "reputation": 1}
-                collection.insert_one(post)
+                prof.insert_one(post)
 
             channel = bot.get_channel(payload.channel_id)
             message = channel.get_partial_message(payload.message_id)
