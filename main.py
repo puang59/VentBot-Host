@@ -138,6 +138,7 @@ async def on_member_join(member):
 async def on_member_remove(member):
     guild = bot.get_guild(943556434644328498)
     try: 
+        collection.delete_many({'author_id': member.id})
         channel = discord.utils.get(guild.channels, name=f'{member.name}s-vent-{member.discriminator}')
         await channel.delete()
     except: 
