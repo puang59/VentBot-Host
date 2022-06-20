@@ -164,7 +164,7 @@ async def on_member_remove(member):
                 await channel.delete()
                 collection.delete_many({'author_id': member.id})
                 prof.delete_one({"user": member.id})
-                await x.add_reaction("✔")
+                await x.add_reaction("✔")#h
         except: 
             memberName = f"{member.name}".lower()
             modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
