@@ -137,6 +137,9 @@ async def on_member_join(member):
 @bot.event
 async def on_member_remove(member):
     guild = bot.get_guild(943556434644328498)
+    leaveChannel = bot.get_channel(943909084430729217)
+    em = discord.Embed(description=f"{member.name} ({member.id}) left!", colour=discord.Colour.red())
+    await leaveChannel.send(embed=em)
     try:
         try: 
             memberName = f"{member.name}".lower()
@@ -158,6 +161,7 @@ async def on_member_remove(member):
         await channel.delete()
         collection.delete_many({'author_id': member.id})
         prof.delete_one({"user": member.id})
+
 
 @bot.event
 async def on_user_update(before, after):
