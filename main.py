@@ -440,7 +440,7 @@ async def lb(ctx):
     results = prof.find({}).sort("reputation", -1)
     temp = ""
     i = 1
-    arg = 10
+    arg = 50
     guild = bot.get_guild(943556434644328498)
     for result in results:
         if i == 1:
