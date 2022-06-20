@@ -132,35 +132,45 @@ async def on_member_join(member):
                         text="Note: We dont save your details and message in any separate database.")
                     await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
                     a = await text_channel.send(embed=ema)
-                    await a.add_reaction('🔍')        
+                    await a.add_reaction('🔍')     
+
+    joinChannel = bot.get_channel(943909084430729217)
+    em = discord.Embed(description=f"<:agree:943603027313565757> {member.name} ({member.id}) joined!", colour=discord.Colour.green())
+    await joinChannel.send(embed=em)  
 
 @bot.event
 async def on_member_remove(member):
     guild = bot.get_guild(943556434644328498)
     leaveChannel = bot.get_channel(943909084430729217)
-    em = discord.Embed(description=f"{member.name} ({member.id}) left!", colour=discord.Colour.red())
-    await leaveChannel.send(embed=em)
-    try:
-        try: 
-            memberName = f"{member.name}".lower()
-            modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
-            channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent-{member.discriminator}')
-            await channel.delete()
-            collection.delete_many({'author_id': member.id})
-            prof.delete_one({"user": member.id})
+    em = discord.Embed(description=f"<:disagree:943603027854626816> {member.name} ({member.id}) left!", colour=discord.Colour.red())
+    x = await leaveChannel.send(embed=em)
+    try: 
+        try:
+            try: 
+                memberName = f"{member.name}".lower()
+                modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
+                channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent-{member.discriminator}')
+                await channel.delete()
+                collection.delete_many({'author_id': member.id})
+                prof.delete_one({"user": member.id})
+                await x.add_reaction("✔")
+            except: 
+                memberName = f"{member.name}".lower()
+                channel = discord.utils.get(guild.channels, name=f'{memberName}s-vent-{member.discriminator}')
+                await channel.delete()
+                collection.delete_many({'author_id': member.id})
+                prof.delete_one({"user": member.id})
+                await x.add_reaction("✔")
         except: 
             memberName = f"{member.name}".lower()
-            channel = discord.utils.get(guild.channels, name=f'{memberName}s-vent-{member.discriminator}')
+            modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
+            channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent')
             await channel.delete()
             collection.delete_many({'author_id': member.id})
             prof.delete_one({"user": member.id})
-    except: 
-        memberName = f"{member.name}".lower()
-        modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
-        channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent')
-        await channel.delete()
-        collection.delete_many({'author_id': member.id})
-        prof.delete_one({"user": member.id})
+            await x.add_reaction("✔")
+    except:
+        await x.add_reaction('❌')
 
 
 @bot.event
