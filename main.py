@@ -138,16 +138,23 @@ async def on_member_join(member):
 async def on_member_remove(member):
     guild = bot.get_guild(943556434644328498)
     try:
-        channelName = f'{member.name}s-vent-{member.discriminator}'.lower()
-        modifiedName = ''.join(char for char in channelName if char.isalnum())
-        channel = discord.utils.get(guild.channels, name=modifiedName)
-        await channel.delete()
-        collection.delete_many({'author_id': member.id})
-        prof.delete_one({"user": member.id})
+        try: 
+            memberName = f"{member.name}".lower()
+            modifiedName = ''.join(char for char in memberName if char.isalnum())
+            channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent-{member.discriminator}')
+            await channel.delete()
+            collection.delete_many({'author_id': member.id})
+            prof.delete_one({"user": member.id})
+        except: 
+            memberName = f"{member.name}".lower()
+            channel = discord.utils.get(guild.channels, name=f'{memberName}s-vent-{member.discriminator}')
+            await channel.delete()
+            collection.delete_many({'author_id': member.id})
+            prof.delete_one({"user": member.id})
     except: 
-        channelName = f'{member.name}s-vent'.lower()
-        modifiedName = ''.join(char for char in channelName if char.isalnum())
-        channel = discord.utils.get(guild.channels, name=modifiedName)
+        memberName = f"{member.name}".lower()
+        modifiedName = ''.join(char for char in memberName if char.isalnum())
+        channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent')
         await channel.delete()
         collection.delete_many({'author_id': member.id})
         prof.delete_one({"user": member.id})
