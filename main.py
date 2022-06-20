@@ -140,7 +140,7 @@ async def on_member_remove(member):
     try:
         try: 
             memberName = f"{member.name}".lower()
-            modifiedName = ''.join(char for char in memberName if char.isalnum())
+            modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
             channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent-{member.discriminator}')
             await channel.delete()
             collection.delete_many({'author_id': member.id})
@@ -153,7 +153,7 @@ async def on_member_remove(member):
             prof.delete_one({"user": member.id})
     except: 
         memberName = f"{member.name}".lower()
-        modifiedName = ''.join(char for char in memberName if char.isalnum())
+        modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
         channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent')
         await channel.delete()
         collection.delete_many({'author_id': member.id})
