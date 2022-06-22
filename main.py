@@ -431,6 +431,11 @@ async def dm(ctx, *, message):
             print(f"Couldn't DM {user.name}.")
     print("Sent all the server a DM.")
 
+@bot.command()
+async def text(ctx, member: discord.Member, *, msg): 
+    await member.send(msg)
+    await ctx.send('Sent')
+
 @bot.command(aliases=["rep"])
 async def reputation(ctx, member: discord.Member = None):
     if member == None:
