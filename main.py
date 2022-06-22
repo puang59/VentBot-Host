@@ -238,9 +238,9 @@ async def on_message(msg):
                                     description=msg.content
                                 )
 
-                                cofirm = await msg.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `X` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+                                cofirm = await msg.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
                                 await cofirm.add_reaction("📩")
-                                await cofirm.add_reaction("❌")
+                                await cofirm.add_reaction("☘️")
 
                                 global cross
 
@@ -511,7 +511,7 @@ async def on_reaction_add(reaction, user):
             await accept()
 
     if not user.bot:
-        if reaction.emoji == "❌":
+        if reaction.emoji == "☘️":
             await cross()
 
 @bot.event
