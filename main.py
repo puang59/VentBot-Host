@@ -642,5 +642,19 @@ async def on_raw_reaction_add(payload):
                             await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
             else:
                 print('Cannot find message id in DataBase!')
+                await payload.member.send('Vent author left the server!')
+
+# global hashid
+# global unhashid
+
+# async def hashid(id):
+#     x = str(id)
+#     hashedX = f"9924{x}45432"
+#     return(hashedX)
+
+# async def unhashid(id): 
+#     x = str(id)
+#     unhashedX = x.replace("9924", "").replace("45432", "")
+#     return(unhashedX)
 
 asyncio.run(main())
