@@ -349,17 +349,20 @@ async def on_message(msg):
                             if msg.content.startswith("."):
                                 pass
                             else:
-                                topic = msg.channel.topic
-                                global msgContent
-                                msgContent = msg.content
-                                chn = msg.guild.get_channel(int(topic))
-                                em = discord.Embed(
-                                    description=msg.content
-                                )
-                                em.set_author(
-                                    name="Stranger", icon_url="https://image.similarpng.com/very-thumbnail/2020/08/Emoji-social-media-Reaction-heart-icon-vector-PNG.png")
-                                x = await chn.send(embed=em, view=ReportBtn())
-                                await msg.add_reaction("<:agree:943603027313565757>")
+                                if "REPORTED" in msg.channel.topic:
+                                    await msg.add_reaction("<:disagree:943603027854626816>")
+                                else:
+                                    topic = msg.channel.topic
+                                    global msgContent
+                                    msgContent = msg.content
+                                    chn = msg.guild.get_channel(int(topic))
+                                    em = discord.Embed(
+                                        description=msg.content
+                                    )
+                                    em.set_author(
+                                        name="Stranger", icon_url="https://image.similarpng.com/very-thumbnail/2020/08/Emoji-social-media-Reaction-heart-icon-vector-PNG.png")
+                                    x = await chn.send(embed=em, view=ReportBtn())
+                                    await msg.add_reaction("<:agree:943603027313565757>")
 
             await bot.process_commands(msg)
 
