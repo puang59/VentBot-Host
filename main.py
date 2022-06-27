@@ -35,11 +35,6 @@ class ReportBtn(discord.ui.View):
         super().__init__(timeout=timeout)
     @discord.ui.button(label="Report User",style=discord.ButtonStyle.danger, disabled=False)
     async def gray_button(self, interaction:discord.Interaction, button:discord.ui.Button):
-        button.disabled=True
-        button.label="Reported"
-        button.style=discord.ButtonStyle.gray
-        await interaction.response.edit_message(view=self)
-
         channel = bot.get_channel(943909084430729217)
         if inbox.find_one({"reactor":interaction.user.id}):
             data = inbox.find_one({"reactor":interaction.user.id})
@@ -47,12 +42,29 @@ class ReportBtn(discord.ui.View):
             em = discord.Embed(description=f"{msgContent}")
             em.set_author(name=f"{author.name} - {data['author']}", icon_url=f"{author.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
+            #blocking the reported user 
+            topic = interaction.channel.topic
+            chn = interaction.guild.get_channel(int(topic))
+            await chn.set_permissions(author, send_messages=False, view_channel=True)
+            await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
         elif inbox.find_one({"author":interaction.user.id}):
             data = inbox.find_one({"author":interaction.user.id})
             reactor = bot.get_user(int(data['reactor']))
             em = discord.Embed(description=f"{msgContent}")
             em.set_author(name=f"{reactor.name} - {data['reactor']}", icon_url=f"{reactor.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
+            #blocking the reported user 
+            topic = interaction.channel.topic
+            chn = interaction.guild.get_channel(int(topic))
+            await chn.set_permissions(reactor, send_messages=False, view_channel=True)
+            await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
+        else: 
+            await interaction.channel.send("UhOh! Looks like something went wrong. Please DM me to report the user instead.")
+            
+        button.disabled=True
+        button.label="Reported"
+        button.style=discord.ButtonStyle.gray
+        await interaction.response.edit_message(view=self)
 
         #print(interaction.channel_id)
         #print(interaction.user.id)
