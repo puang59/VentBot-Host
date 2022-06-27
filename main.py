@@ -44,13 +44,13 @@ class ReportBtn(discord.ui.View):
         if inbox.find_one({"reactor":interaction.user.id}):
             data = inbox.find_one({"reactor":interaction.user.id})
             author = bot.get_user(int(data['author']))
-            em = discord.Embed(description=f"{interaction.message.content}")
+            em = discord.Embed(description=f"{msgContent}")
             em.set_author(name=f"{author.name} - {data['author']}", icon_url=f"{author.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
         elif inbox.find_one({"author":interaction.user.id}):
             data = inbox.find_one({"author":interaction.user.id})
             reactor = bot.get_user(int(data['reactor']))
-            em = discord.Embed(description=f"{interaction.message.content}")
+            em = discord.Embed(description=f"{msgContent}")
             em.set_author(name=f"{reactor.name} - {data['reactor']}", icon_url=f"{reactor.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
 
@@ -336,6 +336,8 @@ async def on_message(msg):
                                 pass
                             else:
                                 topic = msg.channel.topic
+                                global msgContent
+                                msgContent = msg.content
                                 chn = msg.guild.get_channel(int(topic))
                                 em = discord.Embed(
                                     description=msg.content
