@@ -42,11 +42,13 @@ class ReportBtn(discord.ui.View):
             em = discord.Embed(description=f"{msgContent}")
             em.set_author(name=f"{author.name} - {data['author']}", icon_url=f"{author.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
+            await interaction.channel.send(content="<:agree:943603027313565757> The user has been reported to the staff team.\n> We recommend to `.bin` the channel now")
             #blocking the reported user 
             topic = interaction.channel.topic
             chn = interaction.guild.get_channel(int(topic))
             #await chn.set_permissions(author, send_messages=False, view_channel=True)
             await chn.edit(topic=f"{chn.topic}"+" REPORTED")
+            await interaction.channel.edit(topic=f"{interaction.channel.topic}"+" Reporter")
             await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
         elif inbox.find_one({"author":interaction.user.id}):
             data = inbox.find_one({"author":interaction.user.id})
@@ -54,11 +56,13 @@ class ReportBtn(discord.ui.View):
             em = discord.Embed(description=f"{msgContent}")
             em.set_author(name=f"{reactor.name} - {data['reactor']}", icon_url=f"{reactor.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
+            await interaction.channel.send(content="<:agree:943603027313565757> The user has been reported to the staff team.\n> We recommend to `.bin` the channel now")
             #blocking the reported user 
             topic = interaction.channel.topic
             chn = interaction.guild.get_channel(int(topic))
             #await chn.set_permissions(reactor, send_messages=False, view_channel=True)
             await chn.edit(topic=f"{chn.topic}"+" REPORTED")
+            await interaction.channel.edit(topic=f"{interaction.channel.topic}"+" Reporter")
             await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
         else: 
             await interaction.channel.send("UhOh! Looks like something went wrong. Please DM me to report the user instead.")
@@ -351,6 +355,8 @@ async def on_message(msg):
                             else:
                                 if "REPORTED" in msg.channel.topic:
                                     await msg.add_reaction("<:disagree:943603027854626816>")
+                                elif "Reporter" in msg.channel.topic:
+                                    print("Reporter channel detected")
                                 else:
                                     topic = msg.channel.topic
                                     global msgContent
