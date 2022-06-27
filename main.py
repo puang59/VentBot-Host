@@ -45,7 +45,7 @@ class ReportBtn(discord.ui.View):
             #blocking the reported user 
             topic = interaction.channel.topic
             chn = interaction.guild.get_channel(int(topic))
-            await chn.set_permissions(author, send_messages=False, view_channel=True)
+            #await chn.set_permissions(author, send_messages=False, view_channel=True)
             await chn.edit(topic=f"{chn.topic}"+" REPORTED")
             await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
         elif inbox.find_one({"author":interaction.user.id}):
@@ -57,7 +57,7 @@ class ReportBtn(discord.ui.View):
             #blocking the reported user 
             topic = interaction.channel.topic
             chn = interaction.guild.get_channel(int(topic))
-            await chn.set_permissions(reactor, send_messages=False, view_channel=True)
+            #await chn.set_permissions(reactor, send_messages=False, view_channel=True)
             await chn.edit(topic=f"{chn.topic}"+" REPORTED")
             await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
         else: 
