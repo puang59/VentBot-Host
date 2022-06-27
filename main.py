@@ -31,7 +31,7 @@ async def pfp():
 
 
 class ReportBtn(discord.ui.View):
-    def __init__(self, *, timeout=180):
+    def __init__(self, *, timeout=3600):
         super().__init__(timeout=timeout)
     @discord.ui.button(label="Report User",style=discord.ButtonStyle.danger, disabled=False)
     async def gray_button(self, interaction:discord.Interaction, button:discord.ui.Button):
@@ -39,8 +39,23 @@ class ReportBtn(discord.ui.View):
         button.label="Reported"
         button.style=discord.ButtonStyle.gray
         await interaction.response.edit_message(view=self)
-        print(interaction.channel_id)
-        print(interaction.user.id)
+
+        channel = bot.get_channel(943909084430729217)
+        if inbox.find_one({"reactor":interaction.user.id}):
+            data = inbox.find_one({"reactor":interaction.user.id})
+            author = bot.get_user(int(data['author']))
+            em = discord.Embed(description=f"{interaction.message.content}")
+            em.set_author(name=f"{author.name} - {data['author']}", icon_url=f"{author.avatar.url}")
+            await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
+        elif inbox.find_one({"author":interaction.user.id}):
+            data = inbox.find_one({"author":interaction.user.id})
+            reactor = bot.get_user(int(data['reactor']))
+            em = discord.Embed(description=f"{interaction.message.content}")
+            em.set_author(name=f"{reactor.name} - {data['reactor']}", icon_url=f"{reactor.avatar.url}")
+            await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
+
+        #print(interaction.channel_id)
+        #print(interaction.user.id)
 
 @bot.event
 async def status_task():
