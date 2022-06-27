@@ -394,8 +394,13 @@ async def close(ctx):
 async def bin(ctx):
     if ctx.channel.category.name == "📨 INBOX" or ctx.channel.category.name == "📨 INBOX (2)" or ctx.channel.category.name == "📨 INBOX (3)":
         topic = ctx.channel.topic
+        topicID = ""
+        for i, v in enumerate(topic):
+            if v in "0123456789":
+                topicID += v
+        print(topicID)
         guild = bot.get_guild(943556434644328498)
-        other_chn = guild.get_channel(int(topic))
+        other_chn = guild.get_channel(int(topicID))
 
         #Deleting data from DB 
         try: 
