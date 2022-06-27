@@ -46,6 +46,7 @@ class ReportBtn(discord.ui.View):
             topic = interaction.channel.topic
             chn = interaction.guild.get_channel(int(topic))
             await chn.set_permissions(author, send_messages=False, view_channel=True)
+            await chn.edit(topic=f"{chn.topic}"+" REPORTED")
             await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
         elif inbox.find_one({"author":interaction.user.id}):
             data = inbox.find_one({"author":interaction.user.id})
@@ -57,6 +58,7 @@ class ReportBtn(discord.ui.View):
             topic = interaction.channel.topic
             chn = interaction.guild.get_channel(int(topic))
             await chn.set_permissions(reactor, send_messages=False, view_channel=True)
+            await chn.edit(topic=f"{chn.topic}"+" REPORTED")
             await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
         else: 
             await interaction.channel.send("UhOh! Looks like something went wrong. Please DM me to report the user instead.")
