@@ -24,9 +24,23 @@ cluster = MongoClient(
 db = cluster["Discord"]
 collection = db["vent"]
 prof = db["ventProf"]
+inbox = db['ventInbox']
 
 async def pfp():
     pfp = open(f"image.png", "rb").read()
+
+
+class ReportBtn(discord.ui.View):
+    def __init__(self, *, timeout=180):
+        super().__init__(timeout=timeout)
+    @discord.ui.button(label="Report User",style=discord.ButtonStyle.danger, disabled=False)
+    async def gray_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        button.disabled=True
+        button.label="Reported"
+        button.style=discord.ButtonStyle.gray
+        await interaction.response.edit_message(view=self)
+        print(interaction.channel_id)
+        print(interaction.user.id)
 
 @bot.event
 async def status_task():
@@ -313,7 +327,7 @@ async def on_message(msg):
                                 )
                                 em.set_author(
                                     name="Stranger", icon_url="https://image.similarpng.com/very-thumbnail/2020/08/Emoji-social-media-Reaction-heart-icon-vector-PNG.png")
-                                await chn.send(embed=em)
+                                x = await chn.send(embed=em, view=ReportBtn())
                                 await msg.add_reaction("<:agree:943603027313565757>")
 
             await bot.process_commands(msg)
@@ -342,6 +356,10 @@ async def bin(ctx):
         topic = ctx.channel.topic
         guild = bot.get_guild(943556434644328498)
         other_chn = guild.get_channel(int(topic))
+
+        #Deleting data from DB 
+        inbox.delete_one({"channel": other_chn.name})
+
         await ctx.send("Deleting the channel in 10 seconds!")
         await asyncio.sleep(10)
         await ctx.channel.delete()
@@ -640,6 +658,11 @@ async def on_raw_reaction_add(payload):
                             await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
                             await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
                             await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
+
+                    # Inserting Inbox information in the DataBase
+                    post={"channel":f"{inboxCode}", "reactor":payload.member.id, "author":int(db_data["author_id"])}
+                    inbox.insert_one(post)
+
             else:
                 print('Cannot find message id in DataBase!')
                 await payload.member.send('Vent author left the server!')
