@@ -411,7 +411,7 @@ async def bin(ctx):
         other_chn = guild.get_channel(int(topicID))
 
         #Deleting data from DB 
-        inbox.delete_one({"channel":f"{ctx.channel.name}"})
+        inbox.delete_one({"channel":f"{ctx.channel.name}".upper()})
         # try: 
         #     inbox.delete_one({"reactor": int(ctx.message.author.id)})
         # except: 
