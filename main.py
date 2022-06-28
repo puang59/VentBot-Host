@@ -412,9 +412,9 @@ async def bin(ctx):
 
         #Deleting data from DB 
         try: 
-            inbox.delete_one({"reactor": ctx.message.author.id})
+            inbox.delete_one({"reactor": int(ctx.message.author.id)})
         except: 
-            inbox.delete_one({"author": ctx.message.author.id})
+            inbox.delete_one({"author": int(ctx.message.author.id)})
 
         await ctx.send("Deleting the channel in 10 seconds!")
         await asyncio.sleep(10)
@@ -724,7 +724,7 @@ async def on_raw_reaction_add(payload):
                             await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                             await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
                             await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
-                            
+
                             txt = await channel.fetch_message(payload.message_id)
                             ventMsg = discord.Embed(description=f"{txt.embeds[0].description}")
                             ventMsg.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
