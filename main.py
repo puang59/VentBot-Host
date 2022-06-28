@@ -39,7 +39,11 @@ class ReportBtn(discord.ui.View):
         if inbox.find_one({"reactor":interaction.user.id}):
             data = inbox.find_one({"reactor":interaction.user.id})
             author = bot.get_user(int(data['author']))
-            em = discord.Embed(description=f"{msgContent}")
+
+            interChn = bot.get_channel(interaction.channel_id)
+            txt = await interChn.fetch_message(interaction.message.id)
+            em = discord.Embed(description=f"{txt.embeds[0].description}")
+
             em.set_author(name=f"{author.name} - {data['author']}", icon_url=f"{author.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
             await interaction.channel.send(content="<:agree:943603027313565757> The user has been reported to the staff team.\n> We recommend to `.bin` the channel now")
@@ -53,7 +57,11 @@ class ReportBtn(discord.ui.View):
         elif inbox.find_one({"author":interaction.user.id}):
             data = inbox.find_one({"author":interaction.user.id})
             reactor = bot.get_user(int(data['reactor']))
-            em = discord.Embed(description=f"{msgContent}")
+
+            interChn = bot.get_channel(interaction.channel_id)
+            txt = await interChn.fetch_message(interaction.message.id)
+            em = discord.Embed(description=f"{txt.embeds[0].description}")
+            
             em.set_author(name=f"{reactor.name} - {data['reactor']}", icon_url=f"{reactor.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
             await interaction.channel.send(content="<:agree:943603027313565757> The user has been reported to the staff team.\n> We recommend to `.bin` the channel now")
@@ -359,7 +367,7 @@ async def on_message(msg):
                                     print("Reporter channel detected")
                                 else:
                                     topic = msg.channel.topic
-                                    global msgContent
+                                    
                                     msgContent = msg.content
                                     chn = msg.guild.get_channel(int(topic))
                                     em = discord.Embed(
