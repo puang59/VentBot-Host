@@ -61,7 +61,7 @@ class ReportBtn(discord.ui.View):
             interChn = bot.get_channel(interaction.channel_id)
             txt = await interChn.fetch_message(interaction.message.id)
             em = discord.Embed(description=f"{txt.embeds[0].description}")
-            
+
             em.set_author(name=f"{reactor.name} - {data['reactor']}", icon_url=f"{reactor.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
             await interaction.channel.send(content="<:agree:943603027313565757> The user has been reported to the staff team.\n> We recommend to `.bin` the channel now")
@@ -670,7 +670,13 @@ async def on_raw_reaction_add(payload):
                         await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                         await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
                         await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
-                        await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
+                        #await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
+
+                        txt = await channel.fetch_message(payload.message_id)
+                        ventMsg = discord.Embed(description=f"{txt.embeds[0].description}")
+                        ventMsg.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                        await text_channel_owner.send(f"Someone wants to talk to you about your vent. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = ventMsg)
+                        await text_channel_owner.send(embed=binEmbed)
                     except:
                         try: 
                             categOwner = discord.utils.get(guild.categories, name="📨 INBOX (2)")
@@ -692,7 +698,12 @@ async def on_raw_reaction_add(payload):
                             await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                             await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
                             await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
-                            await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
+
+                            txt = await channel.fetch_message(payload.message_id)
+                            ventMsg = discord.Embed(description=f"{txt.embeds[0].description}")
+                            ventMsg.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                            await text_channel_owner.send(f"Someone wants to talk to you about your vent. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = ventMsg)
+                            await text_channel_owner.send(embed=binEmbed)
                         except: 
                             categOwner = discord.utils.get(guild.categories, name="📨 INBOX (3)")
 
@@ -713,7 +724,12 @@ async def on_raw_reaction_add(payload):
                             await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                             await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
                             await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
-                            await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
+                            
+                            txt = await channel.fetch_message(payload.message_id)
+                            ventMsg = discord.Embed(description=f"{txt.embeds[0].description}")
+                            ventMsg.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                            await text_channel_owner.send(f"Someone wants to talk to you about your vent. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = ventMsg)
+                            await text_channel_owner.send(embed=binEmbed)
 
                     # Inserting Inbox information in the DataBase
                     post={"channel":f"{inboxCode}", "reactor":payload.member.id, "author":int(db_data["author_id"])}
