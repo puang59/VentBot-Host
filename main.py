@@ -411,10 +411,11 @@ async def bin(ctx):
         other_chn = guild.get_channel(int(topicID))
 
         #Deleting data from DB 
-        try: 
-            inbox.delete_one({"reactor": int(ctx.message.author.id)})
-        except: 
-            inbox.delete_one({"author": int(ctx.message.author.id)})
+        inbox.delete_one({"channel":f"{ctx.channel.name}"})
+        # try: 
+        #     inbox.delete_one({"reactor": int(ctx.message.author.id)})
+        # except: 
+        #     inbox.delete_one({"author": int(ctx.message.author.id)})
 
         await ctx.send("Deleting the channel in 10 seconds!")
         await asyncio.sleep(10)
