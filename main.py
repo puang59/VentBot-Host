@@ -350,7 +350,7 @@ async def on_message(msg):
                                 em = discord.Embed(
                                     #description=msg.content
                                 )
-
+                                
                                 vCheck.insert_one({"user": msg.author.id, "tags": " "})
                                 tagEm = discord.Embed(
                                     description="__(When you are done selecting tags, press 'Done' button)__"
@@ -361,7 +361,7 @@ async def on_message(msg):
                                 tagData = vCheck.find_one({"user": msg.author.id})
 
                                 em.add_field(name='🏷 Tags', value=tagData['tags'])
-                                em.add_field(name="", value=msg.content)
+                                em.add_field(name="\u200b", value=msg.content)
                                 # cofirm = await msg.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
                                 # await cofirm.add_reaction("📩")
                                 # await cofirm.add_reaction("☘️")
@@ -372,10 +372,11 @@ async def on_message(msg):
                                     em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                     x = await vent_channel.send(embed=em)
                                     await x.add_reaction('🫂')
+                                    vCheck.delete_one({'user': msg.author.id})
+
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                     collection.insert_one(post)
-                                    vCheck.delete_one({'user': msg.author.id})
                                     try:
                                         await cofirm.delete()
                                     except:
@@ -406,10 +407,12 @@ async def on_message(msg):
                                     x = await vent_channel.send(embed=em)
                                     await x.add_reaction('🫂')
                                     await x.add_reaction('💬')
+                                    vCheck.delete_one({'user': msg.author.id})
+
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                     collection.insert_one(post)
-                                    vCheck.delete_one({'user': msg.author.id})
+                                    
                                     try:
                                         await cofirm.delete()
                                     except:
