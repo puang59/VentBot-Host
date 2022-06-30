@@ -375,6 +375,7 @@ async def on_message(msg):
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                     collection.insert_one(post)
+                                    vCheck.delete_one({'user': msg.author.id})
                                     try:
                                         await cofirm.delete()
                                     except:
@@ -389,6 +390,8 @@ async def on_message(msg):
                                         await msg.author.send("<:agree:943603027313565757> Things went right! Stay strong, we believe in you. ᕦ(ò_óˇ)ᕤ", embed=emdm)
                                     except:
                                         print("DMs closed")
+                                    
+                                    
 
                                     # await asyncio.sleep(7200)
                                     # await member.remove_roles(role)
@@ -406,6 +409,7 @@ async def on_message(msg):
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                     collection.insert_one(post)
+                                    vCheck.delete_one({'user': msg.author.id})
                                     try:
                                         await cofirm.delete()
                                     except:
