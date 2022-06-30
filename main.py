@@ -48,6 +48,13 @@ class tagButtons(discord.ui.View):
         button.disabled=True
         button.label="Positive"
         await interaction.response.edit_message(view=self)
+    @discord.ui.button(label="Negative",style=discord.ButtonStyle.grey, disabled=False)
+    async def negative_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        data = vCheck.find_one({"user": interaction.user.id})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Negative`  "}})
+        button.disabled=True
+        button.label="Negative"
+        await interaction.response.edit_message(view=self)
     @discord.ui.button(label="Sexual",style=discord.ButtonStyle.grey, disabled=False)
     async def sexual_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         data = vCheck.find_one({"user": interaction.user.id})
