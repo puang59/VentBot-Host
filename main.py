@@ -369,7 +369,7 @@ async def on_message(msg):
                                     em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                     x = await vent_channel.send(embed=em)
                                     await x.add_reaction('🫂')
-                                    vCheck.delete_one({'user': msg.author.id})
+                                    #vCheck.delete_one({'user': msg.author.id})
 
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
@@ -398,7 +398,7 @@ async def on_message(msg):
                                     x = await vent_channel.send(embed=em)
                                     await x.add_reaction('🫂')
                                     await x.add_reaction('💬')
-                                    vCheck.delete_one({'user': msg.author.id})
+                                    #vCheck.delete_one({'user': msg.author.id})
 
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
@@ -651,10 +651,12 @@ async def on_reaction_add(reaction, user):
     if not user.bot:
         if reaction.emoji == "📩":
             await accept()
+            vCheck.delete_one({'user': user.id})
 
     if not user.bot:
         if reaction.emoji == "☘️":
             await cross()
+            vCheck.delete_one({'user': user.id})
 
 @bot.event
 async def on_raw_reaction_add(payload):
