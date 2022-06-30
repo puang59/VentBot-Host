@@ -365,7 +365,7 @@ async def on_message(msg):
                                 
                                 vCheck.insert_one({"user": msg.author.id, "tags": " "})
                                 tagEm = discord.Embed(
-                                    description="Click on the tags (press 'None' if you want no tag) and when you are done, press 'Done' button"
+                                    description=f"Click on the tags (press 'None' if you want no tag) and when you are done, press 'Done' button\n**Note:** You can select multiple tags."
                                 )
                                 tagEm.set_author(name="Choose Tags", icon_url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fhawcons%2F32%2F698889-icon-146-tag-512.png&f=1&nofb=1")
                                 await msg.channel.send(embed=tagEm, view=tagButtons())
@@ -404,7 +404,7 @@ async def on_message(msg):
                                         link = data["msg_link"]
                                         emdm = discord.Embed(
                                             description=f"||{msg_code}|| - {link}")
-                                        await msg.author.send("<:agree:943603027313565757> Things went right! Stay strong, we believe in you. ᕦ(ò_óˇ)ᕤ", embed=emdm)
+                                        await msg.author.send("<:agree:943603027313565757> Your vent was posted successfully! Heres the vent link with token just incase.", embed=emdm)
                                     except:
                                         print("DMs closed")
 
