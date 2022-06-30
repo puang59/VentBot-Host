@@ -360,11 +360,8 @@ async def on_message(msg):
                                 
                                 tagData = vCheck.find_one({"user": msg.author.id})
 
-                                em.add_field(name='🏷 Tags', value=tagData['tags'])
-                                em.add_field(name="\u200b", value=msg.content)
-                                # cofirm = await msg.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
-                                # await cofirm.add_reaction("📩")
-                                # await cofirm.add_reaction("☘️")
+                                em.add_field(name='🏷 Tags', value=tagData['tags'], inline=False)
+                                em.add_field(name="\u200b", value=msg.content, inline=False)
 
                                 global cross
 
@@ -391,12 +388,6 @@ async def on_message(msg):
                                         await msg.author.send("<:agree:943603027313565757> Things went right! Stay strong, we believe in you. ᕦ(ò_óˇ)ᕤ", embed=emdm)
                                     except:
                                         print("DMs closed")
-                                    
-                                    
-
-                                    # await asyncio.sleep(7200)
-                                    # await member.remove_roles(role)
-                                    # await msg.channel.set_permissions(member, send_messages=True, view_channel=True)
 
                                 global accept
 
