@@ -25,9 +25,67 @@ db = cluster["Discord"]
 collection = db["vent"]
 prof = db["ventProf"]
 inbox = db['ventInbox']
+vCheck = db["ventCheck"]
 
 async def pfp():
     pfp = open(f"image.png", "rb").read()
+
+
+class tagButtons(discord.ui.View):
+    def __init__(self, *, timeout=180):
+        super().__init__(timeout=timeout)
+    @discord.ui.button(label="Wholesome",style=discord.ButtonStyle.grey, disabled=False)
+    async def wholesome_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        data = vCheck.find_one({"user": interaction.user.id})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Wholesome`  "}})
+        button.disabled=True
+        button.label="Wholesome"
+        await interaction.response.edit_message(view=self)
+    @discord.ui.button(label="Positive",style=discord.ButtonStyle.grey, disabled=False)
+    async def positive_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        data = vCheck.find_one({"user": interaction.user.id})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Positive`  "}})
+        button.disabled=True
+        button.label="Positive"
+        await interaction.response.edit_message(view=self)
+    @discord.ui.button(label="Sexual",style=discord.ButtonStyle.grey, disabled=False)
+    async def sexual_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        data = vCheck.find_one({"user": interaction.user.id})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Sexual`  "}})
+        button.disabled=True
+        button.label="Sexual"
+        await interaction.response.edit_message(view=self)
+    @discord.ui.button(label="Suicidal",style=discord.ButtonStyle.grey, disabled=False)
+    async def suicidal_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        data = vCheck.find_one({"user": interaction.user.id})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Suicidal`  "}})
+        button.disabled=True
+        button.label="Suicidal"
+        await interaction.response.edit_message(view=self)
+    @discord.ui.button(label="Gore",style=discord.ButtonStyle.grey, disabled=False)
+    async def gore_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        data = vCheck.find_one({"user": interaction.user.id})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Gore`  "}})
+        button.disabled=True
+        button.label="Gore"
+        await interaction.response.edit_message(view=self)
+    @discord.ui.button(label="Self-Harm",style=discord.ButtonStyle.grey, disabled=False)
+    async def sh_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        data = vCheck.find_one({"user": interaction.user.id})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Self-Harm`  "}})
+        button.disabled=True
+        button.label="Self-Harm"
+        await interaction.response.edit_message(view=self)
+    @discord.ui.button(label="Done",style=discord.ButtonStyle.green, disabled=False, emoji='👍')
+    async def done_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        button.disabled=True
+        button.label="Done"
+        global cofirm
+        cofirm = await interaction.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+        await cofirm.add_reaction("📩")
+        await cofirm.add_reaction("☘️")
+        await interaction.response.edit_message(view=self)
+        await interaction.message.delete()
 
 
 class ReportBtn(discord.ui.View):
@@ -293,9 +351,18 @@ async def on_message(msg):
                                     description=msg.content
                                 )
 
-                                cofirm = await msg.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
-                                await cofirm.add_reaction("📩")
-                                await cofirm.add_reaction("☘️")
+                                vCheck.insert_one({"user": msg.author.id, "tags": " "})
+                                em = discord.Embed(
+                                    description="__(When you are done selecting tags, press 'Done' button)__"
+                                )
+                                em.set_author(name="Choose Tags", icon_url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fhawcons%2F32%2F698889-icon-146-tag-512.png&f=1&nofb=1")
+                                await msg.channel.send(embed=em, view=tagButtons())
+                                
+                                tagData = vCheck.find_one({"user": msg.author.id})
+                                em.add_field(name='🏷 Tags', value=tagData['tags'])
+                                # cofirm = await msg.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+                                # await cofirm.add_reaction("📩")
+                                # await cofirm.add_reaction("☘️")
 
                                 global cross
 
