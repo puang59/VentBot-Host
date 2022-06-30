@@ -348,7 +348,7 @@ async def on_message(msg):
                                 # else:
                                 #     await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
                                 em = discord.Embed(
-                                    description=msg.content
+                                    #description=msg.content
                                 )
 
                                 vCheck.insert_one({"user": msg.author.id, "tags": " "})
@@ -359,7 +359,9 @@ async def on_message(msg):
                                 await msg.channel.send(embed=tagEm, view=tagButtons())
                                 
                                 tagData = vCheck.find_one({"user": msg.author.id})
+
                                 em.add_field(name='🏷 Tags', value=tagData['tags'])
+                                em.add_field(name="", value=msg.content)
                                 # cofirm = await msg.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
                                 # await cofirm.add_reaction("📩")
                                 # await cofirm.add_reaction("☘️")
