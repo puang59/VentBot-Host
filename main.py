@@ -442,7 +442,7 @@ async def on_message(msg):
                                         link = data["msg_link"]
                                         emdm = discord.Embed(
                                             description=f"||{msg_code}|| - {link}")
-                                        await msg.author.send("<:agree:943603027313565757> Things went right! Stay strong, we believe in you. ᕦ(ò_óˇ)ᕤ", embed=emdm)
+                                        await msg.author.send("<:agree:943603027313565757> Your vent was posted successfully! Heres the vent link with token just incase.", embed=emdm)
                                     except:
                                         print("DMs closed")
 
