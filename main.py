@@ -76,6 +76,14 @@ class tagButtons(discord.ui.View):
         button.disabled=True
         button.label="Self-Harm"
         await interaction.response.edit_message(view=self)
+    @discord.ui.button(label="None",style=discord.ButtonStyle.blurple, disabled=False)
+    async def none_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        data = vCheck.find_one({"user": interaction.user.id})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f" "}})
+        button.disabled=True
+        button.label="None"
+        await interaction.response.edit_message(view=self)
+        
     @discord.ui.button(label="Done",style=discord.ButtonStyle.green, disabled=False, emoji='👍')
     async def done_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         button.disabled=True
@@ -347,29 +355,32 @@ async def on_message(msg):
                                 #     pass
                                 # else:
                                 #     await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
-                                em = discord.Embed(
-                                    #description=msg.content
-                                )
                                 
                                 vCheck.insert_one({"user": msg.author.id, "tags": " "})
                                 tagEm = discord.Embed(
-                                    description="__(When you are done selecting tags, press 'Done' button)__"
+                                    description="Click on the tags (press 'None' if you want no tag) and when you are done, press 'Done' button"
                                 )
                                 tagEm.set_author(name="Choose Tags", icon_url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fhawcons%2F32%2F698889-icon-146-tag-512.png&f=1&nofb=1")
                                 await msg.channel.send(embed=tagEm, view=tagButtons())
                                 
-                                tagData = vCheck.find_one({"user": msg.author.id})
 
-                                em.add_field(name='🏷 Tags', value=tagData['tags'], inline=False)
-                                em.add_field(name="\u200b", value=msg.content, inline=False)
+                                #print(tagData['tags'])
+                                #em.add_field(name='🏷 Tags', value=tagData['tags'], inline=False)
+                                #em.add_field(name="\u200b", value=msg.content, inline=False)
 
                                 global cross
 
                                 async def cross():
+                                    tagData = vCheck.find_one({"user": msg.author.id})
+
+                                    em = discord.Embed(
+                                        description=f"{tagData['tags']}\n\n{msg.content}"
+                                    )
+
                                     em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                     x = await vent_channel.send(embed=em)
                                     await x.add_reaction('🫂')
-                                    #vCheck.delete_one({'user': msg.author.id})
+                                    vCheck.delete_one({'user': msg.author.id})
 
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
@@ -379,6 +390,7 @@ async def on_message(msg):
                                     except:
                                         pass
                                     await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
+                                    
                                     try:
                                         data = collection.find_one(
                                             {"code": msg_code})
@@ -392,13 +404,19 @@ async def on_message(msg):
                                 global accept
 
                                 async def accept():
+                                    tagData = vCheck.find_one({"user": msg.author.id})
+
+                                    em = discord.Embed(
+                                        description=f"{tagData['tags']}\n\n{msg.content}"
+                                    )
+
                                     em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                     em.set_footer(
                                         text="You can click on speech-bubble emoji to reply to this vent and talk to the author anonymously.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
                                     x = await vent_channel.send(embed=em)
                                     await x.add_reaction('🫂')
                                     await x.add_reaction('💬')
-                                    #vCheck.delete_one({'user': msg.author.id})
+                                    vCheck.delete_one({'user': msg.author.id})
 
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
@@ -409,6 +427,7 @@ async def on_message(msg):
                                     except:
                                         pass
                                     await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
+                                   
 
                                     try:
                                         data = collection.find_one(
@@ -651,12 +670,10 @@ async def on_reaction_add(reaction, user):
     if not user.bot:
         if reaction.emoji == "📩":
             await accept()
-            vCheck.delete_one({'user': user.id})
 
     if not user.bot:
         if reaction.emoji == "☘️":
             await cross()
-            vCheck.delete_one({'user': user.id})
 
 @bot.event
 async def on_raw_reaction_add(payload):
