@@ -352,11 +352,11 @@ async def on_message(msg):
                                 )
 
                                 vCheck.insert_one({"user": msg.author.id, "tags": " "})
-                                em = discord.Embed(
+                                tagEm = discord.Embed(
                                     description="__(When you are done selecting tags, press 'Done' button)__"
                                 )
-                                em.set_author(name="Choose Tags", icon_url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fhawcons%2F32%2F698889-icon-146-tag-512.png&f=1&nofb=1")
-                                await msg.channel.send(embed=em, view=tagButtons())
+                                tagEm.set_author(name="Choose Tags", icon_url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fhawcons%2F32%2F698889-icon-146-tag-512.png&f=1&nofb=1")
+                                await msg.channel.send(embed=tagEm, view=tagButtons())
                                 
                                 tagData = vCheck.find_one({"user": msg.author.id})
                                 em.add_field(name='🏷 Tags', value=tagData['tags'])
