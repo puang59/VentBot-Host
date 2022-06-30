@@ -86,7 +86,7 @@ class tagButtons(discord.ui.View):
     @discord.ui.button(label="None",style=discord.ButtonStyle.blurple, disabled=False)
     async def none_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         data = vCheck.find_one({"user": interaction.user.id})
-        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f" "}})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": " "}})
         button.disabled=True
         button.label="None"
         await interaction.response.edit_message(view=self)
@@ -363,7 +363,7 @@ async def on_message(msg):
                                 # else:
                                 #     await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
                                 
-                                vCheck.insert_one({"user": msg.author.id, "tags": " "})
+                                vCheck.insert_one({"user": msg.author.id, "tags": "> "})
                                 tagEm = discord.Embed(
                                     description=f"Click on the tags (press 'None' if you want no tag) and when you are done, press 'Done' button\n**Note:** You can select multiple tags."
                                 )
@@ -381,7 +381,7 @@ async def on_message(msg):
                                     tagData = vCheck.find_one({"user": msg.author.id})
 
                                     em = discord.Embed(
-                                        description=f"> {tagData['tags']}\n\n{msg.content}"
+                                        description=f"{tagData['tags']}\n\n{msg.content}"
                                     )
 
                                     em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
@@ -414,7 +414,7 @@ async def on_message(msg):
                                     tagData = vCheck.find_one({"user": msg.author.id})
 
                                     em = discord.Embed(
-                                        description=f"> {tagData['tags']}\n\n{msg.content}"
+                                        description=f"{tagData['tags']}\n\n{msg.content}"
                                     )
 
                                     em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
