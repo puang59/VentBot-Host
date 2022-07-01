@@ -346,7 +346,8 @@ async def on_message(msg):
         if not msg.author.id == 943928873412870154:
             if msg.channel.id != 943556439195152477:
                 if not isinstance(msg.channel, discord.channel.DMChannel):
-                    if not msg.channel.category.id == 950646823654137897 or not msg.channel.category.id == 987983272069976114 or not msg.channel.category.id == 987986457069240401 or not msg.channel.category.id == 943588904622256168:
+                    if not msg.channel.category.id in [950646823654137897, 987983272069976114, 987986457069240401, 943588904622256168]:
+                    #if not msg.channel.category.id == 950646823654137897 or not msg.channel.category.id == 987983272069976114 or not msg.channel.category.id == 987986457069240401 or not msg.channel.category.id == 943588904622256168:
                         if not msg.content.startswith(bot.command_prefix): #checking if msg is a commands 
                             if len(msg.clean_content) < 10:
                                 x = await msg.channel.send("<:disagree:943603027854626816> Your message is too small. (Message should have more than 10 characters)")
