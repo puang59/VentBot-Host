@@ -12,8 +12,6 @@ from pymongo import MongoClient
 intents = discord.Intents.all()
 intents.members = True
 
-bot = commands.Bot(command_prefix=".", intents=intents)
-bot.remove_command("help")
 
 global cluster
 global db
@@ -26,6 +24,12 @@ collection = db["vent"]
 prof = db["ventProf"]
 inbox = db['ventInbox']
 vCheck = db["ventCheck"]
+stories = db['webVent']
+
+ventText = stories.find_one({"guild": "vent"})
+
+bot = commands.Bot(command_prefix=".", intents=intents, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories"))
+bot.remove_command("help")
 
 async def pfp():
     pfp = open(f"image.png", "rb").read()
@@ -395,6 +399,7 @@ async def on_message(msg):
                                     x = await vent_channel.send(embed=em)
                                     await x.add_reaction('🫂')
                                     vCheck.delete_one({'user': msg.author.id})
+                                    stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
@@ -431,6 +436,7 @@ async def on_message(msg):
                                     await x.add_reaction('🫂')
                                     await x.add_reaction('💬')
                                     vCheck.delete_one({'user': msg.author.id})
+                                    stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
                                     post = {"author_id": msg.author.id, "code": f"{msg_code}",
                                             "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
