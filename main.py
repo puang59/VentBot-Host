@@ -34,6 +34,13 @@ async def pfp():
 class tagButtons(discord.ui.View):
     def __init__(self, *, timeout=180):
         super().__init__(timeout=timeout)
+    @discord.ui.button(label="Neutral",style=discord.ButtonStyle.grey, disabled=False)
+    async def neutral_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        data = vCheck.find_one({"user": interaction.user.id})
+        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Neutral`  "}})
+        button.disabled=True
+        button.label="Neutral"
+        await interaction.response.edit_message(view=self)
     @discord.ui.button(label="Wholesome",style=discord.ButtonStyle.grey, disabled=False)
     async def wholesome_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         data = vCheck.find_one({"user": interaction.user.id})
