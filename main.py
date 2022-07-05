@@ -394,11 +394,16 @@ async def on_message(msg):
 
                                 async def cross():
                                     tagData = vCheck.find_one({"user": msg.author.id})
-
-                                    em = discord.Embed(
-                                        description=f"{tagData['tags']}\n\n{msg.content}"
-                                    )
-
+                                    # check if tag is empty - if yes then remove tags from embed - if no then continue
+                                    if "Neutral" in tagData['tags'] or "Wholesome" in tagData['tags'] or "Positive" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
+                                        em = discord.Embed(
+                                            description=f"{tagData['tags']}\n\n{msg.content}"
+                                        )
+                                    else: 
+                                        em = discord.Embed(
+                                            description=f"{msg.content}"
+                                        )
+                                        
                                     em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                     x = await vent_channel.send(embed=em)
                                     await x.add_reaction('🫂')
