@@ -34,7 +34,6 @@ bot.remove_command("help")
 async def pfp():
     pfp = open(f"image.png", "rb").read()
 
-
 class tagButtons(discord.ui.View):
     def __init__(self, *, timeout=180):
         super().__init__(timeout=timeout)
@@ -94,19 +93,23 @@ class tagButtons(discord.ui.View):
         button.disabled=True
         button.label="Self-Harm"
         await interaction.response.edit_message(view=self)
+
     @discord.ui.button(label="None",style=discord.ButtonStyle.blurple, disabled=False)
     async def none_button(self, interaction:discord.Interaction, button:discord.ui.Button):
-        data = vCheck.find_one({"user": interaction.user.id})
+        # data = vCheck.find_one({"user": interaction.user.id})
         vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": " "}})
         button.disabled=True
         button.label="None"
+        global cofirm
+        cofirm = await interaction.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+        await cofirm.add_reaction("📩")
+        await cofirm.add_reaction("☘️")
         await interaction.response.edit_message(view=self)
-        
+        await interaction.message.delete()
     @discord.ui.button(label="Done",style=discord.ButtonStyle.green, disabled=False, emoji='👍')
     async def done_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         button.disabled=True
         button.label="Done"
-        global cofirm
         cofirm = await interaction.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
         await cofirm.add_reaction("📩")
         await cofirm.add_reaction("☘️")
@@ -425,10 +428,15 @@ async def on_message(msg):
 
                                 async def accept():
                                     tagData = vCheck.find_one({"user": msg.author.id})
-
-                                    em = discord.Embed(
-                                        description=f"{tagData['tags']}\n\n{msg.content}"
-                                    )
+                                    # check if tag is empty - if yes then remove tags from embed - if no then continue
+                                    if "Neutral" in tagData['tags'] or "Wholesome" in tagData['tags'] or "Positive" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
+                                        em = discord.Embed(
+                                            description=f"{tagData['tags']}\n\n{msg.content}"
+                                        )
+                                    else: 
+                                        em = discord.Embed(
+                                            description=f"{msg.content}"
+                                        )
 
                                     em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                     em.set_footer(
