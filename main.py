@@ -1,8 +1,4 @@
-from cgitb import text
-from pydoc import describe
-from click import confirm
 from discord.ext import commands, tasks
-import aiohttp
 import discord
 import asyncio
 import os
