@@ -1,5 +1,6 @@
 from cgitb import text
 from pydoc import describe
+from click import confirm
 from discord.ext import commands, tasks
 import aiohttp
 import discord
@@ -34,6 +35,7 @@ bot.remove_command("help")
 async def pfp():
     pfp = open(f"image.png", "rb").read()
 
+global cofirm
 class tagButtons(discord.ui.View):
     def __init__(self, *, timeout=180):
         super().__init__(timeout=timeout)
@@ -99,8 +101,7 @@ class tagButtons(discord.ui.View):
         # data = vCheck.find_one({"user": interaction.user.id})
         vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": " "}})
         button.disabled=True
-        button.label="None"
-        global cofirm
+        button.label="None" 
         cofirm = await interaction.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
         await cofirm.add_reaction("📩")
         await cofirm.add_reaction("☘️")
@@ -115,7 +116,6 @@ class tagButtons(discord.ui.View):
         await cofirm.add_reaction("☘️")
         await interaction.response.edit_message(view=self)
         await interaction.message.delete()
-
 
 class ReportBtn(discord.ui.View):
     def __init__(self, *, timeout=3600):
