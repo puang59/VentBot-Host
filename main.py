@@ -680,6 +680,7 @@ async def lb(ctx):
                 "{:,}".format(result["reputation"]) + \
                 " rep` - " + f'{member.name}' + "\n"
             temp += embed_show
+            
 
         # Top 10 users
         if i == arg:
@@ -700,10 +701,17 @@ async def on_reaction_add(reaction, user):
     if not user.bot:
         if reaction.emoji == "📩":
             await accept()
-
+            try:
+                await reaction.message.delete()
+            except: 
+                pass
     if not user.bot:
         if reaction.emoji == "☘️":
             await cross()
+            try:
+                await reaction.message.delete()
+            except: 
+                pass
 
 @bot.event
 async def on_raw_reaction_add(payload):
@@ -870,3 +878,5 @@ async def on_raw_reaction_add(payload):
 #     return(unhashedX)
 
 asyncio.run(main())
+            
+            
