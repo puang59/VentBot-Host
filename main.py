@@ -253,29 +253,79 @@ async def on_member_join(member):
                         a = await text_channel.send(embed=ema)
                         await a.add_reaction('🔍')        
                     except: 
-                        guild = member.guild
-                        user_a = member
-                        role_b = discord.utils.get(member.guild.roles, name="Blocked")
+                        try: 
+                            guild = member.guild
+                            user_a = member
+                            role_b = discord.utils.get(member.guild.roles, name="Blocked")
 
-                        categ = discord.utils.get(guild.categories, name="PRIVATE SPACE (3)")
-                        #text_channel = await categ.create_text_channel(f"{member.name}s vent")
-                        text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}")
-                        await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
-                        await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                        await text_channel.set_permissions(role_b, send_messages=False)
-                        await text_channel.edit(topic=f"Custom PRIVATE Vent channel for {member.name}")
-                        await text_channel.edit(slowmode_delay=7200)
+                            categ = discord.utils.get(guild.categories, name="PRIVATE SPACE (3)")
+                            #text_channel = await categ.create_text_channel(f"{member.name}s vent")
+                            text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}")
+                            await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
+                            await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                            await text_channel.set_permissions(role_b, send_messages=False)
+                            await text_channel.edit(topic=f"Custom PRIVATE Vent channel for {member.name}")
+                            await text_channel.edit(slowmode_delay=7200)
 
-                        ema = discord.Embed(
-                            description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
-                        )
-                        ema.set_author(name="Instruction: ",
-                                    icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
-                        ema.set_footer(
-                            text="Note: We dont save your details and message in any separate database.")
-                        await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
-                        a = await text_channel.send(embed=ema)
-                        await a.add_reaction('🔍')    
+                            ema = discord.Embed(
+                                description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
+                            )
+                            ema.set_author(name="Instruction: ",
+                                        icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
+                            ema.set_footer(
+                                text="Note: We dont save your details and message in any separate database.")
+                            await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
+                            a = await text_channel.send(embed=ema)
+                            await a.add_reaction('🔍')   
+                        except: 
+                            try: 
+                                guild = member.guild
+                                user_a = member
+                                role_b = discord.utils.get(member.guild.roles, name="Blocked")
+
+                                categ = discord.utils.get(guild.categories, name="PRIVATE SPACE (4)")
+                                #text_channel = await categ.create_text_channel(f"{member.name}s vent")
+                                text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}")
+                                await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
+                                await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                                await text_channel.set_permissions(role_b, send_messages=False)
+                                await text_channel.edit(topic=f"Custom PRIVATE Vent channel for {member.name}")
+                                await text_channel.edit(slowmode_delay=7200)
+
+                                ema = discord.Embed(
+                                    description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
+                                )
+                                ema.set_author(name="Instruction: ",
+                                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
+                                ema.set_footer(
+                                    text="Note: We dont save your details and message in any separate database.")
+                                await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
+                                a = await text_channel.send(embed=ema)
+                                await a.add_reaction('🔍')                                
+                            except: 
+                                guild = member.guild
+                                user_a = member
+                                role_b = discord.utils.get(member.guild.roles, name="Blocked")
+
+                                categ = discord.utils.get(guild.categories, name="PRIVATE SPACE (5)")
+                                #text_channel = await categ.create_text_channel(f"{member.name}s vent")
+                                text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}")
+                                await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
+                                await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                                await text_channel.set_permissions(role_b, send_messages=False)
+                                await text_channel.edit(topic=f"Custom PRIVATE Vent channel for {member.name}")
+                                await text_channel.edit(slowmode_delay=7200) 
+
+                                ema = discord.Embed(
+                                    description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
+                                )
+                                ema.set_author(name="Instruction: ",
+                                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
+                                ema.set_footer(
+                                    text="Note: We dont save your details and message in any separate database.")
+                                await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
+                                a = await text_channel.send(embed=ema)
+                                await a.add_reaction('🔍')                                    
         await x.add_reaction('✔️')
     except:
         await x.add_reaction('❌')
@@ -330,7 +380,7 @@ async def on_user_update(before, after):
 async def on_message(msg):
     if not msg.author.bot:
         if not msg.content.startswith(bot.command_prefix):
-            if msg.channel.category.id == 943581279973167155 or msg.channel.category.id == 987993408138248243 or msg.channel.category.id == 987993582701019166:
+            if msg.channel.category.id == 943581279973167155 or msg.channel.category.id == 987993408138248243 or msg.channel.category.id == 987993582701019166 or msg.channel.category.id == 996458874255187978 or msg.channel.category.id == 996459675589554206:
                 if prof.find_one({"user": msg.author.id}):
                     prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 5}})
                 else: 
