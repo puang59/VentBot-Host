@@ -1,0 +1,248 @@
+from discord.ext import commands
+import asyncio
+import discord 
+import random
+from pymongo import MongoClient, message
+
+class dating(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    global cluster
+    global db
+    global collection
+    cluster = MongoClient(
+        "mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    db = cluster["Dating"]
+    collection = db["DatingProfile"]
+
+    # @commands.Cog.listener()
+    # async def on_message(message): 
+    #     channel = message.channel
+    #     await channel.create_thread(name=f"{message.author.discriminator}-{message.author.name}", message=message, auto_archive_duration=1440, reason=None)
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        guild = member.guild
+        if member.guild.id == 999682901308342342:
+            if collection.find_one({"author_id": member.id}):
+                data = collection.find_one({"author_id": member.id})
+                ch = self.bot.get_channel(int(data["channel_id"]))
+                await ch.set_permissions(member, send_messages=True, view_channel=True)
+            else:
+                try: 
+                    user_a = member
+
+                    categ = discord.utils.get(guild.categories, name="PRIVATE SPACE")
+                    #text_channel = await categ.create_text_channel(f"{member.name}s vent")
+                    text_channel = await categ.create_text_channel(f"{member.name}s - {member.discriminator}")
+                    await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
+                    await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                    await text_channel.edit(topic=f"Custom PRIVATE channel for {member.name}")
+                    await text_channel.edit(slowmode_delay=7200)
+
+                    ema = discord.Embed(
+                        description="Please access the `thread channel` to post your profile!"
+                    )
+                    a = await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)", embed=ema)
+                    thre = await text_channel.create_thread(name=f"Intro - {member.name}", message=a, auto_archive_duration=1440, reason=None)
+                    await thre.send("Shall we start?")
+                    await thre.send(f"Shall we start? [yes/no] {member.mention}")
+
+                    def check(msg):
+                        return msg.author == self.ctx.author and msg.channel == self.ctx.channel and msg.content.lower() in ["y", "Y", "yes", "Yes", "YES", "n", "N", "no", "No", "NO"]
+
+                    try:
+                        msg = await self.bot.wait_for("message", check=check, timeout=300)
+                    except asyncio.TimeoutError:
+                        error = await self.ctx.send(f"<:disagree:766575353816678452> Introduction process failed {member.mention}")
+                        await asyncio.sleep(5)
+                        await error.delete()
+                        return
+
+                    if msg.content.lower() == "y" or msg.content.lower() == "Y" or msg.content.lower() == "yes" or msg.content.lower() == "Yes" or msg.content.lower() == "YES":
+                        await self.ctx.send(f"What is your name? {member.mention}")
+
+                        def check1(msg):
+                            return msg.author == self.ctx.author and msg.channel == self.ctx.channel
+                        try:
+                            msg1 = await self.bot.wait_for("message", check=check1, timeout=300)
+
+                        except asyncio.TimeoutError:
+                            error2 = await self.ctx.send(f"<:disagree:766575353816678452> Introduction process failed {member.mention}")
+                            await asyncio.sleep(5)
+                            await error2.delete()
+                            return
+
+                        if msg1:
+                            await self.ctx.send(f"How old are you? {member.mention}")
+
+                            def check2(msg):
+                                return msg.author == self.ctx.author and msg.channel == self.ctx.channel
+                            try:
+                                msg2 = await self.bot.wait_for("message", check=check2, timeout=300)
+                            except asyncio.TimeoutError:
+                                error3 = await self.ctx.send(f"<:disagree:766575353816678452> Introduction process failed {member.mention}")
+                                await asyncio.sleep(5)
+                                await error3.delete()
+                                return
+
+                            if msg2:
+                                await self.ctx.send(f"What is your gender? {member.mention}")
+
+                                def check3(msg):
+                                    return msg.author == self.ctx.author and msg.channel == self.ctx.channel
+
+                                try:
+                                    msg3 = await self.bot.wait_for("message", check=check3, timeout=300)
+                                except asyncio.TimeoutError:
+                                    error5 = await self.ctx.send(f"<:disagree:766575353816678452> Introduction process failed {member.mention}")
+                                    await asyncio.sleep(5)
+                                    await error5.delete()
+                                    return
+
+                                if msg3:
+                                    await self.ctx.send(f"What are your pronouns? {member.mention}")
+
+                                    def check4(msg):
+                                        return msg.author == self.ctx.author and msg.channel == self.ctx.channel
+
+                                    try:
+                                        msg4 = await self.bot.wait_for("message", check=check4, timeout=300)
+                                    except asyncio.TimeoutError:
+                                        error6 = await self.ctx.send(f"<:disagree:766575353816678452> Introduction process failed {member.mention}")
+                                        await asyncio.sleep(5)
+                                        await error6.delete()
+                                        return
+
+                                    if msg4:
+                                        await self.ctx.send(f"Where are you from? {member.mention}")
+
+                                        def check5(msg):
+                                            return msg.author == self.ctx.author and msg.channel == self.ctx.channel
+
+                                        try:
+                                            msg5 = await self.bot.wait_for("message", check=check5, timeout=300)
+                                        except asyncio.TimeoutError:
+                                            error7 = await self.ctx.send(f"<:disagree:766575353816678452> Introduction process failed {member.mention}")
+                                            await asyncio.sleep(5)
+                                            await error7.delete()
+                                            return
+
+                                        if msg5:
+                                            await self.ctx.send(f"Alright last question. What are your interests? {member.mention}")
+
+                                            def check6(msg):
+                                                return msg.author == self.ctx.author and msg.channel == self.ctx.channel
+
+                                            try:
+                                                msg6 = await self.bot.wait_for("message", check=check6, timeout=300)
+                                            except asyncio.TimeoutError:
+                                                error8 = await self.ctx.send(f"<:disagree:766575353816678452> Introduction process failed {member.mention}")
+                                                await asyncio.sleep(5)
+                                                await error8.delete()
+                                                return
+
+                                            if msg6:
+                                                await self.ctx.send(f"<:agree:766575148035473418> Thank you! Introduction posted successfully in <#807750002096472114>.\n**Note:** You can always delete your intro by using command `;deleteintro` or `;introdelete` {member.mention}")
+                    else:
+                        await self.ctx.send(f"Alright sure, have a nice day! {member.mention}")
+
+                    writeDocument = str(self.ctx.author.avatar.url)
+                    post = {"_id": self.ctx.author.id, "ident": "cb", "username": str(
+                        self.ctx.author), "avatar": writeDocument, "name": msg1.content, "age": msg2.content, "gender": msg3.content, "pronoun": msg4.content, "location": msg5.content, "interests": msg6.content}
+
+                    if collection.find_one({"_id": self.ctx.author.id}):
+                        collection.update_many({"_id": self.ctx.author.id}, {"$set": {"username": str(self.ctx.author), "avatar": writeDocument, "name": msg1.content,
+                                            "age": msg2.content, "gender": msg3.content, "pronoun": msg4.content, "location": msg5.content, "interests": msg6.content}})
+                    else:
+                        collection.insert_one(post)
+
+                    results = collection.find_one({"_id": self.ctx.author.id})
+
+                    value = random.randint(0, 0xffffff)
+                    embed = discord.Embed(color=value)
+                    embed.set_author(
+                        name=results["username"], icon_url=results["avatar"])
+                    embed.add_field(name="Name:", value=results["name"])
+                    embed.add_field(name="Age:", value=results["age"])
+                    embed.add_field(name="Gender:", value=results["gender"])
+                    embed.add_field(name="Pronouns:",
+                                    value=results["pronoun"], inline=False)
+                    embed.add_field(name="Location:",
+                                    value=results["location"], inline=False)
+                    embed.add_field(name="Interests:",
+                                    value=results["interests"], inline=False)
+                    embed.set_thumbnail(url=results["avatar"])
+                    a = self.bot.get_channel(807750002096472114)
+                    xx = await a.send(embed=embed)
+                    await xx.add_reaction("👋")
+
+                    collection.update_one({"_id": self.ctx.author.id}, {
+                                        "$set": {"msg_id": xx.id}})
+                except: 
+                    try: 
+                        user_a = member
+
+                        categ = discord.utils.get(guild.categories, name="PRIVATE SPACE (2)")
+                        #text_channel = await categ.create_text_channel(f"{member.name}s vent")
+                        text_channel = await categ.create_text_channel(f"{member.name}s - {member.discriminator}")
+                        await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
+                        await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                        await text_channel.edit(topic=f"Custom PRIVATE channel for {member.name}")
+                        await text_channel.edit(slowmode_delay=7200)
+
+                        ema = discord.Embed(
+                            description="Please access the `thread channel` to post your profile!"
+                        )
+                        a = await text_channel.send(f"welcome {member.mention}!  (≧◡≦)", embed=ema)
+                        await text_channel.create_thread(name=f"Intro - {member.name}", message=a, auto_archive_duration=1440, reason=None)   
+                    except: 
+                        try: 
+                            user_a = member
+
+                            categ = discord.utils.get(guild.categories, name="PRIVATE SPACE (3)")
+                            #text_channel = await categ.create_text_channel(f"{member.name}s vent")
+                            text_channel = await categ.create_text_channel(f"{member.name}s - {member.discriminator}")
+                            await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
+                            await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                            await text_channel.edit(topic=f"Custom PRIVATE channel for {member.name}")
+                            await text_channel.edit(slowmode_delay=7200)
+
+                            ema = discord.Embed(
+                                description="Please access the `thread channel` to post your profile!"
+                            )
+                            a = await text_channel.send(f"welcome {member.mention}!  (≧◡≦)", embed=ema)
+                            await text_channel.create_thread(name=f"Intro - {member.name}", message=a, auto_archive_duration=1440, reason=None)   
+                        except: 
+                            try: 
+                                user_a = member
+
+                                categ = discord.utils.get(guild.categories, name="PRIVATE SPACE (4)")
+                                #text_channel = await categ.create_text_channel(f"{member.name}s vent")
+                                text_channel = await categ.create_text_channel(f"{member.name}s - {member.discriminator}")
+                                await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
+                                await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                                await text_channel.edit(topic=f"Custom PRIVATE channel for {member.name}")
+                                await text_channel.edit(slowmode_delay=7200)
+                                ema = discord.Embed(
+                                    description="Please access the `thread channel` to post your profile!"
+                                )
+                                a = await text_channel.send(f"welcome {member.mention}!  (≧◡≦)", embed=ema)
+                                await text_channel.create_thread(name=f"Intro - {member.name}", message=a, auto_archive_duration=1440, reason=None)                                   
+                            except: 
+                                user_a = member
+                                categ = discord.utils.get(guild.categories, name="PRIVATE SPACE (5)")
+                                #text_channel = await categ.create_text_channel(f"{member.name}s vent")
+                                text_channel = await categ.create_text_channel(f"{member.name}s - {member.discriminator}")
+                                await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
+                                await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                                await text_channel.edit(topic=f"Custom PRIVATE channel for {member.name}")
+                                await text_channel.edit(slowmode_delay=7200) 
+                                ema = discord.Embed(
+                                    description="Please access the `thread channel` to post your profile!"
+                                )
+                                a = await text_channel.send(f"welcome {member.mention}!  (≧◡≦)", embed=ema)
+                                await text_channel.create_thread(name=f"Intro - {member.name}", message=a, auto_archive_duration=1440, reason=None)   
+              
+async def setup(bot):
+    await bot.add_cog(dating(bot))
