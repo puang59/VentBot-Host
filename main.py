@@ -674,7 +674,7 @@ async def dm(ctx, *, message):
         except:
             print(f"Couldn't DM {user.name}.")
     print("Sent all the server a DM.")
-
+#h
 @bot.command()
 async def text(ctx, member: discord.Member, *, msg): 
     await member.send(msg)
