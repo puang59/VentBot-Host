@@ -380,7 +380,7 @@ async def on_user_update(before, after):
 
 @bot.event
 async def on_message(msg):
-    if member.guild.id == 943556434644328498:
+    if msg.author.guild.id == 943556434644328498:
         if not msg.author.bot:
             if not msg.content.startswith(bot.command_prefix):
                 if msg.channel.category.id == 943581279973167155 or msg.channel.category.id == 987993408138248243 or msg.channel.category.id == 987993582701019166 or msg.channel.category.id == 996458874255187978 or msg.channel.category.id == 996459675589554206:
