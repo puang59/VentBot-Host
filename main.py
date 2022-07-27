@@ -22,7 +22,7 @@ prof = db["ventProf"]
 inbox = db['ventInbox']
 vCheck = db["ventCheck"]
 stories = db['webVent']
-
+    
 ventText = stories.find_one({"guild": "vent"})
 
 bot = commands.Bot(command_prefix=".", intents=intents, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories"))

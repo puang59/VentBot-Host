@@ -19,6 +19,7 @@ db = cluster["Discord"]
 collection = db["vent"]
 prof = db["ventProf"]
 inbox = db['ventInbox']
+
 vCheck = db["ventCheck"]
 stories = db['webVent']
 
