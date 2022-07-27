@@ -14,12 +14,14 @@ class dating(commands.Cog):
     global collection
     global inbox
     global gChat
+    global dHistory
     cluster = MongoClient(
         "mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = cluster["Dating"]
     collection = db["DatingProfile"]
     inbox = db['DatingInbox']
     gChat = db['DatingGlobal']
+    dHistory = db['DatingHistory']
 
 
     global boyAV 
@@ -1561,7 +1563,7 @@ class dating(commands.Cog):
     async def on_message(self, msg): 
         if not msg.guild:
             return
-        if not msg.guild.id == 943556434644328498:
+        if msg.guild.id == 999682901308342342:
             if msg.channel.category is not None:
                 if msg.channel.category.id == 1000038353854533773: #is triggered only in inbox channels 
                     if not msg.author.bot:
@@ -1587,33 +1589,48 @@ class dating(commands.Cog):
             
             #Global Chat 
             if not msg.author.bot:
-                if gChat.find_one({"_id": msg.author.id}):
-                    data = gChat.find_one({"_id": msg.author.id})
-                    if data['ident'] == 0:
-                        return
-                    else: 
-                        globalChannel = msg.guild.get_channel(1000989536861560862)
-                        await globalChannel.send(f'{data["username"]}```{msg.content}```')
-                else:
-                    post = {"_id": msg.author.id, 'username': "-", 'ident': 0}
-                    gChat.insert_one(post)
-                    await msg.channel.send(f"What will be your `display name`?")
+                if msg.channel.category.id == 999927005179035738: 
+                    if collection.find_one({"_id": msg.author.id}):
+                        if gChat.find_one({"_id": msg.author.id}):
+                            data = gChat.find_one({"_id": msg.author.id})
+                            if data['ident'] == 0:
+                                return
+                            else: 
+                                post1 = {"lastmessage": msg.author.id}
+                                his = dHistory.find_one({"lastmessage": msg.author.id})
+                                globalChannel = msg.guild.get_channel(1000989536861560862)
+                                try: 
+                                    if not his['lastmessage'] == msg.author.id: 
+                                        await globalChannel.send(f'{data["username"]}```{msg.content}```')
+                                    else: 
+                                        await globalChannel.send(f"```{msg.content}```")
+                                        dHistory.delete_many({})
+                                except: 
+                                        await globalChannel.send(f'{data["username"]}```{msg.content}```')
+                                        dHistory.delete_many({})
+                                dHistory.insert_one(post1)
 
-                    def check(msg):
-                        return msg.author == msg.author and msg.channel == msg.channel
+                        else:
+                            post = {"_id": msg.author.id, 'username': "-", 'ident': 0}
+                            gChat.insert_one(post)
+                            await msg.channel.send(f"What will be your `display name`?")
 
-                    try:
-                        msg1 = await self.bot.wait_for("message", check=check, timeout=300)
-                    except asyncio.TimeoutError:
-                        error5 = await msg.channel.send(f"<:disagree:943603027854626816> TimeOut {msg.author.mention}")
-                        await asyncio.sleep(5)
-                        await error5.delete()
-                        return
-                    pass
-                    if msg1: 
-                        gChat.update_one({"_id":msg.author.id}, {"$set":{"username":msg1.content}})
-                        gChat.update_one({"_id": msg.author.id}, {"$inc": {"ident": 1}})
-                        await msg.channel.send('Now you can start chatting :)')
+                            def check(msg):
+                                return msg.author == msg.author and msg.channel == msg.channel and msg.guild.id == 999682901308342342
+
+                            try:
+                                msg1 = await self.bot.wait_for("message", check=check, timeout=300)
+                            except asyncio.TimeoutError:
+                                error5 = await msg.channel.send(f"<:disagree:943603027854626816> TimedOut {msg.author.mention}")
+                                await asyncio.sleep(5)
+                                await error5.delete()
+                                return
+                            pass
+                            if msg1: 
+                                gChat.update_one({"_id":msg.author.id}, {"$set":{"username":msg1.content}})
+                                gChat.update_one({"_id": msg.author.id}, {"$inc": {"ident": 1}})
+                                await msg.channel.send('Now you can start chatting :)')
+                            
             
 
 async def setup(bot):

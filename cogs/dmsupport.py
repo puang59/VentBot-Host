@@ -11,8 +11,10 @@ class dmsupport(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
+            return  
+        if message.guild.id == 999682901308342342:
             return
-
+            
         if isinstance(message.channel, discord.DMChannel):
             if message.attachments:
                 link = message.attachments[0].url
