@@ -683,12 +683,12 @@ async def text(ctx, member: discord.Member, *, msg):
     await ctx.send('Sent')
 
 @bot.command()
-async def rem(ctx, member: discord.Member = None):
+async def rem(ctx, member = None):
     if member == None:
         await ctx.send("Please feed me with ID")
         return
     try: 
-        prof.delete_one({"user": member.id})
+        prof.delete_one({"user": member})
         await ctx.send("Person removed from the DB")
     except: 
         await ctx.send("Unexpected Error Occured!")
