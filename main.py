@@ -682,6 +682,18 @@ async def text(ctx, member: discord.Member, *, msg):
     await member.send(msg)
     await ctx.send('Sent')
 
+@bot.command()
+async def rem(ctx, member: discord.Member = None):
+    if member == None:
+        await ctx.send("Please feed me with ID")
+        return
+    try: 
+        prof.delete_one({"user": member.id})
+        await ctx.send("Person removed from the DB")
+    except: 
+        await ctx.send("Unexpected Error Occured!")
+
+
 @bot.command(aliases=["rep"])
 async def reputation(ctx, member: discord.Member = None):
     if member == None:
