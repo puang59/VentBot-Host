@@ -686,7 +686,7 @@ async def text(ctx, member: discord.Member, *, msg):
 async def rem(ctx, member = None):
     if not member == None:
         try: 
-            prof.delete_one({"user": member})
+            prof.delete_one({"user": int(member)})
             await ctx.send("Person removed from the DB")
         except: 
             await ctx.send("Unexpected Error Occured!")
