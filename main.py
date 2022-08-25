@@ -943,7 +943,7 @@ async def on_raw_reaction_add(payload):
 #     x = str(id)
 #     unhashedX = x.replace("9924", "").replace("45432", "")
 #     return(unhashedX)
-
+# TEST 
 asyncio.run(main())
             
             
