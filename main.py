@@ -22,6 +22,7 @@ prof = db["ventProf"]
 inbox = db['ventInbox']
 vCheck = db["ventCheck"]
 stories = db['webVent']
+vType = db['ventType']
     
 ventText = stories.find_one({"guild": "vent"})
 
@@ -42,20 +43,20 @@ class tagButtons(discord.ui.View):
         button.disabled=True
         button.label="Neutral"
         await interaction.response.edit_message(view=self)
-    @discord.ui.button(label="Wholesome",style=discord.ButtonStyle.grey, disabled=False)
-    async def wholesome_button(self, interaction:discord.Interaction, button:discord.ui.Button):
-        data = vCheck.find_one({"user": interaction.user.id})
-        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Wholesome`  "}})
-        button.disabled=True
-        button.label="Wholesome"
-        await interaction.response.edit_message(view=self)
-    @discord.ui.button(label="Positive",style=discord.ButtonStyle.grey, disabled=False)
-    async def positive_button(self, interaction:discord.Interaction, button:discord.ui.Button):
-        data = vCheck.find_one({"user": interaction.user.id})
-        vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Positive`  "}})
-        button.disabled=True
-        button.label="Positive"
-        await interaction.response.edit_message(view=self)
+    # @discord.ui.button(label="Wholesome",style=discord.ButtonStyle.grey, disabled=False)
+    # async def wholesome_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+    #     data = vCheck.find_one({"user": interaction.user.id})
+    #     vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Wholesome`  "}})
+    #     button.disabled=True
+    #     button.label="Wholesome"
+    #     await interaction.response.edit_message(view=self)
+    # @discord.ui.button(label="Positive",style=discord.ButtonStyle.grey, disabled=False)
+    # async def positive_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+    #     data = vCheck.find_one({"user": interaction.user.id})
+    #     vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": f"{data['tags']}`Positive`  "}})
+    #     button.disabled=True
+    #     button.label="Positive"
+    #     await interaction.response.edit_message(view=self)
     @discord.ui.button(label="Negative",style=discord.ButtonStyle.grey, disabled=False)
     async def negative_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         data = vCheck.find_one({"user": interaction.user.id})
@@ -118,6 +119,10 @@ class ReportBtn(discord.ui.View):
         super().__init__(timeout=timeout)
     @discord.ui.button(label="Report User",style=discord.ButtonStyle.danger, disabled=False)
     async def gray_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        button.disabled=True
+        button.label="Reported"
+        button.style=discord.ButtonStyle.gray
+        await interaction.response.edit_message(view=self)
         channel = bot.get_channel(943909084430729217)
         if inbox.find_one({"reactor":interaction.user.id}):
             data = inbox.find_one({"reactor":interaction.user.id})
@@ -129,7 +134,7 @@ class ReportBtn(discord.ui.View):
 
             em.set_author(name=f"{author.name} - {data['author']}", icon_url=f"{author.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
-            await interaction.channel.send(content="<:agree:943603027313565757> The user has been reported to the staff team.\n> We recommend to `.bin` the channel now")
+            await interaction.channel.send(content="<:agree:943603027313565757> The user has been reported to the staff team.")
             #blocking the reported user 
             topic = interaction.channel.topic
             chn = interaction.guild.get_channel(int(topic))
@@ -147,7 +152,7 @@ class ReportBtn(discord.ui.View):
 
             em.set_author(name=f"{reactor.name} - {data['reactor']}", icon_url=f"{reactor.avatar.url}")
             await channel.send(f"{interaction.channel.name} - <#{interaction.channel_id}>", embed=em)
-            await interaction.channel.send(content="<:agree:943603027313565757> The user has been reported to the staff team.\n> We recommend to `.bin` the channel now")
+            await interaction.channel.send(content="<:agree:943603027313565757> The user has been reported to the staff team.")
             #blocking the reported user 
             topic = interaction.channel.topic
             chn = interaction.guild.get_channel(int(topic))
@@ -157,11 +162,6 @@ class ReportBtn(discord.ui.View):
             await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
         else: 
             await interaction.channel.send("UhOh! Looks like something went wrong. Please DM me to report the user instead.")
-            
-        button.disabled=True
-        button.label="Reported"
-        button.style=discord.ButtonStyle.gray
-        await interaction.response.edit_message(view=self)
 
         #print(interaction.channel_id)
         #print(interaction.user.id)
@@ -183,7 +183,7 @@ async def load_cogs():
 async def main():
     async with bot:
         await load_cogs()
-        print("Cogs Loadd\nBot ready!")
+        print("Bot ready!")
         await bot.start('OTYyNjAzODQ2Njk2MzM3NDA4.GazOQC.P1jXz9ZcqnT6ZAbnpE9NNJVVd5M53K-04VDHTs')
 
 @bot.event
@@ -424,17 +424,35 @@ async def on_message(msg):
 
                                     #vent_channel = bot.get_channel(f"{member.name}s vent")
                                     vent_channel = bot.get_channel(943556439195152477)
+                                    casual_channel = bot.get_channel(1014201909118251098)
                                     # if msg.author.id == 852797584812670996:
                                     #     pass
                                     # else:
                                     #     await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
                                     
-                                    vCheck.insert_one({"user": msg.author.id, "tags": "> "})
-                                    tagEm = discord.Embed(
-                                        description=f"Click on the tags (press 'None' if you want no tag) and when you are done, press 'Done' button\n**Note:** You can select multiple tags."
-                                    )
-                                    tagEm.set_author(name="Choose Tags", icon_url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fhawcons%2F32%2F698889-icon-146-tag-512.png&f=1&nofb=1")
-                                    await msg.channel.send(embed=tagEm, view=tagButtons())
+                                    typeMsg = await msg.channel.send("Click on `🤍` reaction to post your vent in <#943556439195152477> or `🌻` reaction to post your vent in <#1014201909118251098>")
+                                    await typeMsg.add_reaction('🤍')
+                                    await typeMsg.add_reaction('🌻')
+
+                                    global casual 
+                                    async def casual(): 
+                                        post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "casual"}
+                                        vType.insert_one(post)
+                                    
+                                    global serious 
+                                    async def serious(): 
+                                        post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "serious"}
+                                        vType.insert_one(post)
+
+
+                                    global tagEmbedMessage
+                                    async def tagEmbedMessage():
+                                        vCheck.insert_one({"user": msg.author.id, "tags": "> "})
+                                        tagEm = discord.Embed(
+                                            description=f"Click on the tags (press 'None' if you want no tag) and when you are done, press 'Done' button\n**Note:** You can select multiple tags."
+                                        )
+                                        tagEm.set_author(name="Choose Tags", icon_url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fhawcons%2F32%2F698889-icon-146-tag-512.png&f=1&nofb=1")
+                                        await msg.channel.send(embed=tagEm, view=tagButtons())
                                     
 
                                     #print(tagData['tags'])
@@ -445,25 +463,43 @@ async def on_message(msg):
 
                                     async def cross():
                                         tagData = vCheck.find_one({"user": msg.author.id})
+                                        ventTypeCheck = vType.find_one({'author_id': msg.author.id})
                                         # check if tag is empty - if yes then remove tags from embed - if no then continue
-                                        if "Neutral" in tagData['tags'] or "Wholesome" in tagData['tags'] or "Positive" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
-                                            em = discord.Embed(
-                                                description=f"{tagData['tags']}\n\n{msg.content}"
-                                            )
+                                        if ventTypeCheck['type'] == "serious": 
+                                            if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
+                                                em = discord.Embed(
+                                                    description=f"{tagData['tags']}\n\n{msg.content}"
+                                                )
+                                            else: 
+                                                em = discord.Embed(
+                                                    description=f"{msg.content}"
+                                                )
                                         else: 
                                             em = discord.Embed(
                                                 description=f"{msg.content}"
-                                            )
-                                            
+                                            )      
+
                                         em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                                        x = await vent_channel.send(embed=em)
-                                        await x.add_reaction('🫂')
+                                        # Checking vent type
+                                        if ventTypeCheck['type'] == "serious": 
+                                            x = await vent_channel.send(embed=em)
+                                            await x.add_reaction('🫂')
+                                        else: 
+                                            y = await casual_channel.send(embed=em)
+                                            await y.add_reaction('🗣')
+                                        vType.delete_one({'author_id':msg.author.id})
                                         vCheck.delete_one({'user': msg.author.id})
                                         stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
-                                        post = {"author_id": msg.author.id, "code": f"{msg_code}",
-                                                "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                        collection.insert_one(post)
+                                        try: 
+                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                    "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                            collection.insert_one(post)
+                                        except: 
+                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                    "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                            collection.insert_one(post)
+
                                         try:
                                             await cofirm.delete()
                                         except:
@@ -484,11 +520,17 @@ async def on_message(msg):
 
                                     async def accept():
                                         tagData = vCheck.find_one({"user": msg.author.id})
+                                        ventTypeCheck = vType.find_one({'author_id': msg.author.id})
                                         # check if tag is empty - if yes then remove tags from embed - if no then continue
-                                        if "Neutral" in tagData['tags'] or "Wholesome" in tagData['tags'] or "Positive" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
-                                            em = discord.Embed(
-                                                description=f"{tagData['tags']}\n\n{msg.content}"
-                                            )
+                                        if ventTypeCheck['type'] == "serious": 
+                                            if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
+                                                em = discord.Embed(
+                                                    description=f"{tagData['tags']}\n\n{msg.content}"
+                                                )
+                                            else: 
+                                                em = discord.Embed(
+                                                    description=f"{msg.content}"
+                                                )
                                         else: 
                                             em = discord.Embed(
                                                 description=f"{msg.content}"
@@ -497,15 +539,28 @@ async def on_message(msg):
                                         em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                         em.set_footer(
                                             text="You can click on speech-bubble emoji to reply to this vent and talk to the author anonymously.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
-                                        x = await vent_channel.send(embed=em)
-                                        await x.add_reaction('🫂')
-                                        await x.add_reaction('💬')
+                                        
+                                        # Checking vent type
+                                        if ventTypeCheck['type'] == "serious": 
+                                            x = await vent_channel.send(embed=em)
+                                            await x.add_reaction('🫂')
+                                            await x.add_reaction('💬')
+                                        else: 
+                                            y = await casual_channel.send(embed=em)
+                                            await y.add_reaction('🗣')
+                                            await y.add_reaction('💬')
+                                        vType.delete_one({'author_id':msg.author.id})
                                         vCheck.delete_one({'user': msg.author.id})
                                         stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
-                                        post = {"author_id": msg.author.id, "code": f"{msg_code}",
-                                                "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                        collection.insert_one(post)
+                                        try: 
+                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                    "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                            collection.insert_one(post)
+                                        except: 
+                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                    "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                            collection.insert_one(post)
                                         
                                         try:
                                             await cofirm.delete()
@@ -573,11 +628,14 @@ async def close(ctx):
 async def bin(ctx):
     if ctx.channel.category.name == "📨 INBOX" or ctx.channel.category.name == "📨 INBOX (2)" or ctx.channel.category.name == "📨 INBOX (3)":
         topic = ctx.channel.topic
+        if "Reporter" in topic or "REPORTED" in topic: 
+            await ctx.send('We are still investigating the issue!')
+            return
         topicID = ""
         for i, v in enumerate(topic):
             if v in "0123456789":
                 topicID += v
-        print(topicID)
+        #print(topicID)
         guild = bot.get_guild(943556434644328498)
         other_chn = guild.get_channel(int(topicID))
 
@@ -774,6 +832,24 @@ async def lb(ctx):
 
 @bot.event
 async def on_reaction_add(reaction, user):
+    if not user.bot: 
+        if reaction.emoji == "🤍":
+            await serious()
+            try: 
+                await reaction.message.delete()
+                await tagEmbedMessage()
+            except: 
+                await tagEmbedMessage()
+    if not user.bot: 
+        if reaction.emoji == "🌻": 
+            await casual()
+            cofirm = await reaction.message.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+            await cofirm.add_reaction("📩")
+            await cofirm.add_reaction("☘️")
+            try:
+                await reaction.message.delete()
+            except: 
+                pass
     if not user.bot:
         if reaction.emoji == "📩":
             await accept()

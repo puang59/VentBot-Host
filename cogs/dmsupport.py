@@ -12,8 +12,8 @@ class dmsupport(commands.Cog):
     async def on_message(self, message):
         if message.author.bot:
             return  
-        if message.guild.id == 999682901308342342:
-            return
+        # if message.guild.id == 999682901308342342:
+        #     return
             
         if isinstance(message.channel, discord.DMChannel):
             if message.attachments:
@@ -93,7 +93,9 @@ class dmsupport(commands.Cog):
                         embed.set_author(
                             name="Staff Team", icon_url="https://www.pngrepo.com/png/121262/512/police.png")
                         await member.send(embed=embed)
-
+    @commands.command()
+    async def cogTest(self, ctx): 
+        await ctx.send('Working!')
 
 async def setup(bot):
     await bot.add_cog(dmsupport(bot))
