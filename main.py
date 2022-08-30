@@ -668,7 +668,7 @@ async def connect(ctx, code):
         await ctx.send(embed = embed)    
 
 @bot.command(pass_context=True)
-async def dm(ctx, *, message):
+async def textall(ctx, *, message):
     for user in ctx.guild.members:
         try:
             await user.send(message)
@@ -678,9 +678,18 @@ async def dm(ctx, *, message):
     print("Sent all the server a DM.")
 #h
 @bot.command()
-async def text(ctx, member: discord.Member, *, msg): 
-    await member.send(msg)
-    await ctx.send('Sent')
+async def text(ctx, members: commands.Greedy[discord.Member], *, msg): 
+    for member in members: 
+        try: 
+            await member.send(msg)
+            await ctx.send(f':agree: Message sent to {member.mention}')
+        except: 
+            await ctx.send(f':disagree: Message couldnt sent to {member.mention}')
+
+# @bot.command()
+# async def test(ctx, members: commands.Greedy[discord.Member], reason: str):
+#     for member in members:
+#         await ctx.send(f'{member.mention} {reason}')
 
 @bot.command()
 async def rem(ctx, member = None):
