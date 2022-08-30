@@ -682,9 +682,9 @@ async def text(ctx, members: commands.Greedy[discord.Member], *, msg):
     for member in members: 
         try: 
             await member.send(msg)
-            await ctx.send(f':agree: Message sent to {member.mention}')
+            await ctx.send(f'<:agree:943603027313565757> Message sent to {member.mention}')
         except: 
-            await ctx.send(f':disagree: Message couldnt sent to {member.mention}')
+            await ctx.send(f'<:disagree:943603027854626816> Message couldnt sent to {member.mention}')
 
 # @bot.command()
 # async def test(ctx, members: commands.Greedy[discord.Member], reason: str):
