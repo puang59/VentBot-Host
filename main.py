@@ -9,6 +9,7 @@ from pymongo import MongoClient
 intents = discord.Intents.all()
 intents.members = True
 
+#push test
 
 global cluster
 global db
