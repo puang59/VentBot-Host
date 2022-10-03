@@ -668,8 +668,13 @@ async def delete(ctx, code):
     data = collection.find_one({"code": code})
 
     channel = bot.get_channel(943556439195152477)
-    txt = await channel.fetch_message(data["msg_id"])
-    await txt.delete()
+    channel2 = bot.get_channel(1014201909118251098)
+    try: 
+        txt = await channel.fetch_message(data["msg_id"])
+        await txt.delete()
+    except: 
+        txt = await channel2.fetch_message(data["msg_id"])
+        await txt.delete()    
 
     collection.delete_one({"code": code})
     await ctx.send("<:agree:943603027313565757> Deleted")
@@ -1016,6 +1021,15 @@ async def on_raw_reaction_add(payload):
             else:
                 print('Cannot find message id in DataBase!')
                 await payload.member.send('Vent author left the server!')
+
+
+#Error Handling
+@bot.event
+async def on_command_error(ctx, error):
+    em = discord.Embed(description=f"Command: `{ctx.command}`\n```{error}```")
+    await ctx.send(embed=em)
+    raise error
+    
 
 # global hashid
 # global unhashid
