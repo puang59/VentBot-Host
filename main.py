@@ -6,10 +6,28 @@ from random import *
 
 from pymongo import MongoClient
 
+########## LOGGER #########
+import logging
+import logging.handlers
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+logging.getLogger('discord.http').setLevel(logging.INFO)
+
+handler = logging.handlers.RotatingFileHandler(
+    filename='discord.log',
+    encoding='utf-8',
+    maxBytes=32 * 1024 * 1024,  # 32 MiB
+    backupCount=5,  # Rotate through 5 files
+)
+dt_fmt = '%Y-%m-%d %H:%M:%S'
+formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {name}: {message}', dt_fmt, style='{')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+############################
+
 intents = discord.Intents.all()
 intents.members = True
-
-#push test
 
 global cluster
 global db
@@ -186,7 +204,7 @@ async def main():
         await load_cogs()
         print("Bot ready!")
         await bot.start('OTYyNjAzODQ2Njk2MzM3NDA4.GazOQC.P1jXz9ZcqnT6ZAbnpE9NNJVVd5M53K-04VDHTs')
-
+        
 @bot.event
 async def on_member_join(member):
     if member.guild.id == 943556434644328498:
@@ -1022,28 +1040,12 @@ async def on_raw_reaction_add(payload):
                 print('Cannot find message id in DataBase!')
                 await payload.member.send('Vent author left the server!')
 
-
-#Error Handling
+########### Error Handling ##########
 @bot.event
 async def on_command_error(ctx, error):
     em = discord.Embed(description=f"Command: `{ctx.command}`\n```{error}```")
     await ctx.send(embed=em)
     raise error
-    
+#####################################
 
-# global hashid
-# global unhashid
-
-# async def hashid(id):
-#     x = str(id)
-#     hashedX = f"9924{x}45432"
-#     return(hashedX)
-
-# async def unhashid(id): 
-#     x = str(id)
-#     unhashedX = x.replace("9924", "").replace("45432", "")
-#     return(unhashedX)
-# TEST 
 asyncio.run(main())
-            
-            
