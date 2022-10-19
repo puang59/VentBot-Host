@@ -4986,3 +4986,34 @@
 [2022-10-19 09:48:09] [DEBUG   ] discord.client: Dispatching event presence_update
 [2022-10-19 09:48:14] [DEBUG   ] discord.gateway: Keeping shard ID None websocket alive with sequence 69.
 [2022-10-19 09:48:15] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': None, 's': None, 'op': 11, 'd': None}
+[2022-10-19 09:48:27] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': 'PRESENCE_UPDATE', 's': 70, 'op': 0, 'd': {'user': {'id': '703221564195340359'}, 'status': 'dnd', 'guild_id': '943556434644328498', 'client_status': {'mobile': 'dnd'}, 'activities': [{'type': 4, 'state': 'W || /vvvvvneg || i miss him a lot- || my tummy hurts 💔', 'name': 'Custom Status', 'id': 'custom', 'created_at': 1666186778575}]}}
+[2022-10-19 09:48:27] [DEBUG   ] discord.client: Dispatching event socket_event_type
+[2022-10-19 09:48:27] [DEBUG   ] discord.client: Dispatching event presence_update
+[2022-10-19 09:48:30] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': 'PRESENCE_UPDATE', 's': 71, 'op': 0, 'd': {'user': {'id': '345082100916944896'}, 'status': 'idle', 'guild_id': '943556434644328498', 'client_status': {'mobile': 'idle'}, 'activities': []}}
+[2022-10-19 09:48:30] [DEBUG   ] discord.client: Dispatching event socket_event_type
+[2022-10-19 09:48:30] [DEBUG   ] discord.client: Dispatching event presence_update
+[2022-10-19 09:48:32] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': 'PRESENCE_UPDATE', 's': 72, 'op': 0, 'd': {'user': {'id': '798337256007008336'}, 'status': 'idle', 'guild_id': '943556434644328498', 'client_status': {'mobile': 'idle'}, 'activities': [{'type': 4, 'state': '"even from a distance, i can hear her.. try to listen, but her whispers make my ears hurt... and on our dates,its never daytime"', 'name': 'Custom Status', 'id': 'custom', 'emoji': {'name': '🍋'}, 'created_at': 1666187311987}]}}
+[2022-10-19 09:48:32] [DEBUG   ] discord.client: Dispatching event socket_event_type
+[2022-10-19 09:48:32] [DEBUG   ] discord.client: Dispatching event presence_update
+[2022-10-19 09:48:40] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': 'PRESENCE_UPDATE', 's': 73, 'op': 0, 'd': {'user': {'id': '345082100916944896'}, 'status': 'online', 'guild_id': '943556434644328498', 'client_status': {'mobile': 'online'}, 'activities': []}}
+[2022-10-19 09:48:40] [DEBUG   ] discord.client: Dispatching event socket_event_type
+[2022-10-19 09:48:40] [DEBUG   ] discord.client: Dispatching event presence_update
+[2022-10-19 09:48:56] [DEBUG   ] discord.gateway: Keeping shard ID None websocket alive with sequence 73.
+[2022-10-19 09:48:56] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': None, 's': None, 'op': 11, 'd': None}
+[2022-10-19 09:49:04] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': 'PRESENCE_UPDATE', 's': 74, 'op': 0, 'd': {'user': {'id': '764997385977462835'}, 'status': 'offline', 'guild_id': '943556434644328498', 'client_status': {}, 'activities': []}}
+[2022-10-19 09:49:04] [DEBUG   ] discord.client: Dispatching event socket_event_type
+[2022-10-19 09:49:04] [DEBUG   ] discord.client: Dispatching event presence_update
+[2022-10-19 09:49:37] [DEBUG   ] discord.gateway: Keeping shard ID None websocket alive with sequence 74.
+[2022-10-19 09:49:37] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': None, 's': None, 'op': 11, 'd': None}
+[2022-10-19 09:49:43] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': 'PRESENCE_UPDATE', 's': 75, 'op': 0, 'd': {'user': {'username': 'Mims', 'id': '960606120576168026', 'discriminator': '8646', 'avatar': '17151f9071a18d1a6aa3706908cef037'}, 'status': 'idle', 'guild_id': '943556434644328498', 'client_status': {'desktop': 'idle'}, 'activities': []}}
+[2022-10-19 09:49:43] [DEBUG   ] discord.client: Dispatching event socket_event_type
+[2022-10-19 09:49:43] [DEBUG   ] discord.client: Dispatching event presence_update
+[2022-10-19 09:49:49] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': 'PRESENCE_UPDATE', 's': 76, 'op': 0, 'd': {'user': {'id': '960606120576168026'}, 'status': 'idle', 'guild_id': '943556434644328498', 'client_status': {'mobile': 'idle', 'desktop': 'idle'}, 'activities': [{'type': 0, 'timestamps': {'start': 1666187389806}, 'platform': 'samsung', 'name': 'Nonogram.com - Picture cross puzzle game', 'id': '167004760a8b6bc', 'created_at': 1666187389806, 'application_id': '614383263158501376'}]}}
+[2022-10-19 09:49:49] [DEBUG   ] discord.client: Dispatching event socket_event_type
+[2022-10-19 09:49:49] [DEBUG   ] discord.client: Dispatching event presence_update
+[2022-10-19 09:49:58] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': 'PRESENCE_UPDATE', 's': 77, 'op': 0, 'd': {'user': {'id': '960606120576168026'}, 'status': 'online', 'guild_id': '943556434644328498', 'client_status': {'mobile': 'online', 'desktop': 'idle'}, 'activities': []}}
+[2022-10-19 09:49:58] [DEBUG   ] discord.client: Dispatching event socket_event_type
+[2022-10-19 09:49:58] [DEBUG   ] discord.client: Dispatching event presence_update
+[2022-10-19 09:50:00] [DEBUG   ] discord.gateway: For Shard ID None: WebSocket Event: {'t': 'PRESENCE_UPDATE', 's': 78, 'op': 0, 'd': {'user': {'id': '703221564195340359'}, 'status': 'dnd', 'guild_id': '943556434644328498', 'client_status': {'mobile': 'dnd'}, 'activities': [{'type': 4, 'state': 'W || /vvvvvneg || i miss him a lot- || my tummy hurts 💔', 'name': 'Custom Status', 'id': 'custom', 'created_at': 1666186778575}, {'type': 2, 'timestamps': {'start': 1666187398436, 'end': 1666187579533}, 'sync_id': '5wDscoENTsVsW6gvCLsLpX', 'state': 'Thy Art Is Murder', 'session_id': '53a7c2bd9a6cbbe988028ea1cfdef161', 'party': {'id': 'spotify:703221564195340359'}, 'name': 'Spotify', 'id': 'spotify:1', 'flags': 48, 'details': 'New Gods', 'created_at': 1666187400705, 'assets': {'large_text': 'Human Target', 'large_image': 'spotify:ab67616d0000b273da45d4ea5b8a8e6f81b098f7'}}]}}
+[2022-10-19 09:50:00] [DEBUG   ] discord.client: Dispatching event socket_event_type
+[2022-10-19 09:50:00] [DEBUG   ] discord.client: Dispatching event presence_update
