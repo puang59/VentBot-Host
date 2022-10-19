@@ -10,8 +10,6 @@ import datetime
 import time
 from pytz import timezone
 
-#falcon push test! #2
-
 ########## LOGGER #########
 import logging, coloredlogs
 import logging.handlers
