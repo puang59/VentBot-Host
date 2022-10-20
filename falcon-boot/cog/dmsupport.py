@@ -81,18 +81,22 @@ class dmsupport(commands.Cog):
                 await dmmsg.delete()
 
         elif isinstance(message.channel, discord.TextChannel):
-            if message.content.startswith(self.bot.command_prefix):
-                pass
-            else:
-                topic = message.channel.topic
-                if topic:
-                    member = message.guild.get_member(int(topic))
-                    if member:
-                        embed = discord.Embed(
-                            description=message.content, colour=discord.Colour.blue())
-                        embed.set_author(
-                            name="Staff Team", icon_url="https://www.pngrepo.com/png/121262/512/police.png")
-                        await member.send(embed=embed)
+            try: 
+                if message.content.startswith(self.bot.command_prefix):
+                    pass
+                else:
+                    topic = message.channel.topic
+                    if topic:
+                        member = message.guild.get_member(int(topic))
+                        if member:
+                            embed = discord.Embed(
+                                description=message.content, colour=discord.Colour.blue())
+                            embed.set_author(
+                                name="Staff Team", icon_url="https://www.pngrepo.com/png/121262/512/police.png")
+                            await member.send(embed=embed)
+            except: 
+                pass 
+            
     @commands.command()
     async def cogTest(self, ctx): 
         await ctx.send('Working!')

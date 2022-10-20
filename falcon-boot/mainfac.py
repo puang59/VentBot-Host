@@ -564,8 +564,6 @@ async def on_user_update(before, after):
 
 @bot.event
 async def on_message(msg):
-    if not msg.guild.id == 943556434644328498:
-        return 
     if msg.author.guild.id == 943556434644328498:
         if not msg.author.bot:
             if not msg.content.startswith(bot.command_prefix):
