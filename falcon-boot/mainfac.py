@@ -708,6 +708,8 @@ async def on_message(msg):
                                     except: 
                                         logInput('messageid', f"{y.id}")
 
+                                    print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
+
                                 global accept
 
                                 async def accept():
@@ -779,6 +781,8 @@ async def on_message(msg):
                                         logInput('messageid', f"{x.id}")
                                     except: 
                                         logInput('messageid', f"{y.id}")
+
+                                    print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
 
 
             # Inbox
