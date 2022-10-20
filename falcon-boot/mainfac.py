@@ -274,6 +274,102 @@ async def main():
         print("                                            |__/                      |__/                   ")
         await bot.start('OTYyNjAzODQ2Njk2MzM3NDA4.GazOQC.P1jXz9ZcqnT6ZAbnpE9NNJVVd5M53K-04VDHTs')
         
+
+########## INBOX SCANNER ##########
+
+@bot.event
+async def inboxscan(): 
+    guild = bot.get_guild(943556434644328498)
+    inboxCateg1 = discord.utils.get(guild.categories, name="📨 INBOX")
+    inboxCateg2 = discord.utils.get(guild.categories, name="📨 INBOX (2)")
+    inboxCateg3 = discord.utils.get(guild.categories, name="📨 INBOX (3)")
+
+    i = 0 
+    while i < 1:
+        print("########################################")
+        print(' _ _ _  _    _|_ _  _|_ _ _|           ')
+        print('_)(_(_|| )  _)|_(_|| |_(-(_|  .  .  .  ')
+        print("########################################")
+
+        numchannel = 0
+        deadchannel = 0
+        deleted = 0
+        #INBOX 1
+        for channel in inboxCateg1.channels: 
+            message = await channel.fetch_message(channel.last_message_id)
+
+            lmsgdate = message.created_at.date()
+            curdate = datetime.datetime.utcnow().date()
+
+            delta = curdate-lmsgdate
+
+            if delta.days > 2: 
+                deadchannel +=1 
+                print(f"Deleted {channel.name} from INBOX 1 - inactive for {delta.days} days")
+                print("---------------------------------------------------------------------------")
+                chn = bot.get_channel(channel.id)
+                await chn.delete()
+                deadchannel +=1
+                deleted +=1
+            else: 
+                pass
+
+            numchannel += 1
+        #INBOX 2
+        for channel in inboxCateg2.channels: 
+            message = await channel.fetch_message(channel.last_message_id)
+
+            lmsgdate = message.created_at.date()
+            curdate = datetime.datetime.utcnow().date()
+
+            delta = curdate-lmsgdate
+
+            if delta.days > 2: 
+                deadchannel +=1 
+                print(f"Deleted {channel.name} from INBOX 2 - inactive for {delta.days} days")
+                print("---------------------------------------------------------------------------")
+                chn = bot.get_channel(channel.id)
+                await chn.delete()
+                deadchannel +=1
+                deleted +=1
+            else: 
+                pass
+
+            numchannel += 1
+        #INBOX 3
+        for channel in inboxCateg3.channels: 
+            message = await channel.fetch_message(channel.last_message_id)
+
+            lmsgdate = message.created_at.date()
+            curdate = datetime.datetime.utcnow().date()
+
+            delta = curdate-lmsgdate
+
+            if delta.days > 2: 
+                deadchannel +=1 
+                print(f"Deleted {channel.name} from INBOX 3 - inactive for {delta.days} days")
+                print("---------------------------------------------------------------------------")
+                chn = bot.get_channel(channel.id)
+                await chn.delete()
+                deadchannel +=1
+                deleted +=1
+            else: 
+                pass
+
+            numchannel += 1
+
+        print("Scanning complete ✔")
+        print("########## RESULT ##########")
+        print("Total channel scanned: ", numchannel)
+        print("Dead channels: ", deadchannel)
+        print("Channels deleted: ", deleted)
+
+        await asyncio.sleep(18000) # 5 hours
+
+@bot.event
+async def on_ready():
+    await inboxscan()
+
 @bot.event
 async def on_member_join(member):
     if member.guild.id == 943556434644328498:
