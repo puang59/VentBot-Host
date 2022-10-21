@@ -357,14 +357,15 @@ async def inboxscan():
                 pass
 
             numchannel += 1
-
+            
+        print("")
         print("Scanning complete ✔")
         print("########## RESULT ##########")
         print("Total channel scanned: ", numchannel)
         print("Dead channels: ", deadchannel)
         print("Channels deleted: ", deleted)
 
-        await asyncio.sleep(18000) # 5 hours
+        await asyncio.sleep(3600) # 1 hours
 
 @bot.event
 async def on_ready():
@@ -566,18 +567,19 @@ async def on_user_update(before, after):
 async def on_message(msg):
     if not msg.author.bot:
         if not msg.content.startswith(bot.command_prefix):
-            if msg.channel.category.id == 943581279973167155 or msg.channel.category.id == 987993408138248243 or msg.channel.category.id == 987993582701019166 or msg.channel.category.id == 996458874255187978 or msg.channel.category.id == 996459675589554206:
-                if prof.find_one({"user": msg.author.id}):
-                    prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 5}})
+            if not isinstance(msg.channel, discord.channel.DMChannel):
+                if msg.channel.category.id in [943581279973167155, 987993408138248243, 987993582701019166, 996458874255187978, 996459675589554206]:
+                    if prof.find_one({"user": msg.author.id}):
+                        prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 5}})
+                    else: 
+                        post = {"user": msg.author.id, "reputation": 5}
+                        prof.insert_one(post)
                 else: 
-                    post = {"user": msg.author.id, "reputation": 5}
-                    prof.insert_one(post)
-            else: 
-                if prof.find_one({"user": msg.author.id}):
-                    prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 1}})
-                else: 
-                    post = {"user": msg.author.id, "reputation": 1}
-                    prof.insert_one(post)
+                    if prof.find_one({"user": msg.author.id}):
+                        prof.update_one({"user": msg.author.id}, {"$inc": {"reputation": 1}})
+                    else: 
+                        post = {"user": msg.author.id, "reputation": 1}
+                        prof.insert_one(post)
         if not msg.author.id == 943928873412870154:
             if msg.channel.id != 943556439195152477:
                 if not isinstance(msg.channel, discord.channel.DMChannel):
