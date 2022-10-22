@@ -322,7 +322,7 @@ async def inboxscan():
                 deleted +=1
                 table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
             else: 
-                pass
+                table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
 
             numchannel += 1
         #INBOX 2
@@ -344,7 +344,7 @@ async def inboxscan():
                 deleted +=1
                 table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
             else: 
-                pass
+                table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
 
             numchannel += 1
         #INBOX 3
@@ -366,7 +366,7 @@ async def inboxscan():
                 deleted +=1
                 table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
             else: 
-                pass
+                table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
 
             numchannel += 1
 
@@ -376,13 +376,9 @@ async def inboxscan():
         print("Total channel scanned: ", numchannel)
         print("Dead channels: ", deadchannel)
         print("Channels deleted: ", deleted)
-        print("")
         print("##### DETAILED RESULT #####")
-        print("")
         print(table1)
-        print("")
         print(table2)
-        print("")
         print(table3)
 
         await asyncio.sleep(3600) # 1 hours
