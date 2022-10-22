@@ -320,9 +320,9 @@ async def inboxscan():
                 await chn.delete()
                 deadchannel +=1
                 deleted +=1
-                table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
+                table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
             else: 
-                table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
+                table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
 
             numchannel += 1
         #INBOX 2
@@ -342,9 +342,9 @@ async def inboxscan():
                 await chn.delete()
                 deadchannel +=1
                 deleted +=1
-                table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
+                table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
             else: 
-                table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
+                table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
 
             numchannel += 1
         #INBOX 3
@@ -364,9 +364,9 @@ async def inboxscan():
                 await chn.delete()
                 deadchannel +=1
                 deleted +=1
-                table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
+                table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
             else: 
-                table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
+                table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
 
             numchannel += 1
 
