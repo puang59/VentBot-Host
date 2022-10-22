@@ -10,6 +10,8 @@ import datetime
 import time
 from pytz import timezone
 
+from prettytable import PrettyTable
+
 ########## LOGGER #########
 import logging, coloredlogs
 import logging.handlers
@@ -291,6 +293,13 @@ async def inboxscan():
         print('_)(_(_|| )  _)|_(_|| |_(-(_|  .  .  .  ')
         print("########################################")
 
+        table1 = PrettyTable(["Channel scanned", "Last message", "Current date", "Inactive for"])
+        table1.title = 'INBOX (1)'
+        table2 = PrettyTable(["Channel scanned", "Last message", "Current date", "Inactive for"])
+        table2.title = 'INBOX (2)'
+        table3 = PrettyTable(["Channel scanned", "Last message", "Current date", "Inactive for"])
+        table3.title = 'INBOX (3)'
+
         numchannel = 0
         deadchannel = 0
         deleted = 0
@@ -311,6 +320,7 @@ async def inboxscan():
                 await chn.delete()
                 deadchannel +=1
                 deleted +=1
+                table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
             else: 
                 pass
 
@@ -332,6 +342,7 @@ async def inboxscan():
                 await chn.delete()
                 deadchannel +=1
                 deleted +=1
+                table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
             else: 
                 pass
 
@@ -353,17 +364,26 @@ async def inboxscan():
                 await chn.delete()
                 deadchannel +=1
                 deleted +=1
+                table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta} days"])
             else: 
                 pass
 
             numchannel += 1
-            
+
         print("")
         print("Scanning complete ✔")
         print("########## RESULT ##########")
         print("Total channel scanned: ", numchannel)
         print("Dead channels: ", deadchannel)
         print("Channels deleted: ", deleted)
+        print("")
+        print("##### DETAILED RESULT #####")
+        print("")
+        print(table1)
+        print("")
+        print(table2)
+        print("")
+        print(table3)
 
         await asyncio.sleep(3600) # 1 hours
 

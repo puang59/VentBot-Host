@@ -1,0 +1,33 @@
+[2022-10-22 12:51:16] [WARNING ] discord.client: PyNaCl is not installed, voice will NOT be supported
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: status_task has successfully been registered as an event
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: inboxscan has successfully been registered as an event
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: on_ready has successfully been registered as an event
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: on_member_join has successfully been registered as an event
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: on_member_remove has successfully been registered as an event
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: on_user_update has successfully been registered as an event
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: on_message has successfully been registered as an event
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: on_reaction_add has successfully been registered as an event
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: on_raw_reaction_add has successfully been registered as an event
+[2022-10-22 12:51:16] [DEBUG   ] discord.client: on_command_error has successfully been registered as an event
+[2022-10-22 12:51:26] [WARNING ] discord.client: PyNaCl is not installed, voice will NOT be supported
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: status_task has successfully been registered as an event
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: inboxscan has successfully been registered as an event
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: on_ready has successfully been registered as an event
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: on_member_join has successfully been registered as an event
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: on_member_remove has successfully been registered as an event
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: on_user_update has successfully been registered as an event
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: on_message has successfully been registered as an event
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: on_reaction_add has successfully been registered as an event
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: on_raw_reaction_add has successfully been registered as an event
+[2022-10-22 12:51:26] [DEBUG   ] discord.client: on_command_error has successfully been registered as an event
+[2022-10-22 12:52:08] [WARNING ] discord.client: PyNaCl is not installed, voice will NOT be supported
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: status_task has successfully been registered as an event
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: inboxscan has successfully been registered as an event
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: on_ready has successfully been registered as an event
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: on_member_join has successfully been registered as an event
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: on_member_remove has successfully been registered as an event
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: on_user_update has successfully been registered as an event
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: on_message has successfully been registered as an event
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: on_reaction_add has successfully been registered as an event
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: on_raw_reaction_add has successfully been registered as an event
+[2022-10-22 12:52:08] [DEBUG   ] discord.client: on_command_error has successfully been registered as an event
