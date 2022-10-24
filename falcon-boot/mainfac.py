@@ -36,7 +36,7 @@ logger.addHandler(handler)
 
 # LOCAL LOGS 
 def logInput(type, data): 
-    file = open ("ventLog.log", "r")  
+    file = open ("./falcon-boot/ventLog.log", "r")  
     lines = file.readlines()
     file.close()
     if type == "at": 
@@ -186,7 +186,8 @@ class tagButtons(discord.ui.View):
         vCheck.update_one({"user": interaction.user.id}, {"$set": {"tags": " "}})
         button.disabled=True
         button.label="None" 
-        cofirm = await interaction.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+        #cofirm = await interaction.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+        cofirm = await interaction.channel.send("`📩` - Accept Private Anonymous Message\n`☘️` - Do not accept private anonymous message\n\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
         await cofirm.add_reaction("📩")
         await cofirm.add_reaction("☘️")
         await interaction.response.edit_message(view=self)
@@ -195,7 +196,8 @@ class tagButtons(discord.ui.View):
     async def done_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         button.disabled=True
         button.label="Done"
-        cofirm = await interaction.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+        #cofirm = await interaction.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+        cofirm = await interaction.channel.send("`📩` - Accept Private Anonymous Message\n`☘️` - Do not accept private anonymous message\n\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
         await cofirm.add_reaction("📩")
         await cofirm.add_reaction("☘️")
         await interaction.response.edit_message(view=self)
@@ -263,7 +265,7 @@ async def status_task():
 
 
 async def load_cogs():
-    for filename in os.listdir("./cog"):
+    for filename in os.listdir("./falcon-boot/cog"):
         if filename.endswith(".py"):
             await bot.load_extension(f"cog.{filename[:-3]}")
 
@@ -629,7 +631,8 @@ async def on_message(msg):
                                 # else:
                                 #     await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
                                 
-                                typeMsg = await msg.channel.send("Click on `🤍` reaction to post your vent in <#943556439195152477> or `🌻` reaction to post your vent in <#1014201909118251098>")
+                                #typeMsg = await msg.channel.send("Click on `🤍` reaction to post your vent in <#943556439195152477> or `🌻` reaction to post your vent in <#1014201909118251098>")
+                                typeMsg = await msg.channel.send("```Select vent type:```\n`🤍` - <#943556439195152477>\n`🌻` - <#1014201909118251098>")
                                 await typeMsg.add_reaction('🤍')
                                 await typeMsg.add_reaction('🌻')
 
@@ -717,7 +720,7 @@ async def on_message(msg):
                                     except:
                                         print("DMs closed")
 
-
+                                    print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
                                     ########## LOGGING ##########
                                     logInput('at', "null")
                                     logInput('by', f"{msg.author.name}")
@@ -725,8 +728,6 @@ async def on_message(msg):
                                         logInput('messageid', f"{x.id}")
                                     except: 
                                         logInput('messageid', f"{y.id}")
-
-                                    print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
 
                                 global accept
 
@@ -791,7 +792,7 @@ async def on_message(msg):
                                         await msg.author.send("<:agree:943603027313565757> Your vent was posted successfully! Heres the vent link with token just incase.", embed=emdm)
                                     except:
                                         print("DMs closed")
-
+                                    print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
                                     ########## LOGGING ##########
                                     logInput('at', "null")
                                     logInput('by', f"{msg.author.name}")
@@ -799,9 +800,6 @@ async def on_message(msg):
                                         logInput('messageid', f"{x.id}")
                                     except: 
                                         logInput('messageid', f"{y.id}")
-
-                                    print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
-
 
             # Inbox
             if isinstance(msg.channel, discord.TextChannel):
@@ -1072,7 +1070,8 @@ async def on_reaction_add(reaction, user):
     if not user.bot: 
         if reaction.emoji == "🌻": 
             await casual()
-            cofirm = await reaction.message.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+            #cofirm = await reaction.message.channel.send("Click on `Envelope` reaction to accept private messages on this vent. (Click on `☘️` if you dont want to accept private message on this vent)\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
+            cofirm = await reaction.message.channel.send("`📩` - Accept Private Anonymous Message\n`☘️` - Do not accept private anonymous message\n\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
             await cofirm.add_reaction("📩")
             await cofirm.add_reaction("☘️")
             try:
