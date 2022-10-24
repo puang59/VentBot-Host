@@ -8,3 +8,4 @@ async-timeout
 boto
 pymongo
 prettytable
+coloredlogs
