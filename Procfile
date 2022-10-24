@@ -1,1 +1,1 @@
-worker: python /falcon-boot/mainfac.py
+worker: python ./falcon-boot/mainfac.py
