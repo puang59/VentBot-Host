@@ -119,7 +119,7 @@ bot.remove_command("help")
 async def pfp():
     pfp = open(f"image.png", "rb").read()
 
-global cofirm
+global cofirm   
 class tagButtons(discord.ui.View):
     def __init__(self, *, timeout=180):
         super().__init__(timeout=timeout)
@@ -626,15 +626,17 @@ async def on_message(msg):
                                 #vent_channel = bot.get_channel(f"{member.name}s vent")
                                 vent_channel = bot.get_channel(943556439195152477)
                                 casual_channel = bot.get_channel(1014201909118251098)
+                                help_channel = bot.get_channel(1035490966934659093)
                                 # if msg.author.id == 852797584812670996:
                                 #     pass
                                 # else:
                                 #     await msg.channel.set_permissions(member, send_messages=False, view_channel=True)
                                 
                                 #typeMsg = await msg.channel.send("Click on `🤍` reaction to post your vent in <#943556439195152477> or `🌻` reaction to post your vent in <#1014201909118251098>")
-                                typeMsg = await msg.channel.send("```Select vent type:```\n`🤍` - <#943556439195152477>\n`🌻` - <#1014201909118251098>")
+                                typeMsg = await msg.channel.send("```Select vent type:```\n`🤍` - <#943556439195152477>\n`🌻` - <#1014201909118251098>\n`📮` - <#1035490966934659093>")
                                 await typeMsg.add_reaction('🤍')
                                 await typeMsg.add_reaction('🌻')
+                                await typeMsg.add_reaction('📮')
 
                                 global casual 
                                 async def casual(): 
@@ -646,6 +648,10 @@ async def on_message(msg):
                                     post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "serious"}
                                     vType.insert_one(post)
 
+                                global helpchn 
+                                async def helpchn():
+                                    post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "help"}
+                                    vType.insert_one(post)
 
                                 global tagEmbedMessage
                                 async def tagEmbedMessage():
@@ -662,7 +668,6 @@ async def on_message(msg):
                                 #em.add_field(name="\u200b", value=msg.content, inline=False)
 
                                 global cross
-
                                 async def cross():
                                     tagData = vCheck.find_one({"user": msg.author.id})
                                     ventTypeCheck = vType.find_one({'author_id': msg.author.id})
@@ -758,24 +763,33 @@ async def on_message(msg):
                                         x = await vent_channel.send(embed=em)
                                         await x.add_reaction('🫂')
                                         await x.add_reaction('💬')
-                                    else: 
+                                    elif ventTypeCheck['type'] == "casual": 
                                         y = await casual_channel.send(embed=em)
                                         await y.add_reaction('🗣')
                                         await y.add_reaction('💬')
+                                    elif ventTypeCheck['type'] == "help": 
+                                        z = await help_channel.send(embed=em)
+                                        await z.add_reaction('⬆️')
+                                        await z.add_reaction('💬')
                                     logInput('type', f"{ventTypeCheck['type']}")
                                     vType.delete_one({'author_id':msg.author.id})
                                     vCheck.delete_one({'user': msg.author.id})
                                     stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
                                     try: 
-                                        post = {"author_id": msg.author.id, "code": f"{msg_code}",
-                                                "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                        collection.insert_one(post)
+                                        try: 
+                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                    "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                            collection.insert_one(post)
+                                        except: 
+                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                    "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                            collection.insert_one(post)
                                     except: 
                                         post = {"author_id": msg.author.id, "code": f"{msg_code}",
-                                                "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                        collection.insert_one(post)
-                                    
+                                                "msg_link": f"{z.jump_url}", "msg_id": z.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                        collection.insert_one(post)    
+
                                     try:
                                         await cofirm.delete()
                                     except:
@@ -797,9 +811,12 @@ async def on_message(msg):
                                     logInput('at', "null")
                                     logInput('by', f"{msg.author.name}")
                                     try: 
-                                        logInput('messageid', f"{x.id}")
+                                        try: 
+                                            logInput('messageid', f"{x.id}")
+                                        except: 
+                                            logInput('messageid', f"{y.id}")
                                     except: 
-                                        logInput('messageid', f"{y.id}")
+                                        logInput('messageid', f"{z.id}")
 
             # Inbox
             if isinstance(msg.channel, discord.TextChannel):
@@ -1078,6 +1095,11 @@ async def on_reaction_add(reaction, user):
                 await reaction.message.delete()
             except: 
                 pass
+    if not user.bot: 
+        if reaction.emoji == "📮": 
+            await helpchn()
+            await reaction.message.delete()
+            await accept()
     if not user.bot:
         if reaction.emoji == "📩":
             await accept()
