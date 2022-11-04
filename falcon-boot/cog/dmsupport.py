@@ -9,27 +9,36 @@ class dmsupport(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user): 
+        if not user.bot: 
+            if reaction.emoji == "✅":
+                await ifvent()
+            elif reaction.emoji == "❌":
+                await ifnotvent()
+
+    @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
             return  
         # if message.guild.id == 999682901308342342:
         #     return
-            
+
         if isinstance(message.channel, discord.DMChannel):
-            if message.attachments:
+
+            guild = self.bot.get_guild(943556434644328498)
+            categ = utils.get(guild.categories, name="MAILS")
+            channel = utils.get(
+                categ.channels, topic=str(message.author.id))
+
+
+            async def ifattachments():
                 link = message.attachments[0].url
                 guild = self.bot.get_guild(943556434644328498)
                 categ = utils.get(guild.categories, name="MAILS")
                 channel = utils.get(
                     categ.channels, topic=str(message.author.id))
-
-                user_a = "852797584812670996"  # evan id
-
                 if not channel:
                     channel = await categ.create_text_channel(name=f"{message.author.discriminator}", topic=str(message.author.id))
-
-                    # evan permission set
-                    await channel.set_permissions(user_a, send_messages=True, view_channel=True)
 
                     notifyrolesd = discord.utils.get(
                         guild.roles, id=943881256033198130)
@@ -52,12 +61,11 @@ class dmsupport(commands.Cog):
                 await asyncio.sleep(20)
                 await dmmsg.delete()
 
-            else:
+            async def ifnotattachments(): 
                 guild = self.bot.get_guild(943556434644328498)
                 categ = utils.get(guild.categories, name="MAILS")
                 channel = utils.get(
                     categ.channels, topic=str(message.author.id))
-
                 if not channel:
                     channel = await categ.create_text_channel(name=f"{message.author.discriminator}", topic=str(message.author.id))
                     notifyrolesd = discord.utils.get(
@@ -79,6 +87,34 @@ class dmsupport(commands.Cog):
                 dmmsg = await message.author.send(embed=embeddm)
                 await asyncio.sleep(20)
                 await dmmsg.delete()
+
+
+            if not channel:
+                confirmation = await message.author.send("Is this a vent message?")
+                await confirmation.add_reaction("✅")
+                await confirmation.add_reaction("❌")
+            
+                global ifvent
+                async def ifvent(): 
+                    await confirmation.delete()
+                    await message.author.send("Please use your private vent channel in the server. Bot DMs are for server related help or for reporting someone.")
+                    return 
+
+                global ifnotvent
+                async def ifnotvent(): 
+                    try: 
+                        await confirmation.delete()
+                    except: 
+                        pass
+                    if message.attachments:
+                        await ifattachments()
+                    else: 
+                        await ifnotattachments()
+            else: #if channel already exists
+                if message.attachments:
+                    await ifattachments()
+                else: 
+                    await ifnotattachments()
 
         elif isinstance(message.channel, discord.TextChannel):
             try: 

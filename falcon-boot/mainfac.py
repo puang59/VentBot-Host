@@ -672,19 +672,24 @@ async def on_message(msg):
                                     tagData = vCheck.find_one({"user": msg.author.id})
                                     ventTypeCheck = vType.find_one({'author_id': msg.author.id})
                                     # check if tag is empty - if yes then remove tags from embed - if no then continue
-                                    if ventTypeCheck['type'] == "serious": 
-                                        if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
-                                            em = discord.Embed(
-                                                description=f"{tagData['tags']}\n\n{msg.content}"
-                                            )
+                                    try: 
+                                        if ventTypeCheck['type'] == "serious": 
+                                            if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
+                                                em = discord.Embed(
+                                                    description=f"{tagData['tags']}\n\n{msg.content}"
+                                                )
+                                            else: 
+                                                em = discord.Embed(
+                                                    description=f"{msg.content}"
+                                                )
                                         else: 
                                             em = discord.Embed(
                                                 description=f"{msg.content}"
-                                            )
-                                    else: 
+                                            )      
+                                    except: 
                                         em = discord.Embed(
                                             description=f"{msg.content}"
-                                        )      
+                                        )                                              
 
                                     em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                                     # Checking vent type
@@ -696,8 +701,8 @@ async def on_message(msg):
                                         await y.add_reaction('🗣')
 
                                     logInput('type', f"{ventTypeCheck['type']}")
-                                    vType.delete_one({'author_id':msg.author.id})
-                                    vCheck.delete_one({'user': msg.author.id})
+                                    vType.delete_many({'author_id':msg.author.id})
+                                    vCheck.delete_many({'user': msg.author.id})
                                     stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
                                     try: 
@@ -740,16 +745,21 @@ async def on_message(msg):
                                     tagData = vCheck.find_one({"user": msg.author.id})
                                     ventTypeCheck = vType.find_one({'author_id': msg.author.id})
                                     # check if tag is empty - if yes then remove tags from embed - if no then continue
-                                    if ventTypeCheck['type'] == "serious": 
-                                        if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
-                                            em = discord.Embed(
-                                                description=f"{tagData['tags']}\n\n{msg.content}"
-                                            )
+                                    try: 
+                                        if ventTypeCheck['type'] == "serious": 
+                                            if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
+                                                em = discord.Embed(
+                                                    description=f"{tagData['tags']}\n\n{msg.content}"
+                                                )
+                                            else: 
+                                                em = discord.Embed(
+                                                    description=f"{msg.content}"
+                                                )
                                         else: 
                                             em = discord.Embed(
                                                 description=f"{msg.content}"
                                             )
-                                    else: 
+                                    except: 
                                         em = discord.Embed(
                                             description=f"{msg.content}"
                                         )
@@ -772,8 +782,8 @@ async def on_message(msg):
                                         await z.add_reaction('⬆️')
                                         await z.add_reaction('💬')
                                     logInput('type', f"{ventTypeCheck['type']}")
-                                    vType.delete_one({'author_id':msg.author.id})
-                                    vCheck.delete_one({'user': msg.author.id})
+                                    vType.delete_many({'author_id':msg.author.id})
+                                    vCheck.delete_many({'user': msg.author.id})
                                     stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
                                     try: 
@@ -1117,102 +1127,75 @@ async def on_reaction_add(reaction, user):
 
 @bot.event
 async def on_raw_reaction_add(payload):
-    if not payload.member.bot:
-        if payload.emoji.name == "🫂":
-            if prof.find_one({"user": payload.member.id}):
-                prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
-            else: 
-                post = {"user": payload.member.id, "reputation": 1}
-                prof.insert_one(post)
+    try: 
+        if not payload.member.bot:
+            if payload.emoji.name == "🫂":
+                if prof.find_one({"user": payload.member.id}):
+                    prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
+                else: 
+                    post = {"user": payload.member.id, "reputation": 1}
+                    prof.insert_one(post)
 
-        if payload.emoji.name == "🔍":
-            channel = bot.get_channel(payload.channel_id)
-            message = channel.get_partial_message(payload.message_id)
-            await message.remove_reaction(payload.emoji ,payload.member)
-            em = discord.Embed(
-                description="No one can access this channel even server owners wont have a look on custom private vent channels because we respect privacy. You are here all by yourself so dont worry about getting judged and feel free to vent.\nWhatever you'll vent about here will be posted publicly on either <#943556439195152477>  or <#1014201909118251098> channel (you can decide when you vent) but no one can know who typed it and what is their identity so feel safe.\n__Once you are done venting out, we will temporarily BLOCK you from sending any message here to avoid spams and trolls.__\n\n**Why keeping us anonymous?**\nWe try our best to help people across the globe to deal with whatever they are going through.\nSince many people on the internet are insecure about getting judged and dealing with toxicity online, we try to minimize it by keeping you anonymous.\n\n**Why are we doing this?**\nWe understand how tough life can get and we understand it can be really difficult for one to go through all the pain and sufferings.\nAll we want is you to move forward in life and this effort is a little push to that. We want to let you know that you are not alone in this game, a lot of people on the world share similar pain. (knowing this definitely helps one to move forward)\n\nSometimes it is better to let your heart cry out loud in a place where no one will judge you, and that is where this server comes in play."
-            )
-            em.set_author(name="Information: ",
-                          icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
-            channel = bot.get_channel(payload.channel_id)
-            txt = await channel.fetch_message(payload.message_id)
-            await txt.edit(embed=em)
-            await txt.add_reaction('⬅️')
-        if payload.emoji.name == '⬅️':
-            channel = bot.get_channel(payload.channel_id)
-            message = channel.get_partial_message(payload.message_id)
-            await message.remove_reaction(payload.emoji ,payload.member)
-            ema = discord.Embed(
-                description="1) Make your text fit in one single message because you will be locked out for \n`2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
-            )
-            ema.set_author(name="Instruction: ",
-                           icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
-            ema.set_footer(
-                text="Note: We dont save your details and message in any separate database.")
-            channel = bot.get_channel(payload.channel_id)
-            txt = await channel.fetch_message(payload.message_id) 
-            await txt.edit(embed=ema)
-            await txt.add_reaction('🔍')
-        if payload.emoji.name == "💬":
-            if prof.find_one({"user": payload.member.id}):
-                prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
-            else: 
-                post = {"user": payload.member.id, "reputation": 1}
-                prof.insert_one(post)
+            if payload.emoji.name == "🔍":
+                channel = bot.get_channel(payload.channel_id)
+                message = channel.get_partial_message(payload.message_id)
+                await message.remove_reaction(payload.emoji ,payload.member)
+                em = discord.Embed(
+                    description="No one can access this channel even server owners wont have a look on custom private vent channels because we respect privacy. You are here all by yourself so dont worry about getting judged and feel free to vent.\nWhatever you'll vent about here will be posted publicly on either <#943556439195152477>  or <#1014201909118251098> channel (you can decide when you vent) but no one can know who typed it and what is their identity so feel safe.\n__Once you are done venting out, we will temporarily BLOCK you from sending any message here to avoid spams and trolls.__\n\n**Why keeping us anonymous?**\nWe try our best to help people across the globe to deal with whatever they are going through.\nSince many people on the internet are insecure about getting judged and dealing with toxicity online, we try to minimize it by keeping you anonymous.\n\n**Why are we doing this?**\nWe understand how tough life can get and we understand it can be really difficult for one to go through all the pain and sufferings.\nAll we want is you to move forward in life and this effort is a little push to that. We want to let you know that you are not alone in this game, a lot of people on the world share similar pain. (knowing this definitely helps one to move forward)\n\nSometimes it is better to let your heart cry out loud in a place where no one will judge you, and that is where this server comes in play."
+                )
+                em.set_author(name="Information: ",
+                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
+                channel = bot.get_channel(payload.channel_id)
+                txt = await channel.fetch_message(payload.message_id)
+                await txt.edit(embed=em)
+                await txt.add_reaction('⬅️')
+            if payload.emoji.name == '⬅️':
+                channel = bot.get_channel(payload.channel_id)
+                message = channel.get_partial_message(payload.message_id)
+                await message.remove_reaction(payload.emoji ,payload.member)
+                ema = discord.Embed(
+                    description="1) Make your text fit in one single message because you will be locked out for \n`2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
+                )
+                ema.set_author(name="Instruction: ",
+                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
+                ema.set_footer(
+                    text="Note: We dont save your details and message in any separate database.")
+                channel = bot.get_channel(payload.channel_id)
+                txt = await channel.fetch_message(payload.message_id) 
+                await txt.edit(embed=ema)
+                await txt.add_reaction('🔍')
+            if payload.emoji.name == "💬":
+                if prof.find_one({"user": payload.member.id}):
+                    prof.update_one({"user": payload.member.id}, {"$inc": {"reputation": 1}})
+                else: 
+                    post = {"user": payload.member.id, "reputation": 1}
+                    prof.insert_one(post)
 
-            channel = bot.get_channel(payload.channel_id)
-            message = channel.get_partial_message(payload.message_id)
-            await message.remove_reaction(payload.emoji ,payload.member)
-            if collection.find_one({"msg_id": payload.message_id}):
-                db_data = collection.find_one({"msg_id": payload.message_id})
-                #guild = payload.guild_id
-                guild = bot.get_guild(payload.guild_id)
-                user_a = payload.member
-                #role_b = discord.utils.get(user.guild.roles, name="Blocked")
-                server = bot.get_guild(943556434644328498)
-                msg_owner = server.get_member(int(db_data["author_id"]))
-                if msg_owner is None: 
-                    await user_a.send("Vent message owner not found! They probably left the server.")
-                else:
-                    
-                    # print(msg_owner)
-                    #print(f"msg_owner: {msg_owner}")
-                    #print(f"user_a: {user_a}")
+                channel = bot.get_channel(payload.channel_id)
+                message = channel.get_partial_message(payload.message_id)
+                await message.remove_reaction(payload.emoji ,payload.member)
+                if collection.find_one({"msg_id": payload.message_id}):
+                    db_data = collection.find_one({"msg_id": payload.message_id})
+                    #guild = payload.guild_id
+                    guild = bot.get_guild(payload.guild_id)
+                    user_a = payload.member
+                    #role_b = discord.utils.get(user.guild.roles, name="Blocked")
+                    server = bot.get_guild(943556434644328498)
+                    msg_owner = server.get_member(int(db_data["author_id"]))
+                    if msg_owner is None: 
+                        await user_a.send("Vent message owner not found! They probably left the server.")
+                    else:
+                        
+                        # print(msg_owner)
+                        #print(f"msg_owner: {msg_owner}")
+                        #print(f"user_a: {user_a}")
 
-                    characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-                    inboxCode = "".join(choice(characters)
-                                    for x in range(randint(2, 5)))
+                        characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+                        inboxCode = "".join(choice(characters)
+                                        for x in range(randint(2, 5)))
 
-                    try: 
-                        categOwner = discord.utils.get(guild.categories, name="📨 INBOX")
-
-                        text_channel_replier = await categOwner.create_text_channel(f"{inboxCode}")
-
-                        await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
-                        await text_channel_replier.set_permissions(msg_owner, view_channel=False)
-                        await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                        binEmbed = discord.Embed(description="Use `.bin` command here to close this inbox", colour=discord.Colour.red())
-                        await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
-                        #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
-
-                        # await text_channel_replier.set_permissions(role_b, send_messages=False)
-                        text_channel_owner = await categOwner.create_text_channel(f"{inboxCode}")
-
-                        await text_channel_owner.set_permissions(user_a, view_channel=False)
-                        await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
-                        await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                        await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
-                        await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
-                        #await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
-
-                        txt = await channel.fetch_message(payload.message_id)
-                        ventMsg = discord.Embed(description=f"{txt.embeds[0].description}")
-                        ventMsg.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                        await text_channel_owner.send(f"Someone wants to talk to you about your vent. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = ventMsg)
-                        await text_channel_owner.send(embed=binEmbed)
-                    except:
                         try: 
-                            categOwner = discord.utils.get(guild.categories, name="📨 INBOX (2)")
+                            categOwner = discord.utils.get(guild.categories, name="📨 INBOX")
 
                             text_channel_replier = await categOwner.create_text_channel(f"{inboxCode}")
 
@@ -1231,46 +1214,76 @@ async def on_raw_reaction_add(payload):
                             await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                             await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
                             await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
+                            #await text_channel_owner.send(f"Someone wants to talk to you about {db_data['msg_link']}. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = binEmbed)
 
                             txt = await channel.fetch_message(payload.message_id)
                             ventMsg = discord.Embed(description=f"{txt.embeds[0].description}")
                             ventMsg.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
                             await text_channel_owner.send(f"Someone wants to talk to you about your vent. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = ventMsg)
                             await text_channel_owner.send(embed=binEmbed)
-                        except: 
-                            categOwner = discord.utils.get(guild.categories, name="📨 INBOX (3)")
+                        except:
+                            try: 
+                                categOwner = discord.utils.get(guild.categories, name="📨 INBOX (2)")
 
-                            text_channel_replier = await categOwner.create_text_channel(f"{inboxCode}")
+                                text_channel_replier = await categOwner.create_text_channel(f"{inboxCode}")
 
-                            await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
-                            await text_channel_replier.set_permissions(msg_owner, view_channel=False)
-                            await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                            binEmbed = discord.Embed(description="Use `.bin` command here to close this inbox", colour=discord.Colour.red())
-                            await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
-                            #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
+                                await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
+                                await text_channel_replier.set_permissions(msg_owner, view_channel=False)
+                                await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                                binEmbed = discord.Embed(description="Use `.bin` command here to close this inbox", colour=discord.Colour.red())
+                                await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
+                                #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
 
-                            # await text_channel_replier.set_permissions(role_b, send_messages=False)
-                            text_channel_owner = await categOwner.create_text_channel(f"{inboxCode}")
+                                # await text_channel_replier.set_permissions(role_b, send_messages=False)
+                                text_channel_owner = await categOwner.create_text_channel(f"{inboxCode}")
 
-                            await text_channel_owner.set_permissions(user_a, view_channel=False)
-                            await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
-                            await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                            await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
-                            await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
+                                await text_channel_owner.set_permissions(user_a, view_channel=False)
+                                await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
+                                await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                                await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
+                                await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
 
-                            txt = await channel.fetch_message(payload.message_id)
-                            ventMsg = discord.Embed(description=f"{txt.embeds[0].description}")
-                            ventMsg.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                            await text_channel_owner.send(f"Someone wants to talk to you about your vent. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = ventMsg)
-                            await text_channel_owner.send(embed=binEmbed)
+                                txt = await channel.fetch_message(payload.message_id)
+                                ventMsg = discord.Embed(description=f"{txt.embeds[0].description}")
+                                ventMsg.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                await text_channel_owner.send(f"Someone wants to talk to you about your vent. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = ventMsg)
+                                await text_channel_owner.send(embed=binEmbed)
+                            except: 
+                                categOwner = discord.utils.get(guild.categories, name="📨 INBOX (3)")
 
-                    # Inserting Inbox information in the DataBase
-                    post={"channel":f"{inboxCode}", "reactor":payload.member.id, "author":int(db_data["author_id"])}
-                    inbox.insert_one(post)
+                                text_channel_replier = await categOwner.create_text_channel(f"{inboxCode}")
 
-            else:
-                print('Cannot find message id in DataBase!')
-                await payload.member.send('Vent author left the server!')
+                                await text_channel_replier.set_permissions(user_a, send_messages=True, view_channel=True)
+                                await text_channel_replier.set_permissions(msg_owner, view_channel=False)
+                                await text_channel_replier.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                                binEmbed = discord.Embed(description="Use `.bin` command here to close this inbox", colour=discord.Colour.red())
+                                await text_channel_replier.send(f"You can send your message here and it will be sent to the author automatically! <@{payload.member.id}>", embed = binEmbed)
+                                #collection.update_one({"msg_id": reaction.message.id}, {"$set":{f"inbox{user.discriminator}":text_channel_replier.id}})
+
+                                # await text_channel_replier.set_permissions(role_b, send_messages=False)
+                                text_channel_owner = await categOwner.create_text_channel(f"{inboxCode}")
+
+                                await text_channel_owner.set_permissions(user_a, view_channel=False)
+                                await text_channel_owner.set_permissions(msg_owner, send_messages=True, view_channel=True)
+                                await text_channel_owner.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                                await text_channel_owner.edit(topic=f"{str(text_channel_replier.id)}")
+                                await text_channel_replier.edit(topic=f"{str(text_channel_owner.id)}")
+
+                                txt = await channel.fetch_message(payload.message_id)
+                                ventMsg = discord.Embed(description=f"{txt.embeds[0].description}")
+                                ventMsg.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                await text_channel_owner.send(f"Someone wants to talk to you about your vent. You'll recieve their message here and you can reply to it by texting here. <@{db_data['author_id']}>", embed = ventMsg)
+                                await text_channel_owner.send(embed=binEmbed)
+
+                        # Inserting Inbox information in the DataBase
+                        post={"channel":f"{inboxCode}", "reactor":payload.member.id, "author":int(db_data["author_id"])}
+                        inbox.insert_one(post)
+
+                else:
+                    print('Cannot find message id in DataBase!')
+                    await payload.member.send('Vent author left the server!')
+    except: 
+        pass
 
 ########### Error Handling ##########
 @bot.event
