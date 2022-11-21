@@ -907,7 +907,7 @@ async def close(ctx):
 
 @bot.command()
 async def latency(ctx): 
-    await ctx.send(f'Pong! In {round(bot.latency * 1000)}ms')
+    await ctx.send(f'Pong! In `{round(bot.latency * 1000)}ms`')
 
 @bot.command()
 async def bin(ctx):
