@@ -278,7 +278,9 @@ async def main():
         print("                                            |__/                      |__/                   ")
         await bot.start('OTYyNjAzODQ2Njk2MzM3NDA4.GazOQC.P1jXz9ZcqnT6ZAbnpE9NNJVVd5M53K-04VDHTs')
         
-
+@bot.command
+async def latency(ctx): 
+    await ctx.send(f'Pong! In {round(bot.latency * 1000)}ms')
 ########## INBOX SCANNER ##########
 
 @bot.event
