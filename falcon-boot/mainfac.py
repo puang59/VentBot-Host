@@ -278,9 +278,6 @@ async def main():
         print("                                            |__/                      |__/                   ")
         await bot.start('OTYyNjAzODQ2Njk2MzM3NDA4.GazOQC.P1jXz9ZcqnT6ZAbnpE9NNJVVd5M53K-04VDHTs')
         
-@bot.command
-async def latency(ctx): 
-    await ctx.send(f'Pong! In {round(bot.latency * 1000)}ms')
 ########## INBOX SCANNER ##########
 
 @bot.event
@@ -908,6 +905,9 @@ async def close(ctx):
             name="Issue Resolved", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/640px-Sign-check-icon.png")
         await member.send(embed=embedclose)
 
+@bot.command()
+async def latency(ctx): 
+    await ctx.send(f'Pong! In {round(bot.latency * 1000)}ms')
 
 @bot.command()
 async def bin(ctx):
