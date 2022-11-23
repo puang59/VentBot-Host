@@ -195,12 +195,13 @@ class dlistener(commands.Cog):
                                             
 
                                     else:
+                                        #await msg.channel.send("Use the command `.username <yourname>` replacing `<yourname>` with the name you want to display in global chat.")
                                         post = {"_id": msg.author.id, 'username': "-", 'ident': 0}
                                         gChat.insert_one(post)
                                         await msg.channel.send(f"What will be your `display name`?")
-
-                                        def check(msg):
-                                            return msg.author == msg.author and msg.channel == msg.channel and msg.guild.id == 999682901308342342
+                                        print('trigger')
+                                        def check(message):
+                                            return message.author == msg.author and message.channel == msg.channel and msg.guild.id == 999682901308342342
 
                                         try:
                                             msg1 = await self.bot.wait_for("message", check=check, timeout=300)
