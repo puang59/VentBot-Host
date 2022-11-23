@@ -418,6 +418,7 @@ class dating(commands.Cog):
                             description="Please access the `thread channel` to post your profile!"
                         )
                         a = await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)", embed=ema)
+                        await text_channel.send("After you are done posting your intro, you can text in this channel to talk in <#1000989536861560862>")
                         thre = await text_channel.create_thread(name=f"Intro - {member.name}", message=a, auto_archive_duration=10080, reason=None)
 
                         if collection.find_one({"_id": member.id}):
