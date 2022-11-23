@@ -88,131 +88,132 @@ class dlistener(commands.Cog):
     async def on_message(self, msg):
         if not msg.guild:
             return
-        if msg.guild.id == 999682901308342342:
-            if not dUser.find_one({"mem": msg.author.id}):
-                if msg.channel.category is not None:
-                    if msg.channel.category.id == 1000038353854533773: #is triggered only in inbox channels 
-                        if not msg.author.bot:
-                            if msg.content.startswith("."):
-                                pass
-                            else:
-                                if "REPORTED" in msg.channel.topic:
-                                    await msg.add_reaction("<:disagree:943603027854626816>")
-                                elif "Reporter" in msg.channel.topic:
-                                    print("Reporter channel detected")
-                                else:
-                                    topic = msg.channel.topic
-                                    
-                                    msgContent = msg.content
-                                    chn = msg.guild.get_channel(int(topic))
-                                    em = discord.Embed(
-                                        description=msg.content
-                                    )
-                                    em.set_author(
-                                        name="Stranger", icon_url="https://image.similarpng.com/very-thumbnail/2020/08/Emoji-social-media-Reaction-heart-icon-vector-PNG.png")
-                                    x = await chn.send(embed=em, view=repButton())
-                                    await msg.add_reaction("<:agree:943603027313565757>")
-            
-            #Global Chat 
-            if not msg.author.bot:
-                if not msg.content.startswith("."):
-                    if not dUser.find_one({"mem": msg.author.id}):
-                        if msg.channel.category.id == 999927005179035738: 
-                            if collection.find_one({"_id": msg.author.id}):
-                                if gChat.find_one({"_id": msg.author.id}):
-                                    data = gChat.find_one({"_id": msg.author.id})
-                                    if data['ident'] == 0:
-                                        return
-                                    else: 
-                                        #post1 = {"lastmessage": msg.author.id}
-                                        his = dHistory.find_one({"lastmessage": msg.author.id})
-                                        globalChannel = msg.guild.get_channel(1000989536861560862)
-                                        gender = collection.find_one({"_id": msg.author.id})
-                                        try: 
-                                            if not his['lastmessage'] == msg.author.id:
-                                                print("if block")
-                                                if gender["gender"].lower() == "male":
-                                                    col = 0x8ED1FC
-                                                elif gender["gender"].lower() == "female":
-                                                    col = 0xF78DA7
-                                                else: 
-                                                    value = random.randint(0, 0xffffff)
-                                                    col = value
-
-                                                emd = discord.Embed(description=f"[**{data['username']}**] {msg.content}", color=col)
-                                                x = await globalChannel.send(embed=emd) 
-                                                dHistory.delete_many({})
-                                                post1 = {"lastmessage": msg.author.id, "msg_id": x.id , "text":msg.content}
-                                                # post2 = {"msgby": msg.author.id, "text": msg.content}
-                                                dHistory.insert_one(post1)
-                                                return
-                                                #dHistory.insert_one(post2) 
-                                                #await globalChannel.send(f'{data["username"]}```{msg.content}```')
-                                            else: 
-                                                print("else block")
-                                                if gender["gender"].lower() == "male":
-                                                    col = 0x8ED1FC
-                                                elif gender["gender"].lower() == "female":
-                                                    col = 0xF78DA7
-                                                else: 
-                                                    value = random.randint(0, 0xffffff)
-                                                    col = value
-                                                
-                                                oldtext = dHistory.find_one({"lastmessage": msg.author.id})
-                                                emd = discord.Embed(description=f"[**{data['username']}**] {str(oldtext['text'])}\n    {msg.content}", color=col)
-                                                #await globalChannel.send(embed=emd) 
-                                                txt = await globalChannel.fetch_message(int(oldtext["msg_id"]))
-                                                x = await txt.edit(embed=emd)
-                                                #await globalChannel.send(f"```{msg.content}```")
-                                                # print('1')
-                                                dHistory.delete_many({})
-                                                # print('2')
-                                                post1 = {"lastmessage": msg.author.id, "msg_id": x.id , "text":f"{oldtext['text']}\n   {msg.content}"}
-                                                # print('3')
-                                                dHistory.insert_one(post1)
-                                                # print('4 (sucess)')
-                                                return
-                                                #dHistory.delete_many({})
-                                        except: 
-                                                print("except block")
-                                                if gender["gender"].lower() == "male":
-                                                    col = 0x8ED1FC
-                                                elif gender["gender"].lower() == "female":
-                                                    col = 0xF78DA7
-                                                else: 
-                                                    value = random.randint(0, 0xffffff)
-                                                    col = value
-                                                emd = discord.Embed(description=f"[**{data['username']}**] {msg.content}", color=col)
-                                                x = await globalChannel.send(embed=emd) 
-                                                #await globalChannel.send(f'{data["username"]}```{msg.content}```')
-                                                dHistory.delete_many({})
-                                                post1 = {"lastmessage": msg.author.id, "msg_id": x.id, "text": msg.content}
-                                                #post2 = {"msgby": msg.author.id, "text": msg.content}
-                                                dHistory.insert_one(post1)
-                                                return
-                                                #dHistory.insert_one(post2)
-                                        
-
-                                else:
-                                    post = {"_id": msg.author.id, 'username': "-", 'ident': 0}
-                                    gChat.insert_one(post)
-                                    await msg.channel.send(f"What will be your `display name`?")
-
-                                    def check(msg):
-                                        return msg.author == msg.author and msg.channel == msg.channel and msg.guild.id == 999682901308342342
-
-                                    try:
-                                        msg1 = await self.bot.wait_for("message", check=check, timeout=300)
-                                    except asyncio.TimeoutError:
-                                        error5 = await msg.channel.send(f"<:disagree:943603027854626816> TimedOut {msg.author.mention}")
-                                        await asyncio.sleep(5)
-                                        await error5.delete()
-                                        return
+        if not msg.author.bot:           
+            if msg.guild.id == 999682901308342342:
+                if not dUser.find_one({"mem": msg.author.id}):
+                    if msg.channel.category is not None:
+                        if msg.channel.category.id == 1000038353854533773: #is triggered only in inbox channels 
+                            if not msg.author.bot:
+                                if msg.content.startswith("."):
                                     pass
-                                    if msg1: 
-                                        gChat.update_one({"_id":msg.author.id}, {"$set":{"username":msg1.content}})
-                                        gChat.update_one({"_id": msg.author.id}, {"$inc": {"ident": 1}})
-                                        await msg.channel.send('Now you can start chatting :)')
-                await self.bot.process_commands(msg)
+                                else:
+                                    if "REPORTED" in msg.channel.topic:
+                                        await msg.add_reaction("<:disagree:943603027854626816>")
+                                    elif "Reporter" in msg.channel.topic:
+                                        print("Reporter channel detected")
+                                    else:
+                                        topic = msg.channel.topic
+                                        
+                                        msgContent = msg.content
+                                        chn = msg.guild.get_channel(int(topic))
+                                        em = discord.Embed(
+                                            description=msg.content
+                                        )
+                                        em.set_author(
+                                            name="Stranger", icon_url="https://image.similarpng.com/very-thumbnail/2020/08/Emoji-social-media-Reaction-heart-icon-vector-PNG.png")
+                                        x = await chn.send(embed=em, view=repButton())
+                                        await msg.add_reaction("<:agree:943603027313565757>")
+                
+                #Global Chat 
+                if not msg.author.bot:
+                    if not msg.content.startswith("."):
+                        if not dUser.find_one({"mem": msg.author.id}):
+                            if msg.channel.category.id == 999927005179035738: 
+                                if collection.find_one({"_id": msg.author.id}):
+                                    if gChat.find_one({"_id": msg.author.id}):
+                                        data = gChat.find_one({"_id": msg.author.id})
+                                        if data['ident'] == 0:
+                                            return
+                                        else: 
+                                            #post1 = {"lastmessage": msg.author.id}
+                                            his = dHistory.find_one({"lastmessage": msg.author.id})
+                                            globalChannel = msg.guild.get_channel(1000989536861560862)
+                                            gender = collection.find_one({"_id": msg.author.id})
+                                            try: 
+                                                if not his['lastmessage'] == msg.author.id:
+                                                    print("if block")
+                                                    if gender["gender"].lower() == "male":
+                                                        col = 0x8ED1FC
+                                                    elif gender["gender"].lower() == "female":
+                                                        col = 0xF78DA7
+                                                    else: 
+                                                        value = random.randint(0, 0xffffff)
+                                                        col = value
+
+                                                    emd = discord.Embed(description=f"[**{data['username']}**] {msg.content}", color=col)
+                                                    x = await globalChannel.send(embed=emd) 
+                                                    dHistory.delete_many({})
+                                                    post1 = {"lastmessage": msg.author.id, "msg_id": x.id , "text":msg.content}
+                                                    # post2 = {"msgby": msg.author.id, "text": msg.content}
+                                                    dHistory.insert_one(post1)
+                                                    return
+                                                    #dHistory.insert_one(post2) 
+                                                    #await globalChannel.send(f'{data["username"]}```{msg.content}```')
+                                                else: 
+                                                    print("else block")
+                                                    if gender["gender"].lower() == "male":
+                                                        col = 0x8ED1FC
+                                                    elif gender["gender"].lower() == "female":
+                                                        col = 0xF78DA7
+                                                    else: 
+                                                        value = random.randint(0, 0xffffff)
+                                                        col = value
+                                                    
+                                                    oldtext = dHistory.find_one({"lastmessage": msg.author.id})
+                                                    emd = discord.Embed(description=f"[**{data['username']}**] {str(oldtext['text'])}\n    {msg.content}", color=col)
+                                                    #await globalChannel.send(embed=emd) 
+                                                    txt = await globalChannel.fetch_message(int(oldtext["msg_id"]))
+                                                    x = await txt.edit(embed=emd)
+                                                    #await globalChannel.send(f"```{msg.content}```")
+                                                    # print('1')
+                                                    dHistory.delete_many({})
+                                                    # print('2')
+                                                    post1 = {"lastmessage": msg.author.id, "msg_id": x.id , "text":f"{oldtext['text']}\n   {msg.content}"}
+                                                    # print('3')
+                                                    dHistory.insert_one(post1)
+                                                    # print('4 (sucess)')
+                                                    return
+                                                    #dHistory.delete_many({})
+                                            except: 
+                                                    print("except block")
+                                                    if gender["gender"].lower() == "male":
+                                                        col = 0x8ED1FC
+                                                    elif gender["gender"].lower() == "female":
+                                                        col = 0xF78DA7
+                                                    else: 
+                                                        value = random.randint(0, 0xffffff)
+                                                        col = value
+                                                    emd = discord.Embed(description=f"[**{data['username']}**] {msg.content}", color=col)
+                                                    x = await globalChannel.send(embed=emd) 
+                                                    #await globalChannel.send(f'{data["username"]}```{msg.content}```')
+                                                    dHistory.delete_many({})
+                                                    post1 = {"lastmessage": msg.author.id, "msg_id": x.id, "text": msg.content}
+                                                    #post2 = {"msgby": msg.author.id, "text": msg.content}
+                                                    dHistory.insert_one(post1)
+                                                    return
+                                                    #dHistory.insert_one(post2)
+                                            
+
+                                    else:
+                                        post = {"_id": msg.author.id, 'username': "-", 'ident': 0}
+                                        gChat.insert_one(post)
+                                        await msg.channel.send(f"What will be your `display name`?")
+
+                                        def check(msg):
+                                            return msg.author == msg.author and msg.channel == msg.channel and msg.guild.id == 999682901308342342
+
+                                        try:
+                                            msg1 = await self.bot.wait_for("message", check=check, timeout=300)
+                                        except asyncio.TimeoutError:
+                                            error5 = await msg.channel.send(f"<:disagree:943603027854626816> TimedOut {msg.author.mention}")
+                                            await asyncio.sleep(5)
+                                            await error5.delete()
+                                            return
+                                        pass
+                                        if msg1: 
+                                            gChat.update_one({"_id":msg.author.id}, {"$set":{"username":msg1.content}})
+                                            gChat.update_one({"_id": msg.author.id}, {"$inc": {"ident": 1}})
+                                            await msg.channel.send('Now you can start chatting :)')
+                    await self.bot.process_commands(msg)
 async def setup(bot):
     await bot.add_cog(dlistener(bot))
