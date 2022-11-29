@@ -292,6 +292,8 @@ async def inboxscan():
     deadchannel = 0
     deleted = 0
 
+    timeScanned = 0
+    
     i = 0 
     while i < 1:
         print("########################################")
@@ -307,202 +309,79 @@ async def inboxscan():
         table3.title = 'INBOX (3)'
 
         #INBOX 1
-        for channel in inboxCateg1.channels: 
-            message = await channel.fetch_message(channel.last_message_id)
+        try: 
+            for channel in inboxCateg1.channels: 
+                message = await channel.fetch_message(channel.last_message_id)
 
-            lmsgdate = message.created_at.date()
-            curdate = datetime.datetime.utcnow().date()
+                lmsgdate = message.created_at.date()
+                curdate = datetime.datetime.utcnow().date()
 
-            delta = curdate-lmsgdate
+                delta = curdate-lmsgdate
 
-            if delta.days > 2: 
-                deadchannel +=1 
-                print(f"Deleted {channel.name} from INBOX 1 - inactive for {delta.days} days")
-                print("---------------------------------------------------------------------------")
-                chn = bot.get_channel(channel.id)
-                await chn.delete()
-                deadchannel +=1
-                deleted +=1
-                table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-            else: 
-                table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
+                if delta.days > 2: 
+                    deadchannel +=1 
+                    print(f"Deleted {channel.name} from INBOX 1 - inactive for {delta.days} days")
+                    print("---------------------------------------------------------------------------")
+                    chn = bot.get_channel(channel.id)
+                    await chn.delete()
+                    deadchannel +=1
+                    deleted +=1
+                    table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
+                else: 
+                    table1.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
 
-            numchannel += 1
+                numchannel += 1
+        except: pass
         #INBOX 2
-        for channel in inboxCateg2.channels: 
-            message = await channel.fetch_message(channel.last_message_id)
+        try: 
+            for channel in inboxCateg2.channels: 
+                message = await channel.fetch_message(channel.last_message_id)
 
-            lmsgdate = message.created_at.date()
-            curdate = datetime.datetime.utcnow().date()
+                lmsgdate = message.created_at.date()
+                curdate = datetime.datetime.utcnow().date()
 
-            delta = curdate-lmsgdate
+                delta = curdate-lmsgdate
 
-            if delta.days > 2: 
-                deadchannel +=1 
-                print(f"Deleted {channel.name} from INBOX 2 - inactive for {delta.days} days")
-                print("---------------------------------------------------------------------------")
-                chn = bot.get_channel(channel.id)
-                await chn.delete()
-                deadchannel +=1
-                deleted +=1
-                table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-            else: 
-                table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
+                if delta.days > 2: 
+                    deadchannel +=1 
+                    print(f"Deleted {channel.name} from INBOX 2 - inactive for {delta.days} days")
+                    print("---------------------------------------------------------------------------")
+                    chn = bot.get_channel(channel.id)
+                    await chn.delete()
+                    deadchannel +=1
+                    deleted +=1
+                    table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
+                else: 
+                    table2.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
 
-            numchannel += 1
+                numchannel += 1
+        except: pass
         #INBOX 3
-        for channel in inboxCateg3.channels: 
-            message = await channel.fetch_message(channel.last_message_id)
+        try: 
+            for channel in inboxCateg3.channels: 
+                message = await channel.fetch_message(channel.last_message_id)
 
-            lmsgdate = message.created_at.date()
-            curdate = datetime.datetime.utcnow().date()
+                lmsgdate = message.created_at.date()
+                curdate = datetime.datetime.utcnow().date()
 
-            delta = curdate-lmsgdate
+                delta = curdate-lmsgdate
 
-            if delta.days > 2: 
-                deadchannel +=1 
-                print(f"Deleted {channel.name} from INBOX 3 - inactive for {delta.days} days")
-                print("---------------------------------------------------------------------------")
-                chn = bot.get_channel(channel.id)
-                await chn.delete()
-                deadchannel +=1
-                deleted +=1
-                table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-            else: 
-                table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
+                if delta.days > 2: 
+                    deadchannel +=1 
+                    print(f"Deleted {channel.name} from INBOX 3 - inactive for {delta.days} days")
+                    print("---------------------------------------------------------------------------")
+                    chn = bot.get_channel(channel.id)
+                    await chn.delete()
+                    deadchannel +=1
+                    deleted +=1
+                    table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
+                else: 
+                    table3.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
 
-            numchannel += 1
+                numchannel += 1
+        except: pass
 
-        guild = bot.get_guild(999682901308342342)
-        inboxCateg1 = discord.utils.get(guild.categories, name="💌 INBOX")
-        inboxCateg2 = discord.utils.get(guild.categories, name="💌 INBOX (2)")
-        inboxCateg3 = discord.utils.get(guild.categories, name="💌 INBOX (3)")
-        inboxCateg4 = discord.utils.get(guild.categories, name="💌 INBOX (4)")
-        inboxCateg5 = discord.utils.get(guild.categories, name="💌 INBOX (5)")
-
-        table1D = PrettyTable(["Channel scanned", "Last message", "Current date", "Inactive for"])
-        table1D.title = 'INBOX (1)'
-        table2D = PrettyTable(["Channel scanned", "Last message", "Current date", "Inactive for"])
-        table2D.title = 'INBOX (2)'
-        table3D = PrettyTable(["Channel scanned", "Last message", "Current date", "Inactive for"])
-        table3D.title = 'INBOX (3)'
-        table4D = PrettyTable(["Channel scanned", "Last message", "Current date", "Inactive for"])
-        table4D.title = 'INBOX (4)'
-        table5D = PrettyTable(["Channel scanned", "Last message", "Current date", "Inactive for"])
-        table5D.title = 'INBOX (5)'
-
-        #INBOX 1
-        for channel in inboxCateg1.channels: 
-            message = await channel.fetch_message(channel.last_message_id)
-
-            lmsgdate = message.created_at.date()
-            curdate = datetime.datetime.utcnow().date()
-
-            delta = curdate-lmsgdate
-
-            if delta.days > 2: 
-                deadchannel +=1 
-                print(f"Deleted {channel.name} from INBOX 1 - inactive for {delta.days} days")
-                print("---------------------------------------------------------------------------")
-                chn = bot.get_channel(channel.id)
-                await chn.delete()
-                deadchannel +=1
-                deleted +=1
-                table1D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-            else: 
-                table1D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-
-            numchannel += 1
-        #INBOX 2
-        for channel in inboxCateg2.channels: 
-            message = await channel.fetch_message(channel.last_message_id)
-
-            lmsgdate = message.created_at.date()
-            curdate = datetime.datetime.utcnow().date()
-
-            delta = curdate-lmsgdate
-
-            if delta.days > 2: 
-                deadchannel +=1 
-                print(f"Deleted {channel.name} from INBOX 2 - inactive for {delta.days} days")
-                print("---------------------------------------------------------------------------")
-                chn = bot.get_channel(channel.id)
-                await chn.delete()
-                deadchannel +=1
-                deleted +=1
-                table2D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-            else: 
-                table2D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-
-            numchannel += 1
-        #INBOX 3
-        for channel in inboxCateg3.channels: 
-            message = await channel.fetch_message(channel.last_message_id)
-
-            lmsgdate = message.created_at.date()
-            curdate = datetime.datetime.utcnow().date()
-
-            delta = curdate-lmsgdate
-
-            if delta.days > 2: 
-                deadchannel +=1 
-                print(f"Deleted {channel.name} from INBOX 3 - inactive for {delta.days} days")
-                print("---------------------------------------------------------------------------")
-                chn = bot.get_channel(channel.id)
-                await chn.delete()
-                deadchannel +=1
-                deleted +=1
-                table3D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-            else: 
-                table3D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-
-            numchannel += 1
-        #INBOX 4
-        for channel in inboxCateg4.channels: 
-            message = await channel.fetch_message(channel.last_message_id)
-
-            lmsgdate = message.created_at.date()
-            curdate = datetime.datetime.utcnow().date()
-
-            delta = curdate-lmsgdate
-
-            if delta.days > 2: 
-                deadchannel +=1 
-                print(f"Deleted {channel.name} from INBOX 4 - inactive for {delta.days} days")
-                print("---------------------------------------------------------------------------")
-                chn = bot.get_channel(channel.id)
-                await chn.delete()
-                deadchannel +=1
-                deleted +=1
-                table4D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-            else: 
-                table4D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-
-            numchannel += 1
-        #INBOX 5
-        for channel in inboxCateg5.channels: 
-            message = await channel.fetch_message(channel.last_message_id)
-
-            lmsgdate = message.created_at.date()
-            curdate = datetime.datetime.utcnow().date()
-
-            delta = curdate-lmsgdate
-
-            if delta.days > 2: 
-                deadchannel +=1 
-                print(f"Deleted {channel.name} from INBOX 5 - inactive for {delta.days} days")
-                print("---------------------------------------------------------------------------")
-                chn = bot.get_channel(channel.id)
-                await chn.delete()
-                deadchannel +=1
-                deleted +=1
-                table5D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-            else: 
-                table5D.add_row([f"{channel.name}", f"{lmsgdate}", f"{curdate}", f"{delta.days} days"])
-
-            numchannel += 1
-
-
+        timeScanned += 1
         print("")
         print("Scanning complete ✔")
         print("########## RESULT ##########")
@@ -513,14 +392,7 @@ async def inboxscan():
         print(table1)
         print(table2)
         print(table3)
-        print(' ')
-        print(' ')
-        print("########## DATING SERVER ##########")
-        print(table1D)
-        print(table2D)
-        print(table3D)
-        print(table4D)
-        print(table5D)
+        print(f"--------------------\nScan counter: {timeScanned} times scanned ")
 
         await asyncio.sleep(3600) # 1 hours
 
