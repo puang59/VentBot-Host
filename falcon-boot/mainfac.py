@@ -630,12 +630,9 @@ async def on_user_update(before, after):
 async def on_message(msg):  
     #if msg.guild.id == 943556434644328498: 
     if not msg.author.bot:
-        try: 
-            now = datetime.now()
-            current_time = now.strftime("%H:%M")
-            print(f"[{msg.author.name}][{msg.channel.name}][{current_time}] - {msg.content}")
-        except: 
-            pass
+        t = time.localtime()
+        current_time = time.strftime("%H:%M", t)
+        print(f"[{msg.author.name}][{msg.channel.name}][{current_time}] - {msg.content}")
         if not msg.content.startswith(bot.command_prefix):
             if not isinstance(msg.channel, discord.channel.DMChannel):
                 if msg.channel.category.id in [943581279973167155, 987993408138248243, 987993582701019166, 996458874255187978, 996459675589554206]:
