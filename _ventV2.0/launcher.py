@@ -6,11 +6,11 @@ from random import *
 from pymongo import MongoClient
 import subprocess
 
-import configparser
-config = configparser.ConfigParser()
-config.read("_ventV2.0/config.ini")
+# import configparser
+# config = configparser.ConfigParser()
+# config.read("_ventV2.0/config.ini")
 
-cluster = MongoClient(config["MONGO"]["MONGO_URI"])
+cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = cluster["Discord"]
 stories = db['webVent']
     
@@ -66,4 +66,4 @@ async def reload(ctx):
         await ctx.send(e)
         await ctx.message.add_reaction('\U0000274e')
 
-bot.run(config["DISCORD"]["TOKEN"])
+bot.run("OTYyNjAzODQ2Njk2MzM3NDA4.GazOQC.P1jXz9ZcqnT6ZAbnpE9NNJVVd5M53K-04VDHTs")

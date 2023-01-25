@@ -4,19 +4,19 @@ import asyncio
 
 from pymongo import MongoClient
 from random import *
-import configparser
+# import configparser
 
 class _utility(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    config = configparser.ConfigParser()
-    config.read('_ventV2.0/config.ini')
+    # config = configparser.ConfigParser()
+    # config.read('_ventV2.0/config.ini')
 
     global collection
     global prof
     global inbox
-    cluster = MongoClient(config['MONGO']['MONGO_URI'])
+    cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = cluster["Discord"]
     collection = db["vent"]
     
