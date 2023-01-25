@@ -1,7 +1,7 @@
 from discord.ext import commands
 import discord
 
-import logging, coloredlogs
+# import logging, coloredlogs
 import logging.handlers
 
 import datetime
@@ -15,23 +15,23 @@ class _logger(commands.Cog):
     ########## LOGGER #########
 
 
-    coloredlogs.install()
+    # coloredlogs.install()
 
-    logger = logging.getLogger('discord')
-    logger.setLevel(logging.DEBUG)
-    logging.getLogger('discord.http').setLevel(logging.INFO)
+    # logger = logging.getLogger('discord')
+    # logger.setLevel(logging.DEBUG)
+    # logging.getLogger('discord.http').setLevel(logging.INFO)
 
-    handler = logging.handlers.RotatingFileHandler(
-        filename='discord.log',
-        encoding='utf-8',
-        maxBytes=32 * 1024 * 1024,  # 32 MiB
-        backupCount=5,  # Rotate through 5 files
-    )
-    dt_fmt = '%Y-%m-%d %H:%M:%S'
-    formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {name}: {message}', dt_fmt, style='{')
-    handler.setFormatter(formatter)
-    # handler.setFormatter(CustomFormatter())
-    logger.addHandler(handler)
+    # handler = logging.handlers.RotatingFileHandler(
+    #     filename='discord.log',
+    #     encoding='utf-8',
+    #     maxBytes=32 * 1024 * 1024,  # 32 MiB
+    #     backupCount=5,  # Rotate through 5 files
+    # )
+    # dt_fmt = '%Y-%m-%d %H:%M:%S'
+    # formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {name}: {message}', dt_fmt, style='{')
+    # handler.setFormatter(formatter)
+    # # handler.setFormatter(CustomFormatter())
+    # logger.addHandler(handler)
 
     # LOCAL LOGS 
     def logInput(type, data): 
