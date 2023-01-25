@@ -23,6 +23,10 @@ class _commands(commands.Cog):
     prof = db["ventProf"]
     inbox = db['ventInbox']
 
+    @commands.command()
+    async def pulltest(self, ctx):
+        await ctx.send("working!!")
+
     @commands.command(aliases=["rep"])
     async def reputation(self, ctx, member: discord.Member = None):
         if member == None:
