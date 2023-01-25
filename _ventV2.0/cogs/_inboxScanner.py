@@ -123,7 +123,7 @@ class _inboxScanner(commands.Cog):
             print(table3)
             print(f"--------------------\nScan counter: {timeScanned} times scanned ")
 
-            await asyncio.sleep(5) # 5 hours
+            await asyncio.sleep(7200) # 2 hours
 
     @commands.Cog.listener()
     async def on_ready(self):
