@@ -23,10 +23,6 @@ class _commands(commands.Cog):
     prof = db["ventProf"]
     inbox = db['ventInbox']
 
-    @commands.command()
-    async def pulltest(self, ctx):
-        await ctx.send("working!!")
-
     @commands.command(aliases=["rep"])
     async def reputation(self, ctx, member: discord.Member = None):
         if member == None:
@@ -92,10 +88,6 @@ class _commands(commands.Cog):
     @commands.command()
     async def latency(self, ctx): 
         await ctx.send(f'Pong! In `{round(self.bot.latency * 1000)}ms`')
-
-    @commands.command()
-    async def avid(self, ctx): 
-        await ctx.send("Hello Avid!!")
 
 async def setup(bot):
     await bot.add_cog(_commands(bot))
