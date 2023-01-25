@@ -394,7 +394,7 @@ async def inboxscan():
         print(table3)
         print(f"--------------------\nScan counter: {timeScanned} times scanned ")
 
-        await asyncio.sleep(3600) # 1 hours
+        await asyncio.sleep(18000) # 5 hours
 
 @bot.event
 async def on_ready():
