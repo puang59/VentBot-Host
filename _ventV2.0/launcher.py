@@ -48,13 +48,13 @@ class VentBot(commands.Bot):
 
 bot = VentBot()
 
-cogsList = []
 @bot.command()
 @commands.check(check_if_allowed)
 async def reload(ctx):
     confirmation = await ctx.send("Reloading...")
     try:
         subprocess.run(["git", "pull", "origin", "master"])
+        cogsList = []
         for ext in bot.initial_extensions:
             await bot.reload_extension(ext)
             cogsList.append(f"[+] {ext}\n")
