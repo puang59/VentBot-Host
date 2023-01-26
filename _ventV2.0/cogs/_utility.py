@@ -9,9 +9,15 @@ from random import *
 class _utility(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.admins = [943928873412870154, 409994220309577729, 852797584812670996]
 
     # config = configparser.ConfigParser()
     # config.read('_ventV2.0/config.ini')
+
+
+    global check_if_allowed
+    def check_if_allowed(self, ctx):
+        return ctx.author.id in self.admin
 
     global collection
     global prof
@@ -22,7 +28,9 @@ class _utility(commands.Cog):
     
     prof = db["ventProf"]
     inbox = db['ventInbox']
-    @commands.command()
+
+    @commands.command(description = "DMs everyone in the server | .textall <message>")
+    @commands.check(check_if_allowed)
     async def textall(self, ctx, *, message):
         for user in ctx.guild.members:
             try:
@@ -33,6 +41,7 @@ class _utility(commands.Cog):
         print("Sent all the server a DM.")
 
     @commands.command()
+    @commands.check(check_if_allowed)
     async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg): 
         for member in members: 
             try: 
@@ -42,6 +51,7 @@ class _utility(commands.Cog):
                 await ctx.send(f'<:disagree:943603027854626816> Message couldnt sent to {member.mention}')
 
     @commands.command()
+    @commands.check(check_if_allowed)
     async def rem(self, ctx, member = None):
         if not member == None:
             try: 
@@ -54,6 +64,7 @@ class _utility(commands.Cog):
 
 
     @commands.command()
+    @commands.check(check_if_allowed)
     async def close(self, ctx):
         if ctx.channel.category.name == "MAILS":
             topic = ctx.channel.topic
@@ -94,6 +105,7 @@ class _utility(commands.Cog):
             await other_chn.delete()
 
     @commands.command()
+    @commands.check(check_if_allowed)
     async def find(self, ctx, code):
         try:
             data = collection.find_one({"code": code})
@@ -105,6 +117,7 @@ class _utility(commands.Cog):
 
 
     @commands.command()
+    @commands.check(check_if_allowed)
     async def delete(self, ctx, code):
         data = collection.find_one({"code": code})
 
@@ -122,6 +135,7 @@ class _utility(commands.Cog):
 
 
     @commands.command(aliases=["reset"])
+    @commands.check(check_if_allowed)
     async def edit(self, ctx, code):
         guild = self.bot.get_guild(943556434644328498)
         data = collection.find_one({"code": code})

@@ -713,7 +713,7 @@ class _events(commands.Cog):
                                     description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
                                 )
                                 ema.set_author(name="Instruction: ",
-                                            icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
+                                            icon_url=guild.icon)
                                 ema.set_footer(
                                     text="Note: We dont save your details and message in any separate database.")
                                 await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
