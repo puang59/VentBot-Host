@@ -266,7 +266,7 @@ class _events(commands.Cog):
                                             y = await casual_channel.send(embed=em)
                                             await y.add_reaction('🗣')
 
-                                        logger.logInput('type', f"{ventTypeCheck['type']}")
+                                        #logger.logInput('type', f"{ventTypeCheck['type']}")
                                         vType.delete_many({'author_id':msg.author.id})
                                         vCheck.delete_many({'user': msg.author.id})
                                         stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
@@ -298,12 +298,12 @@ class _events(commands.Cog):
 
                                         print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
                                         ########## LOGGING ##########
-                                        logger.logInput('at', "null")
-                                        logger.logInput('by', f"{msg.author.name}")
-                                        try: 
-                                            logger.logInput('messageid', f"{x.id}")
-                                        except: 
-                                            logger.logInput('messageid', f"{y.id}")
+                                        #logger.logInput('at', "null")
+                                        #logger.logInput('by', f"{msg.author.name}")
+                                        #try: 
+                                        #    logger.logInput('messageid', f"{x.id}")
+                                        #except: 
+                                        #    logger.logInput('messageid', f"{y.id}")
 
                                     global accept
 
@@ -347,7 +347,7 @@ class _events(commands.Cog):
                                             z = await help_channel.send(embed=em)
                                             await z.add_reaction('⬆️')
                                             await z.add_reaction('💬')
-                                        logger.logInput('type', f"{ventTypeCheck['type']}")
+                                        #logger.logInput('type', f"{ventTypeCheck['type']}")
                                         vType.delete_many({'author_id':msg.author.id})
                                         vCheck.delete_many({'user': msg.author.id})
                                         stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
@@ -384,15 +384,15 @@ class _events(commands.Cog):
                                             print("DMs closed")
                                         print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
                                         ########## LOGGING ##########
-                                        logger.logInput('at', "null")
-                                        logger.logInput('by', f"{msg.author.name}")
-                                        try: 
-                                            try: 
-                                                logger.logInput('messageid', f"{x.id}")
-                                            except: 
-                                                logger.logInput('messageid', f"{y.id}")
-                                        except: 
-                                            logger.logInput('messageid', f"{z.id}")
+                                        #logger.logInput('at', "null")
+                                        #logger.logInput('by', f"{msg.author.name}")
+                                        #try: 
+                                        #    try: 
+                                        #        logger.logInput('messageid', f"{x.id}")
+                                        #    except: 
+                                        #        logger.logInput('messageid', f"{y.id}")
+                                        #except: 
+                                        #    logger.logInput('messageid', f"{z.id}")
 
                 # Inbox
                 if isinstance(msg.channel, discord.TextChannel):
