@@ -53,21 +53,21 @@ class _utility(commands.Cog):
             await ctx.send("Cannot find the person!")
 
 
-@commands.command()
-async def close(self, ctx):
-    if ctx.channel.category.name == "MAILS":
-        topic = ctx.channel.topic
-        guild = self.bot.get_guild(943556434644328498)
-        member = guild.get_member(int(topic))
-        await ctx.send("Deleting the channel in 10 seconds!")
-        await asyncio.sleep(10)
-        await ctx.channel.delete()
-        embedclose = discord.Embed(
-            description="This thread is closed now. Thank you very much!"
-        )
-        embedclose.set_author(
-            name="Issue Resolved", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/640px-Sign-check-icon.png")
-        await member.send(embed=embedclose)
+    @commands.command()
+    async def close(self, ctx):
+        if ctx.channel.category.name == "MAILS":
+            topic = ctx.channel.topic
+            guild = self.bot.get_guild(943556434644328498)
+            member = guild.get_member(int(topic))
+            await ctx.send("Deleting the channel in 10 seconds!")
+            await asyncio.sleep(10)
+            await ctx.channel.delete()
+            embedclose = discord.Embed(
+                description="This thread is closed now. Thank you very much!"
+            )
+            embedclose.set_author(
+                name="Issue Resolved", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/640px-Sign-check-icon.png")
+            await member.send(embed=embedclose)
 
 
     @commands.command()
