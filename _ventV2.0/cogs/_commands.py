@@ -6,15 +6,11 @@ from pymongo import MongoClient
 from random import *
 # import configparser
 
+admins = [943928873412870154, 409994220309577729, 852797584812670996]
+
 class _commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.admins = [943928873412870154, 409994220309577729, 852797584812670996]
-
-
-    global check_if_allowed
-    def check_if_allowed(self, ctx):
-        return ctx.author.id in self.admin
     
     # config = configparser.ConfigParser()
     # config.read('_ventV2.0/config.ini')
@@ -30,7 +26,7 @@ class _commands(commands.Cog):
     inbox = db['ventInbox']
 
     @commands.command(aliases=["rep"])
-    @commands.check(check_if_allowed)
+    @commands.check(lambda ctx: ctx.author.id in admins)
     async def reputation(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
@@ -48,7 +44,7 @@ class _commands(commands.Cog):
             await e_txt.delete()
 
     @commands.command()
-    @commands.check(check_if_allowed)
+    @commands.check(lambda ctx: ctx.author.id in admins)
     async def lb(self, ctx):
         results = prof.find({}).sort("reputation", -1)
         temp = ""
