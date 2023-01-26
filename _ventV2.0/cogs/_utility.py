@@ -94,7 +94,7 @@ class _utility(commands.Cog):
             await other_chn.delete()
 
     @commands.command()
-    async def find(ctx, code):
+    async def find(self, ctx, code):
         try:
             data = collection.find_one({"code": code})
             em = discord.Embed()
