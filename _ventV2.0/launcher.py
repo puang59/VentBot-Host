@@ -59,7 +59,7 @@ async def reload(ctx):
             await bot.reload_extension(ext)
             cogsList.append(f"[+] {ext}\n")
         await confirmation.delete()
-        em = discord.Embed(color=0x36393f)
+        em = discord.Embed(color=0x2e3137)
         em.add_field(name="🔁 Reloaded modules", value=f"```fix\n{''.join(cogsList)}```")
         await ctx.send(embed=em)
 
