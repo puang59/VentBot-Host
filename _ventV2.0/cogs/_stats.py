@@ -6,14 +6,18 @@ import time
 class _stats(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    def get_bot_uptime(self, *, brief: bool = False) -> str:
-        return time.human_timedelta(self.bot.uptime, accuracy=None, brief=brief, suffix=False)
+        self.start_time = time.time()
 
     @commands.command()
     async def uptime(self, ctx):
-        """Tells you how long the bot has been up for."""
-        await ctx.send(f'Uptime: **{self.get_bot_uptime()}**')
-        
+        current_time = time.time()
+        difference = int(round(current_time - self.start_time))
+        minutes, seconds = divmod(difference, 60)
+        hours, minutes = divmod(minutes, 60)
+        days, hours = divmod(hours, 24)
+
+        uptime = f"{days}d, {hours}h, {minutes}m, {seconds}s"
+        await ctx.send(f"Bot uptime: {uptime}")
+
 async def setup(bot):
     await bot.add_cog(_stats(bot))
