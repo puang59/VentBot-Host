@@ -28,7 +28,6 @@ class VentBot(commands.Bot):
             'cogs._events',
             'cogs._inboxScanner',
             'cogs._logger',
-            'cogs._stats',
             'cogs._utility'
         ]
 

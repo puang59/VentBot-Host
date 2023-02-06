@@ -17,7 +17,7 @@ class _stats(commands.Cog):
         days, hours = divmod(hours, 24)
 
         uptime = f"{days}d, {hours}h, {minutes}m, {seconds}s"
-        await ctx.send(f"Bot uptime: {uptime}")
-
+        await ctx.send(f"Uptime: **{uptime}**")
+        
 async def setup(bot):
     await bot.add_cog(_stats(bot))
