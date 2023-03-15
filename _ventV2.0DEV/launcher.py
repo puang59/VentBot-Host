@@ -23,13 +23,14 @@ class VentBot(commands.Bot):
         super().__init__(command_prefix=".", intents=intents, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories"))
         self.initial_extensions = [
             'cogs._commands',
-            'cogs._dmsupport',
-            'cogs._errorHandler',
-            'cogs._events',
-            'cogs._inboxScanner',
-            'cogs._logger',
-            'cogs._stats',
-            'cogs._utility'
+            # 'cogs._dmsupport',
+            # 'cogs._errorHandler',
+            # 'cogs._events',
+            # 'cogs._inboxScanner',
+            # 'cogs._logger',
+            # 'cogs._stats',
+            # 'cogs._utility'
+            'cogs._topgg'
         ]
 
     global check_if_allowed

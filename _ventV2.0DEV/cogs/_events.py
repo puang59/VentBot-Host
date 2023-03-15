@@ -673,12 +673,7 @@ class _events(commands.Cog):
                     prof.delete_one({"user": member.id})
                     await x.add_reaction("✔")
             except:
-                if not member == None:
-                    try: 
-                        prof.delete_one({'user': int(member)})
-                    except: 
-                        await x.add_reaction('❌')
-
+                await x.add_reaction('❌')
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
