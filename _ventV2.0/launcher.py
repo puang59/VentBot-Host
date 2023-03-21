@@ -26,7 +26,7 @@ class VentBot(commands.Bot):
             'cogs._dmsupport',
             'cogs._errorHandler',
             'cogs._events',
-            'cogs._inboxProtection.py',
+            'cogs._inboxProtection',
             'cogs._inboxScanner',
             'cogs._logger',
             'cogs._stats',
