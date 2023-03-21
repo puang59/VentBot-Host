@@ -156,7 +156,7 @@ class _events(commands.Cog):
                 #reactor = self.bot.get_user(int(data['reactor']))
 
                 reactorID = int(data['reactor'])  # replace with the ID of the user you want to get
-                reactorID = discord.utils.get(interaction.guild.members, id=reactorID)
+                reactor = discord.utils.get(interaction.guild.members, id=reactorID)
 
                 #interChn = self.bot.get_channel(interaction.channel_id)
                 
@@ -304,7 +304,10 @@ class _events(commands.Cog):
                                             await cofirm.delete()
                                         except:
                                             pass
-                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
+                                        dataforlink = collection.find_one({"code": msg_code})
+                                        linktodisplay = dataforlink['msg_link']
+                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
+                                                        {linktodisplay}")
                                         
                                         try:
                                             data = collection.find_one(
@@ -390,8 +393,10 @@ class _events(commands.Cog):
                                             await cofirm.delete()
                                         except:
                                             pass
-                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
-                                    
+                                        dataforlink = collection.find_one({"code": msg_code})
+                                        linktodisplay = dataforlink['msg_link']
+                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
+                                                        {linktodisplay}")
 
                                         try:
                                             data = collection.find_one(
