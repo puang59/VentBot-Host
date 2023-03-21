@@ -285,8 +285,12 @@ class _events(commands.Cog):
                                             await cofirm.delete()
                                         except:
                                             pass
-                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
-                                        
+                                        #await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
+                                        dataforlink = collection.find_one({"code": msg_code})
+                                        linktodisplay = dataforlink['msg_link']
+                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
+                                                        {linktodisplay}")
+
                                         try:
                                             data = collection.find_one(
                                                 {"code": msg_code})
@@ -371,7 +375,10 @@ class _events(commands.Cog):
                                             await cofirm.delete()
                                         except:
                                             pass
-                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__")
+                                        dataforlink = collection.find_one({"code": msg_code})
+                                        linktodisplay = dataforlink['msg_link']
+                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
+                                                        {linktodisplay}")
                                     
 
                                         try:
