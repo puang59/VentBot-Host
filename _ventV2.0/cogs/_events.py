@@ -112,9 +112,8 @@ class _events(commands.Cog):
 
     global ReportBtn
     class ReportBtn(discord.ui.View):
-        def __init__(self, bot, *, timeout=3600):
+        def __init__(self, *, timeout=3600):
             super().__init__(timeout=timeout)
-            self.bot = bot
 
         @discord.ui.button(label="Report User",style=discord.ButtonStyle.danger, disabled=False)
         async def gray_button(self, interaction:discord.Interaction, button:discord.ui.Button):
@@ -122,7 +121,11 @@ class _events(commands.Cog):
             button.label="Reported"
             button.style=discord.ButtonStyle.gray
             await interaction.response.edit_message(view=self)
-            channel = self.bot.get_channel(943909084430729217)
+            #channel = self.bot.get_channel(943909084430729217)
+
+            channel_id = 943909084430729217
+            channel = discord.utils.get(interaction.guild.channels, id=channel_id)
+
             if inbox.find_one({"reactor":interaction.user.id}):
                 data = inbox.find_one({"reactor":interaction.user.id})
                 author = self.bot.get_user(int(data['author']))
