@@ -114,6 +114,7 @@ class _events(commands.Cog):
     class ReportBtn(discord.ui.View):
         def __init__(self, *, timeout=3600):
             super().__init__(timeout=timeout)
+            self.bot = bot
 
         @discord.ui.button(label="Report User",style=discord.ButtonStyle.danger, disabled=False)
         async def gray_button(self, interaction:discord.Interaction, button:discord.ui.Button):
