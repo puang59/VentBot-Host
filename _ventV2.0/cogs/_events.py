@@ -112,7 +112,7 @@ class _events(commands.Cog):
 
     global ReportBtn
     class ReportBtn(discord.ui.View):
-        def __init__(self, *, timeout=3600):
+        def __init__(self, bot, *, timeout=3600):
             super().__init__(timeout=timeout)
             self.bot = bot
 
