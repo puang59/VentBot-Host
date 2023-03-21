@@ -128,9 +128,17 @@ class _events(commands.Cog):
 
             if inbox.find_one({"reactor":interaction.user.id}):
                 data = inbox.find_one({"reactor":interaction.user.id})
-                author = self.bot.get_user(int(data['author']))
+                #author = self.bot.get_user(int(data['author']))
 
-                interChn = self.bot.get_channel(interaction.channel_id)
+                authorId = int(data['author'])  # replace with the ID of the user you want to get
+                author = discord.utils.get(interaction.guild.members, id=authorId)
+
+                #interChn = self.bot.get_channel(interaction.channel_id)
+                
+
+                interChn_id = interaction.channel_id
+                interChn = discord.utils.get(interaction.guild.channels, id=interChn_id)
+
                 txt = await interChn.fetch_message(interaction.message.id)
                 em = discord.Embed(description=f"{txt.embeds[0].description}")
 
@@ -145,9 +153,16 @@ class _events(commands.Cog):
                 await chn.send("You have been reported by the person your were talking to! We are looking into the matter and will get back to you soon.")
             elif inbox.find_one({"author":interaction.user.id}):
                 data = inbox.find_one({"author":interaction.user.id})
-                reactor = self.bot.get_user(int(data['reactor']))
+                #reactor = self.bot.get_user(int(data['reactor']))
 
-                interChn = self.bot.get_channel(interaction.channel_id)
+                reactorID = int(data['reactor'])  # replace with the ID of the user you want to get
+                reactorID = discord.utils.get(interaction.guild.members, id=reactorID)
+
+                #interChn = self.bot.get_channel(interaction.channel_id)
+                
+                interChn_id = interaction.channel_id
+                interChn = discord.utils.get(interaction.guild.channels, id=interChn_id)
+
                 txt = await interChn.fetch_message(interaction.message.id)
                 em = discord.Embed(description=f"{txt.embeds[0].description}")
 
