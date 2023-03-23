@@ -708,7 +708,7 @@ class _events(commands.Cog):
     async def on_member_join(self, member):
         if member.guild.id == 943556434644328498:
             try: 
-                blacklist = ['evil', 'like', 'you']
+                blacklist = ['evil!', 'like.', 'you!']
                 if all(string in member.name.lower() for string in blacklist):
                     await member.send("**__You are blacklisted from the server__**\n \
                     If you think this was applied in error, you can text `anonimo#2181`")
