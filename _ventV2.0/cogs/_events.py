@@ -707,14 +707,6 @@ class _events(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         if member.guild.id == 943556434644328498:
-            try: 
-                blacklist = ['evil!', 'like.', 'you!']
-                if all(string in member.name.lower() for string in blacklist):
-                    await member.send("**__You are blacklisted from the server__**\n \
-                    If you think this was applied in error, you can text `anonimo#2181`")
-                    await member.kick(reason="Blacklisted")
-            except: 
-                print(f"{member.name} safely joined the server!")
             joinChannel = self.bot.get_channel(943909084430729217)
             em = discord.Embed(description=f"<:agree:943603027313565757> {member.name} ({member.id}) joined!", colour=discord.Colour.green())
             x = await joinChannel.send(embed=em)  
