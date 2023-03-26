@@ -671,11 +671,16 @@ class _events(commands.Cog):
         guild = self.bot.get_guild(943556434644328498)
         if before.name != after.name: 
             try: 
-                channel = discord.utils.get(guild.channels, name=f'{before.name}s-vent-{before.discriminator}')
-                await channel.edit(name=f'{after.name}s-vent-{after.discriminator}')
-            except: 
-                channel = discord.utils.get(guild.channels, name=f'{before.name}s-vent')
-                await channel.edit(name=f'{after.name}s-vent-{after.discriminator}')
+                try:
+                    channel = discord.utils.get(guild.channels, name=f'{before.name}s-vent-{before.discriminator}')
+                    await channel.edit(name=f'{after.name}s-vent-{after.discriminator}')
+                except: 
+                    channel = discord.utils.get(guild.channels, name=f'{before.name}s-vent')
+                    await channel.edit(name=f'{after.name}s-vent-{after.discriminator}')
+            except Exception as err: 
+                logchannel = self.bot.get_channel(1089639606091259994)
+                await logchannel.send(f"<:disagree:943603027854626816> Failed to change {after.name}#{after.discriminator}'s channel name since `before.name` did not match `after.name`\
+                \n Traceback:```{err}```")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
