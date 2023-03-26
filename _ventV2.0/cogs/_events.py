@@ -322,7 +322,7 @@ class _events(commands.Cog):
                                         logs = self.bot.get_channel(1089639606091259994)
                                         print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
                                         logsEmbed = discord.Embed(
-                                            description=f"```---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------```\n \
+                                            description=f"```NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC```\n \
                                                 {linktodisplay}"
                                         )
                                         await logs.send(embed = logsEmbed)
@@ -417,7 +417,7 @@ class _events(commands.Cog):
                                         logs = self.bot.get_channel(1089639606091259994)
                                         print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
                                         logsEmbed = discord.Embed(
-                                            description=f"```---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------```\n \
+                                            description=f"```NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC```\n \
                                                 {linktodisplay}"
                                         )
                                         await logs.send(embed = logsEmbed)
@@ -681,7 +681,7 @@ class _events(commands.Cog):
     async def on_member_remove(self, member):
         if member.guild.id == 943556434644328498:
             guild = self.bot.get_guild(943556434644328498)
-            leaveChannel = self.bot.get_channel(943909084430729217)
+            leaveChannel = self.bot.get_channel(1089639606091259994)
             em = discord.Embed(description=f"<:disagree:943603027854626816> {member.name} ({member.id}) left!", colour=discord.Colour.red())
             x = await leaveChannel.send(embed=em)
             try: 
@@ -720,7 +720,7 @@ class _events(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         if member.guild.id == 943556434644328498:
-            joinChannel = self.bot.get_channel(943909084430729217)
+            joinChannel = self.bot.get_channel(1089639606091259994)
             em = discord.Embed(description=f"<:agree:943603027313565757> {member.name} ({member.id}) joined!", colour=discord.Colour.green())
             x = await joinChannel.send(embed=em)  
 
