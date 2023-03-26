@@ -319,7 +319,13 @@ class _events(commands.Cog):
                                         except:
                                             print("DMs closed")
 
+                                        logs = self.bot.get_channel(1089639606091259994)
                                         print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
+                                        logsEmbed = discord.Embed(
+                                            description=f"```---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------```\n \
+                                                {linktodisplay}"
+                                        )
+                                        await logs.send(embed = logsEmbed)
                                         ########## LOGGING ##########
                                         #logger.logInput('at', "null")
                                         #logger.logInput('by', f"{msg.author.name}")
@@ -407,7 +413,14 @@ class _events(commands.Cog):
                                             await msg.author.send("<:agree:943603027313565757> Your vent was posted successfully! Heres the vent link with token just incase.", embed=emdm)
                                         except:
                                             print("DMs closed")
+                                        
+                                        logs = self.bot.get_channel(1089639606091259994)
                                         print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
+                                        logsEmbed = discord.Embed(
+                                            description=f"```---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------```\n \
+                                                {linktodisplay}"
+                                        )
+                                        await logs.send(embed = logsEmbed)
                                         ########## LOGGING ##########
                                         #logger.logInput('at', "null")
                                         #logger.logInput('by', f"{msg.author.name}")
