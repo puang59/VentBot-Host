@@ -9,6 +9,8 @@ from random import *
 import time
 import datetime
 
+import traceback 
+
 from ._logger import _logger
 
 class _events(commands.Cog):
@@ -679,8 +681,8 @@ class _events(commands.Cog):
                     await channel.edit(name=f'{after.name}s-vent-{after.discriminator}')
             except Exception as err: 
                 logchannel = self.bot.get_channel(1089639606091259994)
-                await logchannel.send(f"<:disagree:943603027854626816> Failed to change {after.name}#{after.discriminator}'s channel name since `before.name` did not match `after.name`\
-                \n Traceback:```{err}```")
+                await logchannel.send(f"<:disagree:943603027854626816> Failed to change {after.name}#{after.discriminator}'s channel name because __`before.name` did not match `after.name`__\
+                \n```{traceback.format_exc()}```")
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
