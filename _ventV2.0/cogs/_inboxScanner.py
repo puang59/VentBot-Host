@@ -13,6 +13,7 @@ class _inboxScanner(commands.Cog):
     global inboxscan
     async def inboxscan(self): 
         guild = self.bot.get_guild(943556434644328498)
+        logChannel = self.bot.get_channel(1089639606091259994)
         inboxCateg1 = discord.utils.get(guild.categories, name="📨 INBOX")
         inboxCateg2 = discord.utils.get(guild.categories, name="📨 INBOX (2)")
         inboxCateg3 = discord.utils.get(guild.categories, name="📨 INBOX (3)")
@@ -122,7 +123,12 @@ class _inboxScanner(commands.Cog):
             print(table2)
             print(table3)
             print(f"--------------------\nScan counter: {timeScanned} times scanned ")
-
+            
+            resultEmbed = discord.Embed(
+                description=f"Inboc scanning complete ✔\n ```#### RESULT ####\n Total channel scanned: {numchannel}\n \
+                Dead channels: {deadchannel}\n Channels deleted: {deleted}``` \n\nScan counter: {timeScanned} times scanned"
+            )
+            await logChannel.send(embed = resultEmbed)
             await asyncio.sleep(7200) # 2 hours
 
     @commands.Cog.listener()
