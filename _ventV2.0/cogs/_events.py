@@ -207,7 +207,7 @@ class _events(commands.Cog):
             if not msg.author.id == 943928873412870154:
                 if msg.channel.id != 943556439195152477:
                     if not isinstance(msg.channel, discord.channel.DMChannel):
-                        if not msg.channel.category.id in [950646823654137897, 987983272069976114, 987986457069240401, 943588904622256168]:
+                        if not msg.channel.category.id in [950646823654137897, 987983272069976114, 987986457069240401, 943588904622256168, 1089639116704059473, 943909186734022676]:
                             if not msg.content.startswith(self.bot.command_prefix): #checking if msg is a commands 
                                 if len(msg.clean_content) < 10:
                                     x = await msg.channel.send("<:disagree:943603027854626816> Your message is too small. (Message should have more than 10 characters)")

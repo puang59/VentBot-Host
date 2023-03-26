@@ -41,7 +41,7 @@ class dmsupport(commands.Cog):
                     channel = await categ.create_text_channel(name=f"{message.author.discriminator}", topic=str(message.author.id))
 
                     notifyrolesd = discord.utils.get(
-                        guild.roles, id=943881256033198130)
+                        guild.roles, id=1089638056610500778)
                     await channel.send(f"New Mail sent by Anonymous | {notifyrolesd.mention}")
 
                 embed = discord.Embed(
@@ -69,7 +69,7 @@ class dmsupport(commands.Cog):
                 if not channel:
                     channel = await categ.create_text_channel(name=f"{message.author.discriminator}", topic=str(message.author.id))
                     notifyrolesd = discord.utils.get(
-                        guild.roles, id=943881256033198130)
+                        guild.roles, id=1089638056610500778)
                     await channel.send(f"New Mail sent by Anonymous | {notifyrolesd.mention}")
 
                 embed = discord.Embed(
