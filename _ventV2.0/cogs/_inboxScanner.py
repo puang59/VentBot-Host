@@ -125,8 +125,7 @@ class _inboxScanner(commands.Cog):
             print(f"--------------------\nScan counter: {timeScanned} times scanned ")
             
             resultEmbed = discord.Embed(
-                description=f"Inboc scanning complete ✔\n ```#### RESULT ####\n Total channel scanned: {numchannel}\n \
-                Dead channels: {deadchannel}\n Channels deleted: {deleted}``` \n\nScan counter: {timeScanned} times scanned"
+                description=f"**Inbox scanning complete ✔**\n```#### RESULT ####\nTotal channel scanned: {numchannel}\nDead channels: {deadchannel}\nChannels deleted: {deleted}```\n**Scan counter:** {timeScanned} timesd scanned"
             )
             await logChannel.send(embed = resultEmbed)
             await asyncio.sleep(7200) # 2 hours
