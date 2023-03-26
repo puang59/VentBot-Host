@@ -7,6 +7,7 @@ from random import *
 # import configparser
 
 admins = [943928873412870154, 409994220309577729, 852797584812670996]
+heads = [943928873412870154, 852797584812670996]
 
 class _utility(commands.Cog):
     def __init__(self, bot):
@@ -18,15 +19,17 @@ class _utility(commands.Cog):
     global collection
     global prof
     global inbox
+    global logdb
     cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = cluster["Discord"]
     collection = db["vent"]
     
     prof = db["ventProf"]
     inbox = db['ventInbox']
+    logdb = db['ventLog']
 
     @commands.command(description = "DMs everyone in the server | .textall <message>")
-    @commands.check(lambda ctx: ctx.author.id in admins)
+    @commands.check(lambda ctx: ctx.author.id in heads)
     async def textall(self, ctx, *, message):
         for user in ctx.guild.members:
             try:
@@ -37,7 +40,7 @@ class _utility(commands.Cog):
         print("Sent all the server a DM.")
 
     @commands.command()
-    @commands.check(lambda ctx: ctx.author.id in admins)
+    @commands.check(lambda ctx: ctx.author.id in heads)
     async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg): 
         for member in members: 
             try: 
@@ -50,11 +53,15 @@ class _utility(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def rem(self, ctx, member = None):
         if not member == None:
-            try: 
-                prof.delete_one({"user": int(member)})
-                await ctx.send("Person removed from the DB")
-            except: 
-                await ctx.send("Unexpected Error Occured!")
+            if logdb.find_one({"userId": int(member)}):                
+                try: 
+                    prof.delete_one({"user": int(member)})
+                    logdb.delete_one({"userId": int(member)})
+                    await ctx.send("Person removed from the DB")
+                except: 
+                    await ctx.send("Unexpected Error Occured!")
+            else:
+                await ctx.send("Please check the ID")
         else: 
             await ctx.send("Cannot find the person!")
 

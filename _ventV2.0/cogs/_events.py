@@ -26,6 +26,7 @@ class _events(commands.Cog):
     global vType
     global vCheck
     global stories
+    global logdb
     cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = cluster["Discord"]
     collection = db["vent"]
@@ -36,6 +37,7 @@ class _events(commands.Cog):
     vCheck = db["ventCheck"]
     stories = db['webVent']
     vType = db['ventType']
+    logdb = db['ventLog']
 
 
     global logger
@@ -721,6 +723,8 @@ class _events(commands.Cog):
                     try: 
                         prof.delete_one({'user': int(member)})
                     except: 
+                        post = {"userId": member.id}
+                        logdb.insert_one(post)
                         await x.add_reaction('❌')
 
 
