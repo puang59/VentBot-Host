@@ -41,8 +41,7 @@ class VentBot(commands.Bot):
     async def setup_hook(self) -> None:
         for ext in self.initial_extensions:
             await self.load_extension(ext)
-            await self.load_extension("jishaku")
-
+        
     async def on_ready(self):
         print(" \ \ / / __| \| |_   _|  ___  / __| |_ __ _ _  _    /_\  _ _  ___ _ _ _  _ _ __  ___ _  _ ___")
         print("  \ V /| _|| .` | | |   |___| \__ \  _/ _` | || |  / _ \| ' \/ _ \ ' \ || | '  \/ _ \ || (_-<")
