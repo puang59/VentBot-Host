@@ -30,7 +30,8 @@ class VentBot(commands.Bot):
             'cogs._inboxScanner',
             'cogs._logger',
             'cogs._stats',
-            'cogs._utility'
+            'cogs._utility',
+            'jishaku'
         ]
 
     global check_if_allowed
