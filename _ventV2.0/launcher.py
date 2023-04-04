@@ -20,7 +20,7 @@ ventText = stories.find_one({"guild": "vent"})
 
 class VentBot(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=".", intents=intents, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories", owner_ids=[943928873412870154, 852797584812670996]))
+        super().__init__(command_prefix=".", intents=intents, activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories"), owner_ids=[943928873412870154, 852797584812670996])
         self.initial_extensions = [
             'cogs._commands',
             'cogs._dmsupport',
