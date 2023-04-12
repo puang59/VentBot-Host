@@ -130,12 +130,17 @@ class _utility(commands.Cog):
 
         channel = self.bot.get_channel(943556439195152477)
         channel2 = self.bot.get_channel(1014201909118251098)
+        channel3 = self.bot.get_channel(1035490966934659093)
         try: 
-            txt = await channel.fetch_message(data["msg_id"])
-            await txt.delete()
+            try: 
+                txt = await channel.fetch_message(data["msg_id"])
+                await txt.delete()
+            except: 
+                txt = await channel2.fetch_message(data["msg_id"])
+                await txt.delete()    
         except: 
-            txt = await channel2.fetch_message(data["msg_id"])
-            await txt.delete()    
+            txt = await channel3.fetch_message(data["msg_id"])
+            await txt.delete()   
 
         collection.delete_one({"code": code})
         await ctx.send("<:agree:943603027313565757> Deleted")
