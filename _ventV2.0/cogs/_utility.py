@@ -207,7 +207,7 @@ class _utility(commands.Cog):
             await member.timeout(timeoutTime, reason=reason)
             await ctx.send(f'__{user} timedout for 60 Minutes!__\n`Reason:` {reason}')
             try:
-                await member.send(f'__You can have been timedout for 60 Minutes!__\n`Reason:` {reason}')
+                await member.send(f'__You have been timedout for 60 Minutes!__\n`Reason:` {reason}')
             except:
                 pass
         else: 
