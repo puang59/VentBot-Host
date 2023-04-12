@@ -179,7 +179,7 @@ class _utility(commands.Cog):
     async def search(self, ctx, link):
         confirmation = await ctx.send("Searching...")
         found_docs = collection.find({"msg_link": link})
-        if found_docs.count() > 0:
+        if found_docs.count_documents({}) > 0:
             for doc in found_docs:
                 await ctx.send(f"The mentioned vent (`{doc['code']}`) belongs to `{doc['uniqueId']}`")
         else:
