@@ -206,6 +206,10 @@ class _utility(commands.Cog):
             timeoutTime = timedelta(minutes=60)
             await member.timeout(timeoutTime, reason=reason)
             await ctx.send(f'__{user} timedout for 60 Minutes!__\n`Reason:` {reason}')
+            try:
+                await member.send(f'__You can have been timedout for 60 Minutes!__\n`Reason:` {reason}')
+            except:
+                pass
         else: 
             await ctx.send('Cannot find the user!')
 
