@@ -162,17 +162,29 @@ class _utility(commands.Cog):
     
     '''Unique user id commands'''
 
+    # @commands.command(description="Looks for the uniqueId of vent author")
+    # @commands.check(lambda ctx: ctx.author.id in admins)
+    # async def search(self, ctx, link):
+    #     confirmation = await ctx.send("Searching...")
+    #     if collection.find_one({"msg_link": link}):
+    #         data = collection.find({'msg_link': link})
+    #         await confirmation.delete()
+    #         await ctx.send(f"The mentioned vent (`{data['code']}`) belongs to `{data['uniqueId']}`")
+    #     else: 
+    #         await confirmation.delete()
+    #         await ctx.send(f"Failed to find!")
+
     @commands.command(description="Looks for the uniqueId of vent author")
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def search(self, ctx, link):
-        confirmation = await ctx.send("Reloading...")
-        if collection.find_one({"msg_link": link}):
-            data = collection.find({'msg_link': link})
-            await confirmation.delete()
-            await ctx.send(f"The mentioned vent (`{data['code']}`) belongs to `{data['uniqueId']}`")
-        else: 
-            await confirmation.delete()
-            await ctx.send(f"Failed to find!")
+        confirmation = await ctx.send("Searching...")
+        found_docs = collection.find({"msg_link": link})
+        if found_docs.count() > 0:
+            for doc in found_docs:
+                await ctx.send(f"The mentioned vent (`{doc['code']}`) belongs to `{doc['uniqueId']}`")
+        else:
+            await ctx.send("Failed to find!")
+        await confirmation.delete()
 
     @commands.command(description="Deletes a vent message when link is provided")
     @commands.check(lambda ctx: ctx.author.id in admins)
