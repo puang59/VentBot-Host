@@ -315,15 +315,15 @@ class _events(commands.Cog):
                                         uIdData = ventUserId.find_one({"user": msg.author.id})
                                         try: 
                                             try: 
-                                                post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
                                                         "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                                 collection.insert_one(post)
                                             except: 
-                                                post = {"author_id": msg.author.id,  "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                post = {"author_id": msg.author.id,  "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
                                                         "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                                 collection.insert_one(post)
                                         except: 
-                                            post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                            post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
                                                     "msg_link": f"{z.jump_url}", "msg_id": z.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                             collection.insert_one(post)    
 
@@ -411,15 +411,15 @@ class _events(commands.Cog):
                                         uIdData = ventUserId.find_one({"user": msg.author.id})
                                         try: 
                                             try: 
-                                                post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
                                                         "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                                 collection.insert_one(post)
                                             except: 
-                                                post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
                                                         "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                                 collection.insert_one(post)
                                         except: 
-                                            post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                            post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
                                                     "msg_link": f"{z.jump_url}", "msg_id": z.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                             collection.insert_one(post)    
 
