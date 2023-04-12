@@ -174,12 +174,12 @@ class _utility(commands.Cog):
             await confirmation.delete()
             await ctx.send(f"Failed to find!")
 
-    @commands.command(description="Deletes a vent message when link is provided")
+    @commands.command(description="Deletes a vent message when messageid is provided")
     @commands.check(lambda ctx: ctx.author.id in admins)
     @commands.cooldown(4, 300, commands.BucketType.member)
-    async def yeet(self, ctx, link):   
-        if collection.find_one({'msg_link': link}):
-            data = collection.find_one({'msg_link': link})
+    async def yeet(self, ctx, id):   
+        if collection.find_one({'msg_id': int(id)}):
+            data = collection.find_one({'msg_id': int(id)})
             ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093]
             for ids in ventChannleIDs:
                 try:
