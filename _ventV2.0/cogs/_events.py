@@ -215,7 +215,7 @@ class _events(commands.Cog):
                                     characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
                                     uniqueId = "".join(choice(characters)
                                                     for x in range(randint(20, 25)))
-                                    userSavePost = {{"user": msg.author.id, "uniqueId": uniqueId}}
+                                    userSavePost = {"user": msg.author.id, "uniqueId": uniqueId}
                                     ventUserId.insert_one(userSavePost)
                                 else: 
                                     pass
