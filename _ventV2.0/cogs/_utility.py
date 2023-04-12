@@ -2,6 +2,8 @@ from discord.ext import commands
 import discord
 import asyncio
 
+from datetime import datetime, timedelta
+
 from pymongo import MongoClient
 from random import *
 # import configparser
@@ -20,6 +22,7 @@ class _utility(commands.Cog):
     global prof
     global inbox
     global logdb
+    global ventUserId
     cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = cluster["Discord"]
     collection = db["vent"]
@@ -27,6 +30,7 @@ class _utility(commands.Cog):
     prof = db["ventProf"]
     inbox = db['ventInbox']
     logdb = db['ventLog']
+    ventUserId = db['ventId']
 
     @commands.command(description = "DMs everyone in the server | .textall <message>")
     @commands.check(lambda ctx: ctx.author.id in heads)
@@ -49,7 +53,7 @@ class _utility(commands.Cog):
             except: 
                 await ctx.send(f'<:disagree:943603027854626816> Message couldnt sent to {member.mention}')
 
-    @commands.command()
+    @commands.command(description="Removes a user from the DB to maintain lb search")
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def rem(self, ctx, member = None):
         if not member == None:
@@ -119,7 +123,7 @@ class _utility(commands.Cog):
             await ctx.send("<:disagree:943603027854626816> Message cannot be found.")
 
 
-    @commands.command()
+    @commands.command(description="Deletes a vent message when code is provided")
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def delete(self, ctx, code):
         data = collection.find_one({"code": code})
@@ -155,6 +159,60 @@ class _utility(commands.Cog):
         collection.delete_one({"code": code})
 
         await ctx.send("<:agree:943603027313565757> Edit opened successfully")
+    
+    '''Unique user id commands'''
+
+    @commands.command(description="Looks for the uniqueId of vent author")
+    @commands.check(lambda ctx: ctx.author.id in admins)
+    async def search(self, ctx, link):
+        confirmation = await ctx.send("Reloading...")
+        if collection.find_one({"msg_link": link}):
+            data = collection.find({'msg_link': link})
+            await confirmation.delete()
+            await ctx.send(f"The mentioned vent (`{data['code']}`) belongs to `{data['uniqueId']}`")
+        else: 
+            await confirmation.delete()
+            await ctx.send(f"Failed to find!")
+
+    @commands.command(description="Deletes a vent message when link is provided")
+    @commands.check(lambda ctx: ctx.author.id in admins)
+    @commands.cooldown(4, 300, commands.BucketType.member)
+    async def yeet(self, ctx, link):   
+        if collection.find_one({'msg_link': link}):
+            data = collection.find_one({'msg_link': link})
+            ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093]
+            for ids in ventChannleIDs:
+                try:
+                    channel = self.bot.get_channel(ids)
+                    txt = await channel.fetch_message(data['msg_id'])
+                    await txt.delete()
+                    await ctx.send("Deleted the vent message!")
+                except:
+                    continue
+
+    @yeet.error
+    async def on_yeet_error(self, ctx, error: Exception):
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.send(f'This command is on cooldown. Try again in {error.retry_after:.2f}s')
+    
+    @commands.command(desciption="Timeouts a member")
+    @commands.check(lambda ctx: ctx.author.id in admins)
+    @commands.cooldown(4, 300, commands.BucketType.member) 
+    async def mute(self, ctx, user, *, reason = None):
+        if ventUserId.find_one({"uniqueId": str(user)}):
+            data = ventUserId.find_one({'uniqueId': str(user)})
+            guild = self.bot.get_guild(943556434644328498)
+            member = guild.get_member(int(data['user']))
+            timeoutTime = timedelta(minutes=15)
+            await member.timeout(timeoutTime, reason=reason)
+            await ctx.send('User timedout!')
+        else: 
+            await ctx.send('Cannot find the user!')
+
+    @mute.error
+    async def on_mute_error(self, ctx, error: Exception):
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.send(f'This command is on cooldown. Try again in {error.retry_after:.2f}s')
 
 async def setup(bot):
     await bot.add_cog(_utility(bot))

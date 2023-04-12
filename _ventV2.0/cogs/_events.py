@@ -27,6 +27,7 @@ class _events(commands.Cog):
     global vCheck
     global stories
     global logdb
+    global ventUserId
     cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = cluster["Discord"]
     collection = db["vent"]
@@ -38,7 +39,7 @@ class _events(commands.Cog):
     stories = db['webVent']
     vType = db['ventType']
     logdb = db['ventLog']
-
+    ventUserId = db['ventId']
 
     global logger
     logger = _logger(commands.Bot)
@@ -209,6 +210,16 @@ class _events(commands.Cog):
                     if not isinstance(msg.channel, discord.channel.DMChannel):
                         if not msg.channel.category.id in [950646823654137897, 987983272069976114, 987986457069240401, 943588904622256168, 1089639116704059473, 943909186734022676]:
                             if not msg.content.startswith(self.bot.command_prefix): #checking if msg is a commands 
+                                # Storing unqiue user id
+                                if not ventUserId.find_one({"user": msg.author.id}):
+                                    characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+                                    uniqueId = "".join(choice(characters)
+                                                    for x in range(randint(20, 25)))
+                                    userSavePost = {{"user": msg.author.id, "uniqueId": uniqueId}}
+                                    ventUserId.insert_one(userSavePost)
+                                else: 
+                                    pass
+
                                 if len(msg.clean_content) < 10:
                                     x = await msg.channel.send("<:disagree:943603027854626816> Your message is too small. (Message should have more than 10 characters)")
                                     await asyncio.sleep(10)
@@ -286,23 +297,35 @@ class _events(commands.Cog):
                                         if ventTypeCheck['type'] == "serious": 
                                             x = await vent_channel.send(embed=em)
                                             await x.add_reaction('🫂')
-                                        else: 
+                                            await x.add_reaction('💬')
+                                        elif ventTypeCheck['type'] == "casual": 
                                             y = await casual_channel.send(embed=em)
                                             await y.add_reaction('🗣')
+                                            await y.add_reaction('💬')
+                                        elif ventTypeCheck['type'] == "help": 
+                                            z = await help_channel.send(embed=em)
+                                            await z.add_reaction('⬆️')
+                                            await z.add_reaction('💬')
 
                                         #logger.logInput('type', f"{ventTypeCheck['type']}")
                                         vType.delete_many({'author_id':msg.author.id})
                                         vCheck.delete_many({'user': msg.author.id})
                                         stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
+                                        uIdData = ventUserId.find_one({"user": msg.author.id})
                                         try: 
-                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
-                                                    "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                            collection.insert_one(post)
+                                            try: 
+                                                post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                        "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                collection.insert_one(post)
+                                            except: 
+                                                post = {"author_id": msg.author.id,  "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                        "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                collection.insert_one(post)
                                         except: 
-                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
-                                                    "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                            collection.insert_one(post)
+                                            post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                    "msg_link": f"{z.jump_url}", "msg_id": z.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                            collection.insert_one(post)    
 
                                         try:
                                             await cofirm.delete()
@@ -385,17 +408,18 @@ class _events(commands.Cog):
                                         vCheck.delete_many({'user': msg.author.id})
                                         stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
+                                        uIdData = ventUserId.find_one({"user": msg.author.id})
                                         try: 
                                             try: 
-                                                post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
                                                         "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                                 collection.insert_one(post)
                                             except: 
-                                                post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                                post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
                                                         "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                                 collection.insert_one(post)
                                         except: 
-                                            post = {"author_id": msg.author.id, "code": f"{msg_code}",
+                                            post = {"author_id": msg.author.id, "unqiueId": uIdData['uniqueId'], "code": f"{msg_code}",
                                                     "msg_link": f"{z.jump_url}", "msg_id": z.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
                                             collection.insert_one(post)    
 
@@ -686,6 +710,21 @@ class _events(commands.Cog):
                 await logchannel.send(f"<:disagree:943603027854626816> Failed to change {after.name}#{after.discriminator}'s channel name because __`before.name` did not match `after.name`__\
                 \n```{traceback.format_exc()}```")
 
+    '''
+    @commands.Cog.listener()
+    async def on_member_update(self, before, after):
+        if after.timeout: 
+            if inbox.find_one({"reactor":after.id}):
+                data = inbox.find({"reactor":after.id})
+                for name in data:
+                    print(name['channel'].lower())
+                    guild = self.bot.get_guild(943556434644328498)
+                    existing_channel = discord.utils.get(guild.channels, name=name['channel'].lower())
+                    await existing_channel.delete()
+                inbox.delete_many({"reactor": after.id})
+                logchannel = self.bot.get_channel(1089639606091259994)
+                await logchannel.send(f"__{after.name}({after.id}) was ratelimited for creating multiple inbox channels!__\nUser spam inbox channels were deleted automatically.")
+    '''
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         if member.guild.id == 943556434644328498:
@@ -702,6 +741,8 @@ class _events(commands.Cog):
                         await channel.delete()
                         collection.delete_many({'author_id': member.id})
                         prof.delete_one({"user": member.id})
+                        if ventUserId.find_one({'user': member.id}): 
+                            ventUserId.delete_one({'user': member.id})
                         await x.add_reaction("✔")
                     except: 
                         memberName = f"{member.name}".lower()
@@ -709,7 +750,9 @@ class _events(commands.Cog):
                         await channel.delete()
                         collection.delete_many({'author_id': member.id})
                         prof.delete_one({"user": member.id})
-                        await x.add_reaction("✔")#h
+                        if ventUserId.find_one({'user': member.id}): 
+                            ventUserId.delete_one({'user': member.id})
+                        await x.add_reaction("✔")#
                 except: 
                     memberName = f"{member.name}".lower()
                     modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
@@ -717,9 +760,13 @@ class _events(commands.Cog):
                     await channel.delete()
                     collection.delete_many({'author_id': member.id})
                     prof.delete_one({"user": member.id})
+                    if ventUserId.find_one({'user': member.id}): 
+                        ventUserId.delete_one({'user': member.id})
                     await x.add_reaction("✔")
             except:
                 if not member == None:
+                    if ventUserId.find_one({'user': member.id}): 
+                        ventUserId.delete_one({'user': member.id})
                     try: 
                         prof.delete_one({'user': int(member)})
                     except: 
