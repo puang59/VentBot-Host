@@ -167,7 +167,7 @@ class _utility(commands.Cog):
     async def search(self, ctx, id):
         confirmation = await ctx.send("Searching...")
         if collection.find_one({"msg_id": int(id)}):
-            data = collection.find({'msg_id': int(id)})
+            data = collection.find_one({'msg_id': int(id)})
             await confirmation.delete()
             await ctx.send(f"The mentioned vent (`{data['code']}`) belongs to `{data['uniqueId']}`")
         else: 
