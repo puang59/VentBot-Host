@@ -203,9 +203,9 @@ class _utility(commands.Cog):
             data = ventUserId.find_one({'uniqueId': str(user)})
             guild = self.bot.get_guild(943556434644328498)
             member = guild.get_member(int(data['user']))
-            timeoutTime = timedelta(minutes=15)
+            timeoutTime = timedelta(minutes=60)
             await member.timeout(timeoutTime, reason=reason)
-            await ctx.send('User timedout!')
+            await ctx.send(f'__{user} timedout for 60 Minutes!__\n`Reason:` {reason}')
         else: 
             await ctx.send('Cannot find the user!')
 
