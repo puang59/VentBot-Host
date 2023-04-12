@@ -171,13 +171,17 @@ class _utility(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def search(self, ctx, id):
         confirmation = await ctx.send("Searching...")
-        if collection.find_one({"msg_id": int(id)}):
-            data = collection.find_one({'msg_id': int(id)})
+        try:
+            if collection.find_one({"msg_id": int(id)}):
+                data = collection.find_one({'msg_id': int(id)})
+                await confirmation.delete()
+                await ctx.send(f"The mentioned vent (`{data['code']}`) belongs to `{data['uniqueId']}`")
+            else: 
+                await confirmation.delete()
+                await ctx.send(f"Failed to find!")
+        except: 
             await confirmation.delete()
-            await ctx.send(f"The mentioned vent (`{data['code']}`) belongs to `{data['uniqueId']}`")
-        else: 
-            await confirmation.delete()
-            await ctx.send(f"Failed to find!")
+            await ctx.send('Failed to find!')
 
     @commands.command(description="Deletes a vent message when messageid is provided")
     @commands.check(lambda ctx: ctx.author.id in admins)
