@@ -186,6 +186,7 @@ class _utility(commands.Cog):
                     channel = self.bot.get_channel(ids)
                     txt = await channel.fetch_message(data['msg_id'])
                     await txt.delete()
+                    collection.delete_one({'msg_id': int(id)})
                     await ctx.send("Deleted the vent message!")
                 except:
                     continue
