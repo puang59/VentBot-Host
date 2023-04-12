@@ -166,8 +166,8 @@ class _utility(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def search(self, ctx, id):
         confirmation = await ctx.send("Searching...")
-        if collection.find_one({"msg_id": id}):
-            data = collection.find({'msg_id': id})
+        if collection.find_one({"msg_id": int(id)}):
+            data = collection.find({'msg_id': int(id)})
             await confirmation.delete()
             await ctx.send(f"The mentioned vent (`{data['code']}`) belongs to `{data['uniqueId']}`")
         else: 
