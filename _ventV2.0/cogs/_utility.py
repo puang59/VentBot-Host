@@ -228,5 +228,34 @@ class _utility(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f'This command is on cooldown. Try again in {error.retry_after:.2f}s')
 
+    @commands.command()
+    @commands.check(lambda ctx: ctx.author.id in admins)
+    @commands.cooldown(4, 300, commands.BucketType.member)
+    async def ban(self, ctx, user, *, reason = None):
+        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+
+        for char in user:
+            if char in characters: 
+                try: 
+                    data = ventUserId.find_one({'uniqueId': str(user)})
+                    member = guild.get_member(int(data['user']))
+                    await member.ban(reason=reason)
+                    await ctx.send("Banned successfully!")  
+                    break
+                except Exception as err:
+                    await ctx.send(err)   
+        else:
+            try: 
+                member = guild.get_member(int(user))
+                await member.ban(reason=reason)
+                await ctx.send('Banned successfully')
+            except Exception as err: 
+                await ctx.send(err)
+    
+    @ban.error
+    async def on_ban_error(self, ctx, error: Exception):
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.send(f'This command is on cooldown. Try again in {error.retry_after:.2f}s')
+
 async def setup(bot):
     await bot.add_cog(_utility(bot))
