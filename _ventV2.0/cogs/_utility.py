@@ -204,7 +204,9 @@ class _utility(commands.Cog):
     async def on_yeet_error(self, ctx, error: Exception):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f'This command is on cooldown. Try again in {error.retry_after:.2f}s')
-    
+        else: 
+            await ctx.send(error)
+
     @commands.command(desciption="Timeouts a member")
     @commands.check(lambda ctx: ctx.author.id in admins)
     @commands.cooldown(4, 300, commands.BucketType.member) 
