@@ -199,13 +199,21 @@ class _utility(commands.Cog):
                     await ctx.send("Deleted the vent message!")
                 except:
                     continue
+        else: 
+            ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093]
+            for ids in ventChannleIDs:
+                try: 
+                    channel = self.bot.get_channel(ids)
+                    txt = await channel.fetch_message(id)
+                    await txt.delete()
+                    await ctx.send("Deleted the vent message!")
+                except:
+                    continue
 
     @yeet.error
     async def on_yeet_error(self, ctx, error: Exception):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f'This command is on cooldown. Try again in {error.retry_after:.2f}s')
-        else: 
-            await ctx.send(error)
 
     @commands.command(desciption="Timeouts a member")
     @commands.check(lambda ctx: ctx.author.id in admins)
