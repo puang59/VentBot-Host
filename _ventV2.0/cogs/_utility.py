@@ -23,6 +23,7 @@ class _utility(commands.Cog):
     global inbox
     global logdb
     global ventUserId
+    global ventInboxProtection
     cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = cluster["Discord"]
     collection = db["vent"]
@@ -31,6 +32,7 @@ class _utility(commands.Cog):
     inbox = db['ventInbox']
     logdb = db['ventLog']
     ventUserId = db['ventId']
+    ventInboxProtection = db['ventInboxProtection']
 
     @commands.command(description = "DMs everyone in the server | .textall <message>")
     @commands.check(lambda ctx: ctx.author.id in heads)
@@ -269,5 +271,12 @@ class _utility(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f'This command is on cooldown. Try again in {error.retry_after:.2f}s')
 
+    @commands.command()
+    @commands.check(lambda ctx: ctx.author.id in admins)
+    async def cleanDb (self, ctx):
+        ventInboxProtection.delete_many({})
+        await ctx.send('Done')
+
 async def setup(bot):
     await bot.add_cog(_utility(bot))
+
