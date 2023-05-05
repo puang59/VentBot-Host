@@ -381,7 +381,7 @@ class _events(commands.Cog):
                                                 em = discord.Embed(
                                                     description=f"{msg.content}"
                                                 )
-                                        except: 
+                                        except:  
                                             em = discord.Embed(
                                                 description=f"{msg.content}"
                                             )
