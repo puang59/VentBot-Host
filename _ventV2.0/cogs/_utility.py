@@ -46,12 +46,36 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in heads)
     async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg): 
+        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+
+        guild = self.bot.get_guild(943556434644328498)
+        for member in members: 
+            for char in member:
+                if char in characters:
+                    try: 
+                        data = ventUserId.find_one({'uniqueId': str(member)})
+                        mem = guild.get_member(int(data['user']))
+                        await mem.send(msg)
+                        await ctx.send(f'<:agree:943603027313565757> Message sent to {member.mention}')
+                        break
+                    except Exception as err:
+                        await ctx.send(err)
+                else: 
+                    try: 
+                        mem = guild.get_member(int(member))
+                        await mem.send(msg)
+                        await ctx.send(f'<:agree:943603027313565757> Message sent to {member.mention}')
+                        break 
+                    except Exception as err:
+                        await ctx.send(err)
+        '''                
         for member in members: 
             try: 
                 await member.send(msg)
                 await ctx.send(f'<:agree:943603027313565757> Message sent to {member.mention}')
             except: 
                 await ctx.send(f'<:disagree:943603027854626816> Message couldnt sent to {member.mention}')
+        '''
 
     @commands.command(description="Removes a user from the DB to maintain lb search")
     @commands.check(lambda ctx: ctx.author.id in admins)
@@ -244,6 +268,7 @@ class _utility(commands.Cog):
     async def ban(self, ctx, user, *, reason = None):
         characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
+        guild = self.bot.get_guild(943556434644328498)
         for char in user:
             if char in characters: 
                 try: 
@@ -254,13 +279,13 @@ class _utility(commands.Cog):
                     break
                 except Exception as err:
                     await ctx.send(err)   
-        else:
-            try: 
-                member = guild.get_member(int(user))
-                await member.ban(reason=reason)
-                await ctx.send('Banned successfully')
-            except Exception as err: 
-                await ctx.send(err)
+            else:
+                try: 
+                    member = guild.get_member(int(user))
+                    await member.ban(reason=reason)
+                    await ctx.send('Banned successfully')
+                except Exception as err: 
+                    await ctx.send(err)
     
     @ban.error
     async def on_ban_error(self, ctx, error: Exception):
