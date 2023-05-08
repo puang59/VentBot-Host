@@ -47,26 +47,16 @@ class _commands(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def lbdb(self, ctx):
-        results = prof.find({}).sort("reputation", -1)
+        cursor = prof.find({}).sort("reputation", -1).limit(50)
+        leaderboard = []
+        async for document in cursor:
+            user = self.bot.get_user(document["user"])
+            if user:
+                leaderboard.append(f"{user.name}#{user.discriminator} - {document['reputation']} reputation")
+            else:
+                leaderboard.append(f"Unknown User#{document['user']} - {document['reputation']} reputation")
+        await ctx.send("\n".join(leaderboard))
 
-        message = ""
-        count = 0
-        async for doc in results:
-            message += f"{count+1}. {doc['user']} - {doc['reputation']} reputation\n"
-            count += 1
-
-            # Send the message if it exceeds 1900 characters (to leave room for the header and footer)
-            if len(message) > 1900:
-                await ctx.send(f"```py\n{message}```")
-                message = ""
-
-            # Stop after sending the first 50 results
-            if count >= 50:
-                break
-
-        # Send any remaining data
-        if message:
-            await ctx.send(f"```py\n{message}```")
 
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
