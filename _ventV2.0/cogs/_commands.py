@@ -43,6 +43,15 @@ class _commands(commands.Cog):
             await asyncio.sleep(5)
             await e_txt.delete()
 
+    
+    @commands.command()
+    @commands.check(lambda ctx: ctx.author.id in admins)
+    async def lbdb(self, ctx):
+        results = prof.find({}).sort("reputation", -1).limit(50)
+        leaderboard = [f"{i+1}. <@{doc['user']}> - {doc['reputation']} reputation" for i, doc in enumerate(results)]
+        leaderboard_msg = "\n".join(leaderboard)
+        await ctx.send(f"```\n{leaderboard_msg}\n```")
+
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def lb(self, ctx):
