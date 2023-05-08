@@ -43,7 +43,7 @@ class _commands(commands.Cog):
             await asyncio.sleep(5)
             await e_txt.delete()
 
-    
+   # prints first 50 data from lb db 
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def lbdb(self, ctx):
