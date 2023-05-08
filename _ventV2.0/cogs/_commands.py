@@ -43,21 +43,7 @@ class _commands(commands.Cog):
             await asyncio.sleep(5)
             await e_txt.delete()
 
-   # prints first 50 data from lb db 
-    @commands.command()
-    @commands.check(lambda ctx: ctx.author.id in admins)
-    async def lbdb(self, ctx):
-        cursor = prof.find({}).sort("reputation", -1).limit(50)
-        leaderboard = []
-        async for document in cursor:
-            user = self.bot.get_user(document["user"])
-            if user:
-                leaderboard.append(f"{user.name}#{user.discriminator} - {document['reputation']} reputation")
-            else:
-                leaderboard.append(f"Unknown User#{document['user']} - {document['reputation']} reputation")
-        await ctx.send("\n".join(leaderboard))
-
-
+            
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def lb(self, ctx):
