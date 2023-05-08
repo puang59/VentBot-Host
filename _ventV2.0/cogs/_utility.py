@@ -241,31 +241,60 @@ class _utility(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f'This command is on cooldown. Try again in {error.retry_after:.2f}s')
 
+#    @commands.command()
+#    @commands.check(lambda ctx: ctx.author.id in admins)
+#    @commands.cooldown(4, 300, commands.BucketType.member)
+#    async def ban(self, ctx, user, *, reason = None):
+#        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+#
+#        guild = self.bot.get_guild(943556434644328498)
+#        for char in user:
+#            if char in characters: 
+#                try: 
+#                    data = ventUserId.find_one({'uniqueId': str(user)})
+#                    member = guild.get_member(int(data['user']))
+#                    await member.ban(reason=reason)
+#                    await ctx.send("Banned successfully!")  
+#                    break
+#                except Exception as err:
+#                    await ctx.send(err)   
+#            else:
+#                try: 
+#                    member = guild.get_member(int(user))
+#                    await member.ban(reason=reason)
+#                    await ctx.send('Banned successfully')
+#                except Exception as err: 
+#                    await ctx.send(err)
+    
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     @commands.cooldown(4, 300, commands.BucketType.member)
-    async def ban(self, ctx, user, *, reason = None):
-        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-
+    async def ban(self, ctx, user, *, reason=None):
         guild = self.bot.get_guild(943556434644328498)
-        for char in user:
-            if char in characters: 
-                try: 
-                    data = ventUserId.find_one({'uniqueId': str(user)})
-                    member = guild.get_member(int(data['user']))
-                    await member.ban(reason=reason)
-                    await ctx.send("Banned successfully!")  
-                    break
-                except Exception as err:
-                    await ctx.send(err)   
-            else:
-                try: 
-                    member = guild.get_member(int(user))
-                    await member.ban(reason=reason)
-                    await ctx.send('Banned successfully')
-                except Exception as err: 
-                    await ctx.send(err)
-    
+        
+        # Check if user input is a member ID
+        try:
+            member = await commands.MemberConverter().convert(ctx, user)
+        except commands.errors.MemberNotFound:
+            # Check if user input is a unique ID containing alphabets
+            if not any(char.isalpha() for char in user):
+                await ctx.send('Invalid input. Please provide a valid member ID or unique ID containing alphabets.')
+                return
+            data = ventUserId.find_one({'uniqueId': user})
+            if not data:
+                await ctx.send('Could not find a user with the provided unique ID.')
+                return
+            member = guild.get_member(int(data['user']))
+        
+        # Ban the member
+        try:
+            await member.ban(reason=reason)
+            await ctx.send('Banned successfully.')
+        except discord.errors.Forbidden:
+            await ctx.send('I do not have permission to ban this member.')
+        except discord.errors.HTTPException:
+            await ctx.send('An error occurred while trying to ban this member.')
+
     @ban.error
     async def on_ban_error(self, ctx, error: Exception):
         if isinstance(error, commands.CommandOnCooldown):
