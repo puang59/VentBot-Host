@@ -47,10 +47,26 @@ class _commands(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def lbdb(self, ctx):
-        results = prof.find({}).sort("reputation", -1).limit(50)
-        leaderboard = [f"{i+1}. <@{doc['user']}> - {doc['reputation']} reputation" for i, doc in enumerate(results)]
-        leaderboard_msg = "\n".join(leaderboard)
-        await ctx.send(f"```\n{leaderboard_msg}\n```")
+        results = prof.find({}).sort("reputation", -1)
+
+        message = ""
+        count = 0
+        async for doc in results:
+            message += f"{count+1}. {doc['user']} - {doc['reputation']} reputation\n"
+            count += 1
+
+            # Send the message if it exceeds 1900 characters (to leave room for the header and footer)
+            if len(message) > 1900:
+                await ctx.send(f"```py\n{message}```")
+                message = ""
+
+            # Stop after sending the first 50 results
+            if count >= 50:
+                break
+
+        # Send any remaining data
+        if message:
+            await ctx.send(f"```py\n{message}```")
 
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
