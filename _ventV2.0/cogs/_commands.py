@@ -9,6 +9,7 @@ from random import *
 admins = [943928873412870154, 409994220309577729, 852797584812670996, 751780778802806784, 698895560442118239, 853421799781302302]
 
 class _commands(commands.Cog):
+    """General server commands"""
     def __init__(self, bot):
         self.bot = bot
     
@@ -28,6 +29,7 @@ class _commands(commands.Cog):
     @commands.command(aliases=["rep"])
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def reputation(self, ctx, member: discord.Member = None):
+        """Shows reputation earned by the specificed user"""
         if member == None:
             member = ctx.author
 
@@ -47,6 +49,7 @@ class _commands(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def lb(self, ctx):
+        """Shows reputation leaderboard"""
         results = prof.find({}).sort("reputation", -1)
         temp = ""
         i = 1
@@ -90,9 +93,6 @@ class _commands(commands.Cog):
                                 icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
             await ctx.send(embed=embed)
 
-    @commands.command()
-    async def latency(self, ctx): 
-        await ctx.send(f'Pong! In `{round(self.bot.latency * 1000)}ms`')
 
 async def setup(bot):
     await bot.add_cog(_commands(bot))

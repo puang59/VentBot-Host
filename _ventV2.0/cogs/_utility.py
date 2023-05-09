@@ -38,6 +38,7 @@ class _utility(commands.Cog):
     @commands.command(description = "DMs everyone in the server | .textall <message>")
     @commands.check(lambda ctx: ctx.author.id in heads)
     async def textall(self, ctx, *, message):
+        """DMs everyone in the server"""
         for user in ctx.guild.members:
             try:
                 await user.send(message)
@@ -49,6 +50,7 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in heads)
     async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg): 
+        """DMs specified members of the server"""
         for member in members: 
             try: 
                 await member.send(msg)
@@ -60,6 +62,7 @@ class _utility(commands.Cog):
     @commands.command(description="Removes a user from the DB to maintain lb search")
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def rem(self, ctx, member = None):
+        """Removes a user from the DB to maintain lb search"""
         if not member == None:
             if logdb.find_one({"userId": int(member)}):                
                 try: 
@@ -77,6 +80,7 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def close(self, ctx):
+        """Terminates the help thread"""
         if ctx.channel.category.name == "MAILS":
             topic = ctx.channel.topic
             guild = self.bot.get_guild(943556434644328498)
@@ -94,6 +98,7 @@ class _utility(commands.Cog):
 
     @commands.command()
     async def bin(self, ctx):
+        """Closes the inbox channel - Public command"""
         ventsrv = ["📨 INBOX", "📨 INBOX (2)", "📨 INBOX (3)"]
         if ctx.channel.category.name in ventsrv:
             topic = ctx.channel.topic
@@ -118,6 +123,7 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def find(self, ctx, code):
+        """Looks up for the vent message link when code is provided"""
         try:
             data = collection.find_one({"code": code})
             em = discord.Embed()
@@ -130,6 +136,7 @@ class _utility(commands.Cog):
     @commands.command(description="Deletes a vent message when code is provided")
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def delete(self, ctx, code):
+        """Deletes a vent message when code is provided"""
         data = collection.find_one({"code": code})
 
         channel = self.bot.get_channel(943556439195152477)
@@ -153,6 +160,7 @@ class _utility(commands.Cog):
     @commands.command(aliases=["reset"])
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def edit(self, ctx, code):
+        """Resets the channel cooldown just incase someone requests to edit their vent message"""
         guild = self.bot.get_guild(943556434644328498)
         data = collection.find_one({"code": code})
         member = guild.get_member(int(data["author_id"]))
@@ -174,6 +182,7 @@ class _utility(commands.Cog):
     @commands.command(description="Looks for the uniqueId of vent author")
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def search(self, ctx, id):
+        """Looks for the uniqueId of vent author"""
         confirmation = await ctx.send("Searching...")
         try:
             if collection.find_one({"msg_id": int(id)}):
@@ -191,6 +200,7 @@ class _utility(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in admins)
     @commands.cooldown(4, 300, commands.BucketType.member)
     async def yeet(self, ctx, id):   
+        """Deletes a vent message when messageid is provided"""
         if collection.find_one({'msg_id': int(id)}):
             data = collection.find_one({'msg_id': int(id)})
             ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093]
@@ -223,6 +233,7 @@ class _utility(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in admins)
     @commands.cooldown(4, 300, commands.BucketType.member) 
     async def mute(self, ctx, user, *, reason = None):
+        """Timeouts a specified member"""
         if ventUserId.find_one({"uniqueId": str(user)}):
             data = ventUserId.find_one({'uniqueId': str(user)})
             guild = self.bot.get_guild(943556434644328498)
@@ -271,6 +282,7 @@ class _utility(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in admins)
     @commands.cooldown(4, 300, commands.BucketType.member)
     async def ban(self, ctx, user, *, reason=None):
+        """Removes the existence of the user specified"""
         guild = self.bot.get_guild(943556434644328498)
         
         # Check if user input is a member ID
@@ -304,6 +316,7 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def cleanDb (self, ctx):
+        """Delets all data from ventInboxProtection DB permanently"""
         ventInboxProtection.delete_many({})
         await ctx.send('Done')
 
@@ -311,6 +324,7 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def globalwarn(self, ctx, channel: discord.TextChannel, *, message = None):
+        """Posts a warn message in public vent channels just incase theres a chaos between users"""
         if message == None: 
             await ctx.send("Please provide a valid message")
         else: 
