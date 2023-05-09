@@ -12,6 +12,7 @@ admins = [943928873412870154, 409994220309577729, 852797584812670996, 7517807788
 heads = [943928873412870154, 852797584812670996]
 
 class _utility(commands.Cog):
+    """Commands for server moderation"""
     def __init__(self, bot):
         self.bot = bot
 
