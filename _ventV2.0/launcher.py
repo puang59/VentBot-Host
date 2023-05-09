@@ -63,7 +63,7 @@ class MyHelp(commands.HelpCommand):
                     name = "No"
                     description = "Commands with no category"
 
-                embed.add_field(name=f"{name} Category [{amount_commands}]", value=description)
+                embed.add_field(name=f"{name} Category [{amount_commands}]", value=description, inline=False)
 
         embed.description = f"{len(bot.commands)} commands | {usable} usable"
 
@@ -76,7 +76,7 @@ class MyHelp(commands.HelpCommand):
         embed = HelpEmbed(title=signature, description=command.help or "No help found...")
 
         if cog := command.cog:
-            embed.add_field(name="Category", value=cog.qualified_name)
+            embed.add_field(name="Category", value=cog.qualified_name, inline=False)
 
         can_run = "No"
         # command.can_run to test if the cog is usable
@@ -84,13 +84,13 @@ class MyHelp(commands.HelpCommand):
             if await command.can_run(self.context):
                 can_run = "Yes"
 
-        embed.add_field(name="Usable", value=can_run)
+        embed.add_field(name="Usable", value=can_run, inline=False)
 
         if command._buckets and (
         cooldown := command._buckets._cooldown):  # use of internals to get the cooldown of the command
             embed.add_field(
                 name="Cooldown",
-                value=f"{cooldown.rate} per {cooldown.per:.0f} seconds",
+                value=f"{cooldown.rate} per {cooldown.per:.0f} seconds", inline=False,
             )
 
         await self.send(embed=embed)
@@ -100,7 +100,7 @@ class MyHelp(commands.HelpCommand):
 
         if filtered_commands := await self.filter_commands(commands):
             for command in filtered_commands:
-                embed.add_field(name=self.get_command_signature(command), value=command.help or "No help found...")
+                embed.add_field(name=self.get_command_signature(command), value=command.help or "No help found...", inline=False)
 
         await self.send(embed=embed)
 

@@ -61,7 +61,7 @@ class _utility(commands.Cog):
 
     @commands.command(description="Removes a user from the DB to maintain lb search")
     @commands.check(lambda ctx: ctx.author.id in admins)
-    async def rem(self, ctx, member = None):
+    async def rem(self, ctx, member):
         """Removes a user from the DB to maintain lb search"""
         if not member == None:
             if logdb.find_one({"userId": int(member)}):                
@@ -232,8 +232,10 @@ class _utility(commands.Cog):
     @commands.command(desciption="Timeouts a member")
     @commands.check(lambda ctx: ctx.author.id in admins)
     @commands.cooldown(4, 300, commands.BucketType.member) 
-    async def mute(self, ctx, user, *, reason = None):
+    async def mute(self, ctx, user, *, reason):
         """Timeouts a specified member"""
+        if reason == None: 
+            reason = "None"
         if ventUserId.find_one({"uniqueId": str(user)}):
             data = ventUserId.find_one({'uniqueId': str(user)})
             guild = self.bot.get_guild(943556434644328498)
@@ -281,10 +283,12 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     @commands.cooldown(4, 300, commands.BucketType.member)
-    async def ban(self, ctx, user, *, reason=None):
+    async def ban(self, ctx, user, *, reason):
         """Removes the existence of the user specified"""
+        if reason == None: 
+            reason = "None"
         guild = self.bot.get_guild(943556434644328498)
-        
+
         # Check if user input is a member ID
         try:
             member = await commands.MemberConverter().convert(ctx, user)
@@ -323,7 +327,7 @@ class _utility(commands.Cog):
 
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
-    async def globalwarn(self, ctx, channel: discord.TextChannel, *, message = None):
+    async def globalwarn(self, ctx, channel: discord.TextChannel, *, message):
         """Posts a warn message in public vent channels just incase theres a chaos between users"""
         if message == None: 
             await ctx.send("Please provide a valid message")
