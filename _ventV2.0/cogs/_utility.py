@@ -76,7 +76,7 @@ class _utility(commands.Cog):
         else: 
             await ctx.send("Cannot find the person!")
 
-
+# checks
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def close(self, ctx):
