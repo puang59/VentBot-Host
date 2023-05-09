@@ -114,6 +114,12 @@ class MyHelp(commands.HelpCommand):
         title = cog.qualified_name or "No"
         await self.send_help_embed(f'{title} Category', cog.description, cog.get_commands())
 
+    async def send_error_message(self, error):
+        embed = discord.Embed(title="Error", description=f"Please make sure you are using correct command name. If you are searching for category, make sure you put `_` before category name like `.help _utility`.\n```{error}```")
+        channel = self.get_destination()
+        await channel.send(embed=embed)
+
+
         
 class VentBot(commands.Bot):
     def __init__(self):
