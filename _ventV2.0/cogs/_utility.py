@@ -338,7 +338,7 @@ class _utility(commands.Cog):
                 color=discord.Colour.red()
             )
             warner = ctx.author.name
-            art = ra.robo(f"{str(warner)})
+            art = ra.robo(f"{str(warner)}")
             em.set_author(name="Moderator", icon_url=art)
             x = await channel.send(embed = em)
             await x.add_reaction('\U00002755')
