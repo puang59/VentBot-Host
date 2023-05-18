@@ -322,7 +322,7 @@ class _events(commands.Cog):
                                             value = randint(0, 0xffffff)
                                             em.color = value 
                                             w = await wok_channel.send(embed=em)
-                                            await z.add_reaction('\U0001f49e')
+                                            await w.add_reaction('\U0001f49e')
 
                                         #logger.logInput('type', f"{ventTypeCheck['type']}")
                                         vType.delete_many({'author_id':msg.author.id})
