@@ -143,6 +143,7 @@ class _utility(commands.Cog):
         channel = self.bot.get_channel(943556439195152477)
         channel2 = self.bot.get_channel(1014201909118251098)
         channel3 = self.bot.get_channel(1035490966934659093)
+        channel4 = self.bot.get_channel(1108828942019858582)
         try: 
             try: 
                 txt = await channel.fetch_message(data["msg_id"])
@@ -151,8 +152,12 @@ class _utility(commands.Cog):
                 txt = await channel2.fetch_message(data["msg_id"])
                 await txt.delete()    
         except: 
-            txt = await channel3.fetch_message(data["msg_id"])
-            await txt.delete()   
+            try: 
+                txt = await channel3.fetch_message(data["msg_id"])
+                await txt.delete()   
+            except:
+                txt = await channel4.fetch_message(data["msg_id"])
+                await txt.delete()   
 
         collection.delete_one({"code": code})
         await ctx.send("<:agree:943603027313565757> Deleted")
@@ -204,7 +209,7 @@ class _utility(commands.Cog):
         """Deletes a vent message when messageid is provided"""
         if collection.find_one({'msg_id': int(id)}):
             data = collection.find_one({'msg_id': int(id)})
-            ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093]
+            ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093, 1108828942019858582]
             for ids in ventChannleIDs:
                 try:
                     channel = self.bot.get_channel(ids)
@@ -215,7 +220,7 @@ class _utility(commands.Cog):
                 except:
                     continue
         else: 
-            ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093]
+            ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093, 1108828942019858582]
             for ids in ventChannleIDs:
                 try: 
                     channel = self.bot.get_channel(ids)
