@@ -319,7 +319,7 @@ class _events(commands.Cog):
                                         elif ventTypeCheck['type'] == "wok": 
                                             ra = roboart() 
                                             em.set_author(name="Anonymous", icon_url=ra.kitten(f"{msg.author.name}"))
-                                            value = random.randint(0, 0xffffff)
+                                            value = randint(0, 0xffffff)
                                             em.color = value 
                                             w = await wok_channel.send(embed=em)
                                             await z.add_reaction('\U0001f49e')
@@ -428,7 +428,7 @@ class _events(commands.Cog):
                                         elif ventTypeCheck['type'] == "wok": 
                                             ra = roboart() 
                                             em.set_author(name="Anonymous", icon_url=ra.kitten(f"{msg.author.name}"))
-                                            value = random.randint(0, 0xffffff)
+                                            value = randint(0, 0xffffff)
                                             em.color = value 
                                             w = await wok_channel.send(embed=em)
                                             await w.add_reaction('\U0001f49e')
