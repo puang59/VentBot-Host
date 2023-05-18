@@ -349,7 +349,6 @@ class _utility(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def clean(self, ctx, year: int, month: int, day: int, cutoffRep: int):
         """Kicks inactive members of the server (year, month, day, cutoff rep)"""
-        #cutoff_date = datetime(year, month, day)  
         cutoff_date = pytz.utc.localize(datetime(year, month, day))
         kick_count = 0
 
@@ -360,8 +359,8 @@ class _utility(commands.Cog):
             await member.kick(reason=reason)
 
         for member in ctx.guild.members:
-            joined_at = member.joined_at.replace(tzinfo=pytz.utc)
-            if joined_at < cutoff_date:
+            joined_at = member.joined_at
+            if joined_at is not None and joined_at.replace(tzinfo=pytz.utc) < cutoff_date:
                 rep = prof.find_one({"user": member.id})
                 if rep and rep['reputation'] < cutoffRep:
                     await kick_member(member, f"Inactivity in the server since {cutoff_date.date()}")
@@ -372,8 +371,7 @@ class _utility(commands.Cog):
                     await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity (no reputation record found)")
                     kick_count += 1
 
-        await ctx.send(f"`Total members kicked: {kick_count}`")
-
+        await ctx.send(f"Total members kicked: {kick_count}")
 
 async def setup(bot):
     await bot.add_cog(_utility(bot))
