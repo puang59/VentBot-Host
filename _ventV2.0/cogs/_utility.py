@@ -355,13 +355,18 @@ class _utility(commands.Cog):
         async def kick_member(member, reason):
             em = discord.Embed(color=discord.Color.red())
             em.add_field(name="Reason:", value=f"Inactivity in the server since {cutoff_date.date()}", inline=False)
-            try: 
+            try:
                 await member.send("You have been kicked out from the server. If you think it was applied in error or you wish to stay active in the server by helping others and yourself, you can rejoin the server from this link: https://disboard.org/server/943556434644328498", embed=em)
                 await member.kick(reason=reason)
-            except: 
+            except:
                 await member.kick(reason=reason)
 
         for member in ctx.guild.members:
+            if member.bot:
+                continue
+            if not ctx.guild.me.guild_permissions.kick_members:
+                continue
+
             joined_at = member.joined_at
             if joined_at is not None and joined_at.replace(tzinfo=pytz.utc) < cutoff_date:
                 rep = prof.find_one({"user": member.id})
@@ -374,7 +379,7 @@ class _utility(commands.Cog):
                     await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity (no reputation record found)")
                     kick_count += 1
 
-        await ctx.send(f"Total members kicked: {kick_count}")
+        await ctx.send(f"`Total members kicked: {kick_count}`")
 
 async def setup(bot):
     await bot.add_cog(_utility(bot))
