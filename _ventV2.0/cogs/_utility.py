@@ -343,6 +343,34 @@ class _utility(commands.Cog):
             x = await channel.send(embed = em)
             await x.add_reaction('\U00002755')
 
+
+    @commands.command()
+    @commands.check(lambda ctx: ctx.author.id in admins)
+    async def clean(ctx, year: int, month: int, day: int, cutoffRep: int):
+        """Kicks inactive members of the server"""
+        cutoff_date = datetime(year, month, day)  
+        kick_count = 0
+
+        async def kick_member(member, reason):
+            em = discord.Embed(color=discord.Color.red())
+            em.add_field(name="Reason:", value=f"Inactivity in the server since {cutoff_date.date()}", inline=False)
+            await member.send("You have been kicked out from the server. If you think it was applied in error or you wish to stay active in the server by helping others and yourself, you can rejoin the server from this link: https://disboard.org/server/943556434644328498", embed=em)
+            await member.kick(reason=reason)
+
+        for member in ctx.guild.members:
+            if member.joined_at < cutoff_date:
+                rep = prof.find_one({"user": member.id})
+                if rep and rep['reputation'] < cutoffRep:
+                    await kick_member(member, f"Inactivity in the server since {cutoff_date.date()}")
+                    await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity")
+                    kick_count += 1
+                elif not rep:
+                    await kick_member(member, f"Inactivity in the server since {cutoff_date.date()} (no reputation record found)")
+                    await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity (no reputation record found)")
+                    kick_count += 1
+
+        await ctx.send(f"`Total members kicked: {kick_count}`")
+
+
 async def setup(bot):
     await bot.add_cog(_utility(bot))
-
