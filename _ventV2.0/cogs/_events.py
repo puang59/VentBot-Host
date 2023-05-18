@@ -3,7 +3,7 @@ import discord
 import asyncio
 
 from pymongo import MongoClient
-import random 
+from random import *
 # import configparser
 from RoboArt import roboart
 import time
