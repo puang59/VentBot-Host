@@ -347,7 +347,7 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def clean(ctx, year: int, month: int, day: int, cutoffRep: int):
-        """Kicks inactive members of the server"""
+        """Kicks inactive members of the server (year, month, day, cutoff rep)"""
         cutoff_date = datetime(year, month, day)  
         kick_count = 0
 
