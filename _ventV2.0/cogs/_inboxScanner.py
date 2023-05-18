@@ -128,7 +128,7 @@ class _inboxScanner(commands.Cog):
                 description=f"**Inbox scanning complete ✔**\n```#### RESULT ####\nTotal channel scanned: {numchannel}\nDead channels: {deadchannel}\nChannels deleted: {deleted}```\n**Scan counter:** {timeScanned} times scanned"
             )
             await logChannel.send(embed = resultEmbed)
-            await asyncio.sleep(7200) # 2 hours
+            await asyncio.sleep(86400) # 24 hours
 
     @commands.Cog.listener()
     async def on_ready(self):
