@@ -701,7 +701,7 @@ class _events(commands.Cog):
                 await reaction.message.delete()
                 await accept()
         if not user.bot: 
-            if reaction.emoji == "\U0001f49e": 
+            if reaction.emoji == "\U0001f48c": 
                 await wokchn()
                 cofirm = await reaction.message.channel.send("`📩` - Accept Private Anonymous Message\n`☘️` - Do not accept private anonymous message\n\n**Note:** Person who will send private message to you wont be able to know who you are and you wont be able to know who they are.")
                 await cofirm.add_reaction("📩")
