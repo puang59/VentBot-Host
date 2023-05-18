@@ -3,6 +3,7 @@ import discord
 import asyncio
 from RoboArt import roboart
 from datetime import datetime, timedelta
+import pytz
 
 from pymongo import MongoClient
 from random import *
@@ -348,7 +349,8 @@ class _utility(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def clean(self, ctx, year: int, month: int, day: int, cutoffRep: int):
         """Kicks inactive members of the server (year, month, day, cutoff rep)"""
-        cutoff_date = datetime(year, month, day)  
+        #cutoff_date = datetime(year, month, day)  
+        cutoff_date = pytz.utc.localize(datetime(year, month, day))
         kick_count = 0
 
         async def kick_member(member, reason):
@@ -358,7 +360,8 @@ class _utility(commands.Cog):
             await member.kick(reason=reason)
 
         for member in ctx.guild.members:
-            if member.joined_at < cutoff_date:
+            joined_at = member.joined_at.replace(tzinfo=pytz.utc)
+            if joined_at < cutoff_date:
                 rep = prof.find_one({"user": member.id})
                 if rep and rep['reputation'] < cutoffRep:
                     await kick_member(member, f"Inactivity in the server since {cutoff_date.date()}")
