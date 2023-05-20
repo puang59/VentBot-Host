@@ -1,10 +1,12 @@
 from discord.ext import commands
 import discord
+import time 
 
 class _autoRole(commands.Cog):
     """Self Roles"""
     def __init__(self, bot):
         self.bot = bot
+        self.start_time = time.time()
 
     @commands.command()
     async def autorole(self, ctx): 
@@ -70,5 +72,5 @@ class _autoRole(commands.Cog):
                 role = guild.get_role(1109394399114301531)
                 await user.remove_roles(role)
 
-def setup(bot):
-    bot.add_cog(_autoRole(bot))
+async def setup(bot):
+    await bot.add_cog(_autoRole(bot))
