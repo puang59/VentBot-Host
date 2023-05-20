@@ -8,6 +8,15 @@ class _autoRole(commands.Cog):
         self.bot = bot
         self.start_time = time.time()
 
+    async def fetch_member(self, guild, user_id):
+        member = self.member_cache.get(user_id)
+        if member:
+            return member
+
+        member = await guild.fetch_member(user_id)
+        self.member_cache[user_id] = member
+        return member
+
     @commands.command()
     async def autorole(self, ctx): 
         """Auto Role"""
@@ -51,7 +60,8 @@ class _autoRole(commands.Cog):
         guild = self.bot.get_guild(payload.guild_id)
 
         if guild is not None:
-            user = await guild.fetch_member(payload.user_id)
+            user_id = payload.user_id
+            user = await self.fetch_member(guild, user_id)
 
             if user is not None and not user.bot:
                 if payload.emoji.name == '🇦': # Serious-vent
