@@ -208,7 +208,7 @@ class _events(commands.Cog):
             if not msg.author.id == 943928873412870154:
                 if msg.channel.id != 943556439195152477:
                     if not isinstance(msg.channel, discord.channel.DMChannel):
-                        if not msg.channel.category.id in [950646823654137897, 987983272069976114, 987986457069240401, 943588904622256168, 1089639116704059473, 943909186734022676]:
+                        if not msg.channel.category.id in [950646823654137897, 987983272069976114, 987986457069240401, 943588904622256168, 1089639116704059473, 943909186734022676, 1108828456353026088]:
                             if not msg.content.startswith(self.bot.command_prefix): #checking if msg is a commands 
                                 # Storing unqiue user id
                                 if not ventUserId.find_one({"user": msg.author.id}):
