@@ -20,9 +20,8 @@ class _autoRole(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        guild_id = payload.guild_id
-        guild = self.bot.get_guild(guild_id)
-        user = guild.get_member(payload.user_id)
+        guild = self.bot.get_guild(payload.guild_id)
+        user = guild.get_member(payload.member.id)
 
         if not user.bot: 
             if payload.emoji.name == '🇦': # Serious-vent
@@ -47,9 +46,8 @@ class _autoRole(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
-        guild_id = payload.guild_id
-        guild = self.bot.get_guild(guild_id)
-        user = guild.get_member(payload.user_id)
+        guild = self.bot.get_guild(payload.guild_id)
+        user = guild.get_member(payload.member.id)
 
         if not user.bot: 
             if payload.emoji.name == '🇦': # Serious-vent
