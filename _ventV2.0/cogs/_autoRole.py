@@ -24,7 +24,7 @@ class _autoRole(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         guildId = payload.guild_id
-        guild = self.bot.get_guild(guild_id)
+        guild = self.bot.get_guild(guildId)
         member = guild.get_member(payload.user.id)
 
         if not payload.member.bot: 
