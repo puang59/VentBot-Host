@@ -49,28 +49,30 @@ class _autoRole(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         guild = self.bot.get_guild(payload.guild_id)
-        user = guild.get_member(payload.member.id)
 
-        if not user.bot: 
-            if payload.emoji.name == '🇦': # Serious-vent
-                role = guild.get_role(1109394091487285318)
-                await user.remove_roles(role)
+        if guild is not None:
+            user = await guild.fetch_member(payload.user_id)
 
-            if payload.emoji.name == '🇧': # Casual-vent
-                role = guild.get_role(1109394240364105778)
-                await user.remove_roles(role)
+            if user is not None and not user.bot:
+                if payload.emoji.name == '🇦': # Serious-vent
+                    role = guild.get_role(1109394091487285318)
+                    await user.remove_roles(role)
 
-            if payload.emoji.name == '🇨': # Help-vent
-                role = guild.get_role(1109394295439511593)
-                await user.remove_roles(role)
+                if payload.emoji.name == '🇧': # Casual-vent
+                    role = guild.get_role(1109394240364105778)
+                    await user.remove_roles(role)
 
-            if payload.emoji.name == '🇩': # Whispers-of-kindness
-                role = guild.get_role(1109394345926340619)
-                await user.remove_roles(role)
+                if payload.emoji.name == '🇨': # Help-vent
+                    role = guild.get_role(1109394295439511593)
+                    await user.remove_roles(role)
 
-            if payload.emoji.name == '🇪': # Global-chat
-                role = guild.get_role(1109394399114301531)
-                await user.remove_roles(role)
+                if payload.emoji.name == '🇩': # Whispers-of-kindness
+                    role = guild.get_role(1109394345926340619)
+                    await user.remove_roles(role)
 
+                if payload.emoji.name == '🇪': # Global-chat
+                    role = guild.get_role(1109394399114301531)
+                    await user.remove_roles(role)
+                
 async def setup(bot):
     await bot.add_cog(_autoRole(bot))
