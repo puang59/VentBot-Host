@@ -119,12 +119,12 @@ class MyHelp(commands.HelpCommand):
         channel = self.get_destination()
         await channel.send(embed=embed)
 
-
         
 class VentBot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=".", intents=intents, help_command=MyHelp(), activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories"), owner_ids=[943928873412870154, 852797584812670996])
         self.initial_extensions = [
+            'cogs._autoRole',
             'cogs._commands',
             'cogs._dmsupport',
             'cogs._errorHandler',
