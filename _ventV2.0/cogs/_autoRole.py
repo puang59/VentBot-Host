@@ -9,12 +9,12 @@ class _autoRole(commands.Cog):
         self.start_time = time.time()
 
     async def fetch_member(self, guild, user_id):
-        member = self.member_cache.get(user_id)
+        member = self.bot.member_cache.get((guild.id, user_id))
         if member:
             return member
 
         member = await guild.fetch_member(user_id)
-        self.member_cache[user_id] = member
+        self.bot.member_cache[(guild.id, user_id)] = member
         return member
 
     @commands.command()
@@ -85,4 +85,5 @@ class _autoRole(commands.Cog):
                     await user.remove_roles(role)
                 
 async def setup(bot):
+    bot.member_cache = {}
     await bot.add_cog(_autoRole(bot))
