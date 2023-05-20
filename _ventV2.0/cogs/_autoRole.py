@@ -25,28 +25,28 @@ class _autoRole(commands.Cog):
     async def on_raw_reaction_add(self, payload):
         guildId = payload.guild_id
         guild = self.bot.get_guild(guildId)
-        member = guild.get_member(payload.user.id)
+        usr = guild.get_member(payload.member.id)
 
         if not payload.member.bot: 
             if payload.emoji.name == '🇦': # Serious-vent
                 role = guild.get_role(1109394091487285318)
-                await member.add_roles(role)
+                await usr.add_roles(role)
 
             if payload.emoji.name == '🇧': # Casual-vent
                 role = guild.get_role(1109394240364105778)
-                await member.add_roles(role)
+                await usr.add_roles(role)
 
             if payload.emoji.name == '🇨': # Help-vent
                 role = guild.get_role(1109394295439511593)
-                await member.add_roles(role)
+                await usr.add_roles(role)
 
             if payload.emoji.name == '🇩': # Whispers-of-kindness
                 role = guild.get_role(1109394345926340619)
-                await member.add_roles(role)
+                await usr.add_roles(role)
 
             if payload.emoji.name == '🇪': # Global-chat
                 role = guild.get_role(1109394399114301531)
-                await member.add_roles(role)
+                await usr.add_roles(role)
 
 async def setup(bot):
     await bot.add_cog(_autoRole(bot))
