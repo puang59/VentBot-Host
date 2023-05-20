@@ -15,11 +15,11 @@ class _autoRole(commands.Cog):
         em = discord.Embed(title="Hide channels", description="`\U00000030 - Hide Serious-vent`\n`\U00000031 - Hide Casual-vent`\n`\U00000032 - Hide Help-vent`\n----------\n`\U00000033 - Hide Whispers-of-kindness`\n`\U00000034 - Hide Global-chat`", color=0x5865F2)
         em.set_footer(text="More than one role can be choosen")
         x = await ctx.send(embed=em)
-        await x.add_reaction('\U0001f1e6')
-        await x.add_reaction('\U0001f1e7')
-        await x.add_reaction('\U0001f1e8')
-        await x.add_reaction('\U0001f1e9')
-        await x.add_reaction('\U0001f1ea')
+        await x.add_reaction('🇦')
+        await x.add_reaction('🇧')
+        await x.add_reaction('🇨')
+        await x.add_reaction('🇩')
+        await x.add_reaction('🇪')
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
