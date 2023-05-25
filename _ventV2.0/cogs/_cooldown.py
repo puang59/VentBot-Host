@@ -53,7 +53,6 @@ class _cooldown(commands.Cog):
             await channel.edit(slowmode_delay=0)
             await ctx.send(f"Removed the cooldown for the user `{user}` for: `{sec} seconds`")
             await asyncio.sleep(sec)
-           
             await channel.edit(slowmode_delay=7200)
             await ctx.send(f"Cooldown for the user `{user}` is added back.")
 

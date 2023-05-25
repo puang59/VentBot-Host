@@ -317,8 +317,10 @@ class _events(commands.Cog):
                                             await z.add_reaction('⬆️')
                                             #await z.add_reaction('💬')
                                         elif ventTypeCheck['type'] == "wok": 
-                                            ra = roboart() 
-                                            em.set_author(name="Anonymous", icon_url=ra.kitten(f"{msg.author.name}"))
+                                            ra = roboart()
+                                            authorname = str(msg.author.name)
+                                            first_word = authorname.split()[0]
+                                            em.set_author(name="Anonymous", icon_url=ra.kitten(f"{first_word}"))
                                             value = randint(0, 0xffffff)
                                             em.color = value 
                                             w = await wok_channel.send(embed=em)
@@ -427,7 +429,9 @@ class _events(commands.Cog):
                                             await z.add_reaction('💬')
                                         elif ventTypeCheck['type'] == "wok": 
                                             ra = roboart() 
-                                            em.set_author(name="Anonymous", icon_url=ra.kitten(f"{msg.author.name}"))
+                                            authorname = str(msg.author.name)
+                                            first_word = authorname.split()[0]
+                                            em.set_author(name="Anonymous", icon_url=ra.kitten(f"{first_word}"))
                                             value = randint(0, 0xffffff)
                                             em.color = value 
                                             w = await wok_channel.send(embed=em)
@@ -850,7 +854,7 @@ class _events(commands.Cog):
                         categories = ["PRIVATE SPACE (1)", "PRIVATE SPACE (2)", "PRIVATE SPACE (3)","PRIVATE SPACE (4)","PRIVATE SPACE (5)",\
                                     "PRIVATE SPACE (6)","PRIVATE SPACE (7)", "PRIVATE SPACE (8)","PRIVATE SPACE (9)","PRIVATE SPACE (10)"]
 
-                        for categName in categories: 
+                        for categName in categories: even
                             try: 
                                 categ = discord.utils.get(guild.categories, name=categName)
                                 text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}") 
