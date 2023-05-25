@@ -853,7 +853,7 @@ class _events(commands.Cog):
                         for categName in categories:
                             try: 
                                 categ = discord.utils.get(guild.categories, name=categName)
-                                text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}")
+                                text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}") 
                                 await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
                                 await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                                 await text_channel.set_permissions(role_b, send_messages=False)
