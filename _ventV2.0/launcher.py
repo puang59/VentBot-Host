@@ -126,6 +126,7 @@ class VentBot(commands.Bot):
         self.initial_extensions = [
             'cogs._autoRole',
             'cogs._commands',
+            'cogs._cooldown',
             'cogs._dmsupport',
             'cogs._errorHandler',
             'cogs._events',
