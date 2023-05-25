@@ -854,7 +854,7 @@ class _events(commands.Cog):
                         categories = ["PRIVATE SPACE (1)", "PRIVATE SPACE (2)", "PRIVATE SPACE (3)","PRIVATE SPACE (4)","PRIVATE SPACE (5)",\
                                     "PRIVATE SPACE (6)","PRIVATE SPACE (7)", "PRIVATE SPACE (8)","PRIVATE SPACE (9)","PRIVATE SPACE (10)"]
 
-                        for categName in categories: even
+                        for categName in categories:
                             try: 
                                 categ = discord.utils.get(guild.categories, name=categName)
                                 text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}") 
