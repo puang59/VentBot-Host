@@ -163,25 +163,25 @@ class _utility(commands.Cog):
         await ctx.send("<:agree:943603027313565757> Deleted")
 
 
-    @commands.command(aliases=["reset"])
-    @commands.check(lambda ctx: ctx.author.id in admins)
-    async def edit(self, ctx, code):
-        """Resets the channel cooldown just incase someone requests to edit their vent message"""
-        guild = self.bot.get_guild(943556434644328498)
-        data = collection.find_one({"code": code})
-        member = guild.get_member(int(data["author_id"]))
-        ch = self.bot.get_channel(int(data["channel_id"]))
-        #role = discord.utils.get(ctx.guild.roles, name="Blocked")
-        #await member.remove_roles(role)
-        await ch.set_permissions(member, send_messages=True, view_channel=True)
-
-        # deleting message from vent channel
-        channel = self.bot.get_channel(943556439195152477)
-        txt = await channel.fetch_message(data["msg_id"])
-        await txt.delete()
-        collection.delete_one({"code": code})
-
-        await ctx.send("<:agree:943603027313565757> Edit opened successfully")
+    # @commands.command(aliases=["reset"])
+    # @commands.check(lambda ctx: ctx.author.id in admins)
+    # async def edit(self, ctx, code):
+    #     """Resets the channel cooldown just incase someone requests to edit their vent message"""
+    #     guild = self.bot.get_guild(943556434644328498)
+    #     data = collection.find_one({"code": code})
+    #     member = guild.get_member(int(data["author_id"]))
+    #     ch = self.bot.get_channel(int(data["channel_id"]))
+    #     #role = discord.utils.get(ctx.guild.roles, name="Blocked")
+    #     #await member.remove_roles(role)
+    #     await ch.set_permissions(member, send_messages=True, view_channel=True)
+    #
+    #     # deleting message from vent channel
+    #     channel = self.bot.get_channel(943556439195152477)
+    #     txt = await channel.fetch_message(data["msg_id"])
+    #     await txt.delete()
+    #     collection.delete_one({"code": code})
+    #
+    #     await ctx.send("<:agree:943603027313565757> Edit opened successfully")
     
     '''Unique user id commands'''
 

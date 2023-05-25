@@ -28,7 +28,7 @@ class _cooldown(commands.Cog):
     ventInboxProtection = db['ventInboxProtection']
 
     @commands.command()
-    async def cool(self, ctx, user, sec:int):
+    async def reset(self, ctx, user, sec:int):
         guild = self.bot.get_guild(943556434644328498)
         
         #If uniqueId is provided or userId is provided
@@ -50,48 +50,11 @@ class _cooldown(commands.Cog):
             channelid = int(data['channel_id'])
             channel = guild.get_channel(channelid)
             await channel.edit(slowmode_delay=0)
-
+            await ctx.send(f"Removed the cooldown for the user `{user}` for: `{sec} seconds`")
             await asyncio.sleep(sec)
            
             await channel.edit(slowmode_delay=7200)
-
-
-    # @commands.command()
-    # @commands.check(lambda ctx: ctx.author.id in admins)
-    # async def clean(self, ctx, year: int, month: int, day: int, cutoffRep: int):
-    #     """Kicks inactive members of the server (year, month, day, cutoff rep)"""
-    #     cutoff_date = pytz.utc.localize(datetime(year, month, day))
-    #     kick_count = 0
-    #
-    #     async def kick_member(member, reason):
-    #         em = discord.Embed(color=discord.Color.red())
-    #         em.add_field(name="Reason:", value=f"Inactivity in the server since {cutoff_date.date()}", inline=False)
-    #         try:
-    #             await member.send("You have been kicked out from the server. If you think it was applied in error or you wish to stay active in the server by helping others and yourself, you can rejoin the server from this link: https://disboard.org/server/943556434644328498", embed=em)
-    #             await member.kick(reason=reason)
-    #         except:
-    #             await member.kick(reason=reason)
-    #
-    #     for member in ctx.guild.members:
-    #         if member.bot:
-    #             continue
-    #         if not ctx.guild.me.guild_permissions.kick_members:
-    #             continue
-    #
-    #         joined_at = member.joined_at
-    #         if joined_at is not None and joined_at.replace(tzinfo=pytz.utc) < cutoff_date:
-    #             rep = prof.find_one({"user": member.id})
-    #             if rep and rep['reputation'] < cutoffRep:
-    #                 await kick_member(member, f"Inactivity in the server since {cutoff_date.date()}")
-    #                 await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity")
-    #                 kick_count += 1
-    #             elif not rep:
-    #                 await kick_member(member, f"Inactivity in the server since {cutoff_date.date()} (no reputation record found)")
-    #                 await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity (no reputation record found)")
-    #                 kick_count += 1
-    #
-    #     await ctx.send(f"`Total members kicked: {kick_count}`")
-
+            await ctx.send(f"Cooldown for the user `{user}` is added back.")
 
 async def setup(bot):
     await bot.add_cog(_cooldown(bot)) 
