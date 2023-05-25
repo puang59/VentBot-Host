@@ -50,7 +50,10 @@ class _cooldown(commands.Cog):
             channelid = int(data['channel_id'])
             channel = guild.get_channel(channelid)
             await channel.edit(slowmode_delay=0)
+
             await asyncio.sleep(sec)
+           
+            await channel.edit(slowmode_delay=7200)
 
 
     # @commands.command()
