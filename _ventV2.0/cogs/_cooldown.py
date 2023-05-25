@@ -29,6 +29,7 @@ class _cooldown(commands.Cog):
 
     @commands.command()
     async def reset(self, ctx, user, sec:int):
+        """Resets the channel cooldown for specified duration | time should always be in seconds without any character attacked to it like sec, s etc"""
         guild = self.bot.get_guild(943556434644328498)
         
         #If uniqueId is provided or userId is provided
