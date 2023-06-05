@@ -20,7 +20,6 @@ intents.members = True
 ventText = stories.find_one({"guild": "vent"})
 
 
-
 class HelpEmbed(discord.Embed):  # Our embed with some preset attributes to avoid setting it multiple times
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -28,7 +27,6 @@ class HelpEmbed(discord.Embed):  # Our embed with some preset attributes to avoi
         text = "Use help [command] or help [category] for more information | <> is required | [] is optional"
         self.set_footer(text=text)
         self.color = discord.Color.blurple()
-
 
 class MyHelp(commands.HelpCommand):
     def __init__(self):

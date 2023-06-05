@@ -17,17 +17,17 @@ class _autoRole(commands.Cog):
         self.bot.member_cache[(guild.id, user_id)] = member
         return member
 
-    @commands.command()
-    async def autorole(self, ctx): 
-        """Auto Role"""
-        em = discord.Embed(title="Hide channels", description="`🇦 - Hide Serious-vent`\n`🇧 - Hide Casual-vent`\n`🇨 - Hide Help-vent`\n----------\n`🇩 - Hide Whispers-of-kindness`\n`🇪 - Hide Global-chat`", color=0x5865F2)
-        em.set_footer(text="More than one role can be chosen")
-        x = await ctx.send(embed=em)
-        await x.add_reaction('🇦')
-        await x.add_reaction('🇧')
-        await x.add_reaction('🇨')
-        await x.add_reaction('🇩')
-        await x.add_reaction('🇪')
+    # @commands.command()
+    # async def autorole(self, ctx): 
+    #     """Auto Role"""
+    #     em = discord.Embed(title="Hide channels", description="`🇦 - Hide Serious-vent`\n`🇧 - Hide Casual-vent`\n`🇨 - Hide Help-vent`\n----------\n`🇩 - Hide Whispers-of-kindness`\n`🇪 - Hide Global-chat`", color=0x5865F2)
+    #     em.set_footer(text="More than one role can be chosen")
+    #     x = await ctx.send(embed=em)
+    #     await x.add_reaction('🇦')
+    #     await x.add_reaction('🇧')
+    #     await x.add_reaction('🇨')
+    #     await x.add_reaction('🇩')
+    #     await x.add_reaction('🇪')
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):

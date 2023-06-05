@@ -8,8 +8,13 @@ class _errorHandler(commands.Cog):
     ########### Error Handling ##########
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        em = discord.Embed(description=f"Command: `{ctx.command}`\n```{error}```")
-        await ctx.send(embed=em)
+        if isinstance(error, commands.CommandNotFound):
+            # Check if the command prefix is "..."
+            if ctx.prefix == ".." or ctx.prefix == "..." or ctx.prefix == "....":
+                pass
+        else:
+            em = discord.Embed(description=f"Command: `{ctx.command}`\n```{error}```")
+            await ctx.send(embed=em)
 
         # botlog = bot.get_channel(1039589477187858502)
         # msg = await botlog.fetch_message(1039590988181688380)

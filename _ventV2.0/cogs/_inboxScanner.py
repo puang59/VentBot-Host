@@ -10,6 +10,7 @@ admins = [943928873412870154, 409994220309577729, 852797584812670996, 7517807788
 heads = [943928873412870154, 852797584812670996]
 
 class _inboxScanner(commands.Cog):
+    """Inbox Scanner that looks for dead inbox channel and deletes them"""
     def __init__(self, bot):
         self.bot = bot
 
