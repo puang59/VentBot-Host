@@ -140,6 +140,7 @@ class _inboxScanner(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def scaninbox(self, ctx):
+        """Scans inbox channels manually"""
         guild = self.bot.get_guild(943556434644328498)
         logChannel = self.bot.get_channel(1089639606091259994)
         inboxCateg1 = discord.utils.get(guild.categories, name="📨 INBOX")
