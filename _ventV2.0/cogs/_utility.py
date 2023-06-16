@@ -54,33 +54,25 @@ class _utility(commands.Cog):
         """DMs specified members of the server"""
         for member in members: 
             # Check if user input is a member ID
-            try:
-                member = await commands.MemberConverter().convert(ctx, member)
-            except commands.errors.MemberNotFound:
+            if isinstance(member, discord.Member):
+                # Member is already a valid member instance
+                target_member = member
+            else:
                 # Check if user input is a unique ID containing alphabets
-                if not any(char.isalpha() for char in user):
+                if not any(char.isalpha() for char in member):
                     await ctx.send('Invalid input. Please provide a valid member ID or unique ID containing alphabets.')
                     return
-                data = ventUserId.find_one({'uniqueId': user})
+                data = ventUserId.find_one({'uniqueId': member})
                 if not data:
                     await ctx.send('Could not find a user with the provided unique ID.')
                     return
-                member = guild.get_member(int(data['user']))
+                target_member = ctx.guild.get_member(int(data['user']))
             
-            # # Ban the member
-            # try:
-            #     await member.ban(reason=reason)
-            #     await ctx.send('Banned successfully.')
-            # except discord.errors.Forbidden:
-            #     await ctx.send('I do not have permission to ban this member.')
-            # except discord.errors.HTTPException:
-            #     await ctx.send('An error occurred while trying to ban this member.')
             try: 
-                await member.send(msg)
-                await ctx.send(f'<:agree:943603027313565757> Message sent to {member.mention}')
+                await target_member.send(msg)
+                await ctx.send(f'<:agree:943603027313565757> Message sent to {target_member.mention}')
             except: 
-                await ctx.send(f'<:disagree:943603027854626816> Message couldnt sent to {member.mention}')
-
+                await ctx.send(f'<:disagree:943603027854626816> Message couldn\'t be sent to {target_member.mention}')
 
     @commands.command(description="Removes a user from the DB to maintain lb search")
     @commands.check(lambda ctx: ctx.author.id in admins)
