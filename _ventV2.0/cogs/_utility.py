@@ -53,6 +53,28 @@ class _utility(commands.Cog):
     async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg): 
         """DMs specified members of the server"""
         for member in members: 
+            # Check if user input is a member ID
+            try:
+                member = await commands.MemberConverter().convert(ctx, user)
+            except commands.errors.MemberNotFound:
+                # Check if user input is a unique ID containing alphabets
+                if not any(char.isalpha() for char in user):
+                    await ctx.send('Invalid input. Please provide a valid member ID or unique ID containing alphabets.')
+                    return
+                data = ventUserId.find_one({'uniqueId': user})
+                if not data:
+                    await ctx.send('Could not find a user with the provided unique ID.')
+                    return
+                member = guild.get_member(int(data['user']))
+            
+            # # Ban the member
+            # try:
+            #     await member.ban(reason=reason)
+            #     await ctx.send('Banned successfully.')
+            # except discord.errors.Forbidden:
+            #     await ctx.send('I do not have permission to ban this member.')
+            # except discord.errors.HTTPException:
+            #     await ctx.send('An error occurred while trying to ban this member.')
             try: 
                 await member.send(msg)
                 await ctx.send(f'<:agree:943603027313565757> Message sent to {member.mention}')
