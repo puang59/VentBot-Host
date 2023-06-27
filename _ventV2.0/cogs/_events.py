@@ -554,9 +554,10 @@ class _events(commands.Cog):
                     channel = self.bot.get_channel(payload.channel_id)
                     txt = await channel.fetch_message(payload.message_id)
                     await txt.edit(embed=em)
-                    await txt.add_reaction('⬅️')
-                if payload.emoji.name == '⬅️':
-                    channel = self.get_channel(payload.channel_id)
+                    await txt.add_reaction('\U00002b05')
+                if payload.emoji.name == '\U00002b05':
+                    server = self.bot.get_guild(payload.guild_id)
+                    channel = server.get_channel(payload.channel_id)
                     message = channel.get_partial_message(payload.message_id)
                     await message.remove_reaction(payload.emoji ,payload.member)
                     ema = discord.Embed(
@@ -688,8 +689,8 @@ class _events(commands.Cog):
                     else:
                         print('Cannot find message id in DataBase!')
                         await payload.member.send('Vent author left the server!')
-        except: 
-            pass
+        except Exception as err:
+            print(err)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
