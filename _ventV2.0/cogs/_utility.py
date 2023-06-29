@@ -99,10 +99,12 @@ class _utility(commands.Cog):
                 target_member = guild.get_member(int(data['user']))
         
             
-            try: 
+            try:
+                print("Attempt")
                 await target_member.send(msg)
                 await ctx.send(f'<:agree:943603027313565757> Message sent to {target_member.mention}')
             except: 
+                print("Failed")
                 await ctx.send(f"<:disagree:943603027854626816> Message couldn't be sent to {target_member.mention}")
 
     @commands.command(description="Removes a user from the DB to maintain lb search")
