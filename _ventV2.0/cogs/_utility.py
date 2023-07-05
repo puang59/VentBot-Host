@@ -40,6 +40,7 @@ class _utility(commands.Cog):
     @commands.command(description = "Removes every instance of a user")
     @commands.check(lambda ctx: ctx.author.id in heads)
     async def hardclean(self, ctx, user):
+        """Cleans every initials of a member from each database collection"""
         counter = 0
         try: 
             collection.delete_many({'author_id': user}) # all vent
