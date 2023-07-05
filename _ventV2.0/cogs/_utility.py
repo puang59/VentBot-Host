@@ -48,28 +48,28 @@ class _utility(commands.Cog):
             counter += 1
         except Exception as e:
             await ctx.channel.send(f"Failed to clean vent messages: {e}")
-        #
-        # try:
-        #     prof.delete_many({'user': user}) # reputation log
-        #     await ctx.channel.send("Cleaned all reputation log ... ")
-        #     counter += 1
-        # except Exception as e:
-        #     await ctx.channel.send(f"Failed to clean reputation log: {e}")
-        #
-        # try:
-        #     logdb.delete_many({'userId': user}) # log delete
-        #     await ctx.channel.send("Cleaned all related log ...")
-        #     counter += 1
-        # except Exception as e:
-        #     await ctx.channel.send(f"Failed to clean related log: {e}")
-        #
-        # try:
-        #     ventUserId.delete_many({'user': user})
-        #     await ctx.channel.send("Cleaned unique user id ...")
-        #     counter += 1
-        # except Exception as e:
-        #     await ctx.channel.send(f"Failed to clean unique user id: {e}")
-        #
+        
+        try:
+            prof.delete_many({'user': user}) # reputation log
+            await ctx.channel.send("Cleaned all reputation log ... ")
+            counter += 1
+        except Exception as e:
+            await ctx.channel.send(f"Failed to clean reputation log: {e}")
+
+        try:
+            logdb.delete_many({'userId': user}) # log delete
+            await ctx.channel.send("Cleaned all related log ...")
+            counter += 1
+        except Exception as e:
+            await ctx.channel.send(f"Failed to clean related log: {e}")
+
+        try:
+            ventUserId.delete_many({'user': user})
+            await ctx.channel.send("Cleaned unique user id ...")
+            counter += 1
+        except Exception as e:
+            await ctx.channel.send(f"Failed to clean unique user id: {e}")
+                
         await ctx.channel.send(f"`SuccessCode: {counter}/4`")
 
     @commands.command(description = "DMs everyone in the server | .textall <message>")

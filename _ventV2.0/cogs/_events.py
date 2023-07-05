@@ -837,51 +837,52 @@ class _events(commands.Cog):
                 await joinChannel.send(f"Banned {member.name} ({member.id}) - Vegan troller suspected!!")
                 return  # Don't execute the rest of the function if the member is banned
 
-            try: 
-                if not prof.find_one({"user": member.id}):
-                    post = {"user": member.id, "reputation": 0}
-                    prof.insert_one(post)
+            # try: 
+            if not prof.find_one({"user": member.id}):
+                post = {"user": member.id, "reputation": 0}
+                prof.insert_one(post)
 
-                if member.guild.id == 943556434644328498:
+            if member.guild.id == 943556434644328498:
+                try: 
                     if collection.find_one({"author_id": member.id}):
                         data = collection.find_one({"author_id": member.id})
                         ch = self.bot.get_channel(int(data["channel_id"]))
                         await ch.set_permissions(member, send_messages=True, view_channel=True)
-                    else:
-                        guild = member.guild
-                        user_a = member
-                        role_b = discord.utils.get(member.guild.roles, name="Blocked")
+                except:
+                    guild = member.guild
+                    user_a = member
+                    role_b = discord.utils.get(member.guild.roles, name="Blocked")
 
-                        categories = ["PRIVATE SPACE (1)", "PRIVATE SPACE (2)", "PRIVATE SPACE (3)","PRIVATE SPACE (4)","PRIVATE SPACE (5)",\
-                                    "PRIVATE SPACE (6)","PRIVATE SPACE (7)", "PRIVATE SPACE (8)","PRIVATE SPACE (9)","PRIVATE SPACE (10)"]
+                    categories = ["PRIVATE SPACE (1)", "PRIVATE SPACE (2)", "PRIVATE SPACE (3)","PRIVATE SPACE (4)","PRIVATE SPACE (5)",\
+                                "PRIVATE SPACE (6)","PRIVATE SPACE (7)", "PRIVATE SPACE (8)","PRIVATE SPACE (9)","PRIVATE SPACE (10)"]
 
-                        for categName in categories:
-                            try: 
-                                categ = discord.utils.get(guild.categories, name=categName)
-                                text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}") 
-                                await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
-                                await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                                await text_channel.set_permissions(role_b, send_messages=False)
-                                await text_channel.edit(topic=f"Custom PRIVATE Vent channel for {member.name}")
-                                await text_channel.edit(slowmode_delay=7200)
+                    for categName in categories:
+                        try: 
+                            categ = discord.utils.get(guild.categories, name=categName)
+                            text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}") 
+                            await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
+                            await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
+                            await text_channel.set_permissions(role_b, send_messages=False)
+                            await text_channel.edit(topic=f"Custom PRIVATE Vent channel for {member.name}")
+                            await text_channel.edit(slowmode_delay=7200)
 
-                                ema = discord.Embed(
-                                    description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
-                                )
-                                ema.set_author(name="Instruction: ",
-                                            icon_url=guild.icon)
-                                ema.set_footer(
-                                    text="Note: We dont save your details and message in any separate database.")
-                                await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
-                                a = await text_channel.send(embed=ema)
-                                await a.add_reaction('🔍')
-                                break 
-                            except: 
-                                pass             
+                            ema = discord.Embed(
+                                description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
+                            )
+                            ema.set_author(name="Instruction: ",
+                                        icon_url=guild.icon)
+                            ema.set_footer(
+                                text="Note: We dont save your details and message in any separate database.")
+                            await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
+                            a = await text_channel.send(embed=ema)
+                            await a.add_reaction('🔍')
+                            break 
+                        except: 
+                            pass             
                 await x.add_reaction('\U00002714')
-            except Exception as e:
-                print(e)
-                await x.add_reaction('\U0000274c')
+            # except Exception as e:
+            #     print(e)
+            #     await x.add_reaction('\U0000274c')
             if len(member.guild.text_channels) == 500: 
                 await joinChannel.send(f'\U000026a0 <@{943928873412870154}><@{852797584812670996} server channel limit exceeding!')
 
