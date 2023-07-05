@@ -879,7 +879,8 @@ class _events(commands.Cog):
                             except: 
                                 pass             
                 await x.add_reaction('\U00002714')
-            except:
+            except Exception as e:
+                print(e)
                 await x.add_reaction('\U0000274c')
             if len(member.guild.text_channels) == 500: 
                 await joinChannel.send(f'\U000026a0 <@{943928873412870154}><@{852797584812670996} server channel limit exceeding!')
