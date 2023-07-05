@@ -48,70 +48,70 @@ class _utility(commands.Cog):
                 print(f"Couldn't DM {user.name}.")
         print("Sent all the server a DM.")
 
+     @commands.command()
+     @commands.check(lambda ctx: ctx.author.id in heads)
+     async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg): 
+         """DMs specified members of the server"""
+         for member in members: 
+             # Check if user input is a member ID
+             if isinstance(member, discord.Member):
+                 # Member is already a valid member instance
+                 target_member = member
+             else:
+                 # Check if user input is a unique ID containing alphabets
+                 if not any(char.isalpha() for char in member):
+                     await ctx.send('Invalid input. Please provide a valid member ID or unique ID containing alphabets.')
+                     return
+                 data = ventUserId.find_one({'uniqueId': member})
+                 if not data:
+                     await ctx.send('Could not find a user with the provided unique ID.')
+                     return
+                 target_member = ctx.guild.get_member(int(data['user']))
+             
+             try: 
+                 await target_member.send(msg)
+                 await ctx.send(f'<:agree:943603027313565757> Message sent to {target_member.mention}')
+             except: 
+                 await ctx.send(f"<:disagree:943603027854626816> Message couldn't be sent to {target_member.mention}")
+    
+
+
     # @commands.command()
     # @commands.check(lambda ctx: ctx.author.id in heads)
     # async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg): 
     #     """DMs specified members of the server"""
+    #     if not members:
+    #         await ctx.send('No members provided.')
+    #         return
+    #
     #     for member in members: 
     #         # Check if user input is a member ID
-    #         if isinstance(member, discord.Member):
-    #             # Member is already a valid member instance
-    #             target_member = member
-    #         else:
+    #         guild = self.bot.get_guild(943556434644328498)
+    #
+    #         # Check if user input is a member ID
+    #         try:
+    #             target_member = await commands.MemberConverter().convert(ctx, str(member))
+    #         except commands.errors.MemberNotFound:
     #             # Check if user input is a unique ID containing alphabets
     #             if not any(char.isalpha() for char in member):
+    #                 print("Invalid input: member ID or unique ID containing alphabets required")
     #                 await ctx.send('Invalid input. Please provide a valid member ID or unique ID containing alphabets.')
     #                 return
     #             data = ventUserId.find_one({'uniqueId': member})
     #             if not data:
+    #                 print("User not found with the provided unique ID")
     #                 await ctx.send('Could not find a user with the provided unique ID.')
     #                 return
-    #             target_member = ctx.guild.get_member(int(data['user']))
-    #         
-    #         try: 
+    #             target_member = guild.get_member(int(data['user']))
+    #         print(target_member.name)
+    #         try:
+    #             print("Sending message...")
     #             await target_member.send(msg)
     #             await ctx.send(f'<:agree:943603027313565757> Message sent to {target_member.mention}')
-    #         except: 
+    #         except Exception as e:
+    #             print("Failed to send message:", str(e))
     #             await ctx.send(f"<:disagree:943603027854626816> Message couldn't be sent to {target_member.mention}")
     #
-
-
-    @commands.command()
-    @commands.check(lambda ctx: ctx.author.id in heads)
-    async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg): 
-        """DMs specified members of the server"""
-        if not members:
-            await ctx.send('No members provided.')
-            return
-
-        for member in members: 
-            # Check if user input is a member ID
-            guild = self.bot.get_guild(943556434644328498)
-
-            # Check if user input is a member ID
-            try:
-                target_member = await commands.MemberConverter().convert(ctx, str(member))
-            except commands.errors.MemberNotFound:
-                # Check if user input is a unique ID containing alphabets
-                if not any(char.isalpha() for char in member):
-                    print("Invalid input: member ID or unique ID containing alphabets required")
-                    await ctx.send('Invalid input. Please provide a valid member ID or unique ID containing alphabets.')
-                    return
-                data = ventUserId.find_one({'uniqueId': member})
-                if not data:
-                    print("User not found with the provided unique ID")
-                    await ctx.send('Could not find a user with the provided unique ID.')
-                    return
-                target_member = guild.get_member(int(data['user']))
-            print(target_member.name)
-            try:
-                print("Sending message...")
-                await target_member.send(msg)
-                await ctx.send(f'<:agree:943603027313565757> Message sent to {target_member.mention}')
-            except Exception as e:
-                print("Failed to send message:", str(e))
-                await ctx.send(f"<:disagree:943603027854626816> Message couldn't be sent to {target_member.mention}")
-
     @commands.command(description="Removes a user from the DB to maintain lb search")
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def rem(self, ctx, member):
