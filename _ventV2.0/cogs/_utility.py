@@ -86,7 +86,7 @@ class _utility(commands.Cog):
 
             # Check if user input is a member ID
             try:
-                target_member = await commands.MemberConverter().convert(ctx, member)
+                target_member = await commands.MemberConverter().convert(ctx, str(member))
             except commands.errors.MemberNotFound:
                 # Check if user input is a unique ID containing alphabets
                 if not any(char.isalpha() for char in member):
