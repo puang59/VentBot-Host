@@ -80,6 +80,10 @@ class _utility(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in heads)
     async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg): 
         """DMs specified members of the server"""
+        if not members:
+            await ctx.send('No members provided.')
+            return
+
         for member in members: 
             # Check if user input is a member ID
             guild = self.bot.get_guild(943556434644328498)
