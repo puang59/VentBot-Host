@@ -86,25 +86,26 @@ class _utility(commands.Cog):
 
             # Check if user input is a member ID
             try:
-                target_member = await commands.MemberConverter().convert(ctx, user)
+                target_member = await commands.MemberConverter().convert(ctx, member)
             except commands.errors.MemberNotFound:
                 # Check if user input is a unique ID containing alphabets
-                if not any(char.isalpha() for char in user):
+                if not any(char.isalpha() for char in member):
+                    print("Invalid input: member ID or unique ID containing alphabets required")
                     await ctx.send('Invalid input. Please provide a valid member ID or unique ID containing alphabets.')
                     return
-                data = ventUserId.find_one({'uniqueId': user})
+                data = ventUserId.find_one({'uniqueId': member})
                 if not data:
+                    print("User not found with the provided unique ID")
                     await ctx.send('Could not find a user with the provided unique ID.')
                     return
                 target_member = guild.get_member(int(data['user']))
-        
-            
+            print(target_member.name)
             try:
-                print("Attempt")
+                print("Sending message...")
                 await target_member.send(msg)
                 await ctx.send(f'<:agree:943603027313565757> Message sent to {target_member.mention}')
-            except: 
-                print("Failed")
+            except Exception as e:
+                print("Failed to send message:", str(e))
                 await ctx.send(f"<:disagree:943603027854626816> Message couldn't be sent to {target_member.mention}")
 
     @commands.command(description="Removes a user from the DB to maintain lb search")
