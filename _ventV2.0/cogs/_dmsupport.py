@@ -3,6 +3,8 @@ from discord import utils
 import discord
 import asyncio
 
+from pymongo import MongoClient
+from random import *
 
 class dmsupport(commands.Cog):
     def __init__(self, bot):
