@@ -29,10 +29,10 @@ class dmsupport(commands.Cog):
     def unique_id_finder(discordId):
         try: 
             uniqueId = ventUserId.find_one({'user': discordId})
-            formattedId = uniqueId['uniqueId'][0:3]
+            formattedId = uniqueId['uniqueId'][0:10]
             return formattedId 
         except:
-            randomNum = randint(1000, 9999)
+            randomNum = randint(1000000000, 9999999999)
             return randomNum
 
     @commands.Cog.listener()
