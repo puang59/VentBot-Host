@@ -8,6 +8,13 @@ class dmsupport(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    global ventUserId
+    cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    db = cluster["Discord"]
+    collection = db["vent"]
+
+    ventUserId = db['ventId']
+
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user): 
         if not user.bot: 
@@ -15,6 +22,16 @@ class dmsupport(commands.Cog):
                 await ifvent()
             elif reaction.emoji == "❌":
                 await ifnotvent()
+
+    global unique_id_finder
+    def unique_id_finder(discordId):
+        try: 
+            uniqueId = ventUserId.find_one({'user': discordId})
+            formattedId = uniqueId[0:3]
+            return formattedId 
+        except:
+            randomNum = randint(1000, 9999)
+            return randomNum
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -25,6 +42,8 @@ class dmsupport(commands.Cog):
 
         if isinstance(message.channel, discord.DMChannel):
 
+            uniqueId = unique_id_finder(message.author.id)
+            
             guild = self.bot.get_guild(943556434644328498)
             categ = utils.get(guild.categories, name="MAILS")
             channel = utils.get(
@@ -38,7 +57,7 @@ class dmsupport(commands.Cog):
                 channel = utils.get(
                     categ.channels, topic=str(message.author.id))
                 if not channel:
-                    channel = await categ.create_text_channel(name=f"{message.author.discriminator}", topic=str(message.author.id))
+                    channel = await categ.create_text_channel(name=f"{uniqueId}", topic=str(message.author.id))
 
                     notifyrolesd = discord.utils.get(
                         guild.roles, id=1089638056610500778)
@@ -67,7 +86,7 @@ class dmsupport(commands.Cog):
                 channel = utils.get(
                     categ.channels, topic=str(message.author.id))
                 if not channel:
-                    channel = await categ.create_text_channel(name=f"{message.author.discriminator}", topic=str(message.author.id))
+                    channel = await categ.create_text_channel(name=f"{uniqueId}", topic=str(message.author.id))
                     notifyrolesd = discord.utils.get(
                         guild.roles, id=1089638056610500778)
                     await channel.send(f"New Mail sent by Anonymous | {notifyrolesd.mention}")
