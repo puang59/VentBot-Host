@@ -1,8 +1,14 @@
+<div align=center>
+
+![Vent](./logo.png)
+
 # VentBot-Host
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 A Discord bot designed to manage the "Vent - stay anonymous" Discord server. It provides various features to facilitate anonymous communication and server management.
+
+<div align=left>
 
 ## Table of Contents
 - [Description](#description)
