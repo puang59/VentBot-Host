@@ -20,7 +20,6 @@ class _utility(commands.Cog):
 
     # config = configparser.ConfigParser()
     # config.read('_ventV2.0/config.ini')
-    :wa
 
     global collection
     global prof
