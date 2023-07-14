@@ -859,11 +859,11 @@ class _events(commands.Cog):
                             "PRIVATE SPACE (6)","PRIVATE SPACE (7)", "PRIVATE SPACE (8)","PRIVATE SPACE (9)","PRIVATE SPACE (10)"]
 
                 # Storing unqiue user id
-                if not ventUserId.find_one({"user": msg.author.id}):
+                if not ventUserId.find_one({"user": member.id}):
                     characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
                     uniqueId = "".join(choice(characters)
                                     for x in range(randint(20, 25)))
-                    userSavePost = {"user": msg.author.id, "uniqueId": uniqueId}
+                    userSavePost = {"user": member.id, "uniqueId": uniqueId}
                     ventUserId.insert_one(userSavePost)
                 else: 
                     pass
