@@ -1,1 +1,0 @@
-worker: python ./falcon-boot/mainfac.py
