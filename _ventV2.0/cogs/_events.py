@@ -858,10 +858,20 @@ class _events(commands.Cog):
                 categories = ["PRIVATE SPACE (1)", "PRIVATE SPACE (2)", "PRIVATE SPACE (3)","PRIVATE SPACE (4)","PRIVATE SPACE (5)",\
                             "PRIVATE SPACE (6)","PRIVATE SPACE (7)", "PRIVATE SPACE (8)","PRIVATE SPACE (9)","PRIVATE SPACE (10)"]
 
+                # Storing unqiue user id
+                if not ventUserId.find_one({"user": msg.author.id}):
+                    characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+                    uniqueId = "".join(choice(characters)
+                                    for x in range(randint(20, 25)))
+                    userSavePost = {"user": msg.author.id, "uniqueId": uniqueId}
+                    ventUserId.insert_one(userSavePost)
+                else: 
+                    pass
+
                 for categName in categories:
                     try:
                         categ = discord.utils.get(guild.categories, name=categName)
-                        text_channel = await categ.create_text_channel(f"{member.name}s vent {member.discriminator}") 
+                        text_channel = await categ.create_text_channel(f"{member.name}s vent {uniqueId[0:7]}") 
                         await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
                         await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                         await text_channel.set_permissions(role_b, send_messages=False)
