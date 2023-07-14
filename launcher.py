@@ -3,15 +3,16 @@ import discord
 import asyncio
 import os
 from random import *
+
 from pymongo import MongoClient
 import subprocess
+
 import datetime 
 import contextlib
-# import configparser
-# config = configparser.ConfigParser()
-# config.read("_ventV2.0/config.ini")
 
-cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+import config 
+
+cluster = MongoClient(config.mongoURI)
 db = cluster["Discord"]
 stories = db['webVent']
     
@@ -120,7 +121,7 @@ class MyHelp(commands.HelpCommand):
         
 class VentBot(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=".", intents=intents, help_command=MyHelp(), activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories"), owner_ids=[943928873412870154, 852797584812670996, 657064257552384044])
+        super().__init__(command_prefix=".", intents=intents, help_command=MyHelp(), activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories"), owner_ids=config.ownerIds)
         self.initial_extensions = [
             'cogs._autoRole',
             'cogs._commands',
@@ -138,7 +139,7 @@ class VentBot(commands.Bot):
 
     global check_if_allowed
     def check_if_allowed(ctx):
-        admins = [943928873412870154, 409994220309577729, 852797584812670996, 657064257552384044]
+        admin = config.ownerIds
         return ctx.author.id in admins
 
     async def setup_hook(self) -> None:
@@ -174,4 +175,4 @@ async def reload(ctx):
         await ctx.send(e)
         await ctx.message.add_reaction('\U0000274e')
 
-bot.run("OTYyNjAzODQ2Njk2MzM3NDA4.GazOQC.P1jXz9ZcqnT6ZAbnpE9NNJVVd5M53K-04VDHTs")
+bot.run(config.token)
