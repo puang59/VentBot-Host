@@ -18,21 +18,17 @@ VentBot-Host is a Discord bot created to enhance the management of the "Vent - s
 To install VentBot-Host, follow these steps:
 1. Clone the repository:
 
-```git clone https://github.com/puang59/VentBot-Host.git```
+`git clone https://github.com/puang59/VentBot-Host.git`
 
 2. Install the required dependencies listed in the `requirements.txt` file:
 
-pip install -r requirements.txt
-
-markdown
+`pip install -r requirements.txt`
 
 3. Configure the bot by providing the necessary tokens and settings in the `config.py` file.
+
 4. Run the bot:
 
-python launcher.py
-
-vbnet
-
+`python3 launcher.py`
 
 ## Todo
 - [ ] Shifting from MongoDB to PostgreSQL or any SQL-based database: The data is becoming difficult to handle with MongoDB, and switching to a more scalable and structured database will improve performance and management.
