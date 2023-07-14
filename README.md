@@ -18,9 +18,7 @@ VentBot-Host is a Discord bot created to enhance the management of the "Vent - s
 To install VentBot-Host, follow these steps:
 1. Clone the repository:
 
-git clone https://github.com/your-username/VentBot-Host.git
-
-markdown
+```git clone https://github.com/puang59/VentBot-Host.git```
 
 2. Install the required dependencies listed in the `requirements.txt` file:
 
