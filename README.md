@@ -34,7 +34,7 @@ To install VentBot-Host, follow these steps:
 - [ ] Shifting from MongoDB to PostgreSQL or any SQL-based database: The data is becoming difficult to handle with MongoDB, and switching to a more scalable and structured database will improve performance and management.
 
 ## License
-This project is licensed under the MIT License. You are free to make changes and contribute to the project while giving proper credit to the original authors. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the MIT License. You are free to make changes and contribute to the project while giving proper credit to the original authors. See the [LICENSE](LICENSE.txt) file for more details.
 
 ## Contributing
 Contributions to VentBot-Host are welcome! If you have any ideas, improvements, or bug fixes, feel free to open an issue or submit a pull request. Let's build a better bot together!
