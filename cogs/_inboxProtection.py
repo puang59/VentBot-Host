@@ -2,10 +2,11 @@ from discord.ext import commands
 import discord
 import asyncio
 
-
 from pymongo import MongoClient
 
 from datetime import datetime, timedelta
+
+import config
 
 class _inboxProtection(commands.Cog):
     def __init__(self, bot):
@@ -13,7 +14,8 @@ class _inboxProtection(commands.Cog):
 
 
     global inboxDB
-    cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+
+    cluster = MongoClient(config.mongoURI)
     db = cluster["Discord"]
     
     inboxDB = db['ventInboxProtection']

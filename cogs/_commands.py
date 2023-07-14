@@ -4,9 +4,8 @@ import asyncio
 
 from pymongo import MongoClient
 from random import *
-# import configparser
 
-admins = [943928873412870154, 409994220309577729, 852797584812670996, 751780778802806784, 698895560442118239, 853421799781302302, 657064257552384044]
+import config
 
 class _commands(commands.Cog):
     """General server commands"""
@@ -19,15 +18,15 @@ class _commands(commands.Cog):
     global collection
     global prof
     global inbox
-    cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    cluster = MongoClient(config.mongoURI)
     db = cluster["Discord"]
+
     collection = db["vent"]
-    
     prof = db["ventProf"]
     inbox = db['ventInbox']
 
     @commands.command(aliases=["rep"])
-    @commands.check(lambda ctx: ctx.author.id in admins)
+    @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def reputation(self, ctx, member: discord.Member):
         """Shows reputation earned by the specificed user"""
         if member == None:
@@ -47,7 +46,7 @@ class _commands(commands.Cog):
 
             
     @commands.command()
-    @commands.check(lambda ctx: ctx.author.id in admins)
+    @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def lb(self, ctx):
         """Shows reputation leaderboard"""
         results = prof.find({}).sort("reputation", -1)

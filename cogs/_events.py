@@ -11,6 +11,8 @@ import datetime
 
 import traceback 
 
+import config
+
 from ._logger import _logger
 
 class _events(commands.Cog):
@@ -28,13 +30,13 @@ class _events(commands.Cog):
     global stories
     global logdb
     global ventUserId
-    cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+
+    cluster = MongoClient(config.mongoURI)
     db = cluster["Discord"]
+
     collection = db["vent"]
-    
     prof = db["ventProf"]
     inbox = db['ventInbox']
-    inboxDating = db['DatingInbox']
     vCheck = db["ventCheck"]
     stories = db['webVent']
     vType = db['ventType']

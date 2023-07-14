@@ -4,17 +4,19 @@ import discord
 import asyncio
 
 from pymongo import MongoClient
+
 from random import *
+import config
 
 class dmsupport(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     global ventUserId
-    cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    cluster = MongoClient(config.mongoURI)
     db = cluster["Discord"]
-    collection = db["vent"]
 
+    collection = db["vent"]
     ventUserId = db['ventId']
 
     @commands.Cog.listener()

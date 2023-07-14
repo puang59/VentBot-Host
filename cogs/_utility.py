@@ -7,10 +7,11 @@ import pytz
 
 from pymongo import MongoClient
 from random import *
-# import configparser
-# This is a comment 
-admins = [943928873412870154, 409994220309577729, 852797584812670996, 751780778802806784, 698895560442118239, 853421799781302302, 657064257552384044]
-heads = [943928873412870154, 852797584812670996, 657064257552384044]
+
+import config
+
+admins = config.admins
+heads = config.ownerIds
 
 class _utility(commands.Cog):
     """Commands for server moderation"""
@@ -19,6 +20,7 @@ class _utility(commands.Cog):
 
     # config = configparser.ConfigParser()
     # config.read('_ventV2.0/config.ini')
+    :wa
 
     global collection
     global prof
@@ -26,10 +28,11 @@ class _utility(commands.Cog):
     global logdb
     global ventUserId
     global ventInboxProtection
-    cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+
+    cluster = MongoClient(config.mongoURI)
     db = cluster["Discord"]
+
     collection = db["vent"]
-    
     prof = db["ventProf"]
     inbox = db['ventInbox']
     logdb = db['ventLog']

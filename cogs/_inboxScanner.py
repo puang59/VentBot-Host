@@ -6,8 +6,7 @@ from prettytable import PrettyTable
 
 import datetime
 
-admins = [943928873412870154, 409994220309577729, 852797584812670996, 751780778802806784, 698895560442118239, 853421799781302302, 657064257552384044]
-heads = [943928873412870154, 852797584812670996, 657064257552384044]
+import config
 
 class _inboxScanner(commands.Cog):
     """Inbox Scanner that looks for dead inbox channel and deletes them"""
@@ -139,7 +138,7 @@ class _inboxScanner(commands.Cog):
         await inboxscan(self)
 
     @commands.command()
-    @commands.check(lambda ctx: ctx.author.id in admins)
+    @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def scaninbox(self, ctx):
         """Scans inbox channels manually"""
         guild = self.bot.get_guild(943556434644328498)

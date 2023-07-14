@@ -2,8 +2,11 @@ from discord.ext import commands
 import discord
 
 from pymongo import MongoClient
+
 import time
 import asyncio
+
+import config
 
 class _cooldown(commands.Cog):
     """Cooldown Reset Cog"""
@@ -17,10 +20,11 @@ class _cooldown(commands.Cog):
     global logdb
     global ventUserId
     global ventInboxProtection
-    cluster = MongoClient("mongodb+srv://Edryu:jaisairam4@cluster0.inbe1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+
+    cluster = MongoClient(config.mongoURI)
     db = cluster["Discord"]
+
     collection = db["vent"]
-    
     prof = db["ventProf"]
     inbox = db['ventInbox']
     logdb = db['ventLog']
