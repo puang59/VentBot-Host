@@ -55,6 +55,10 @@ class _autoRole(commands.Cog):
                 role = guild.get_role(1109394399114301531)
                 await user.add_roles(role)
 
+            if payload.emoji.name == '🇬': # Github
+                role = guild.get_role(1129738188756357170)
+                await user.add_roles(role)
+
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         guild = self.bot.get_guild(payload.guild_id)
@@ -84,6 +88,10 @@ class _autoRole(commands.Cog):
                     role = guild.get_role(1109394399114301531)
                     await user.remove_roles(role)
                 
+                if payload.emoji.name == '🇬': # Github
+                    role = guild.get_role(1129738188756357170)
+                    await user.remove_roles(role)
+
 async def setup(bot):
     bot.member_cache = {}
     await bot.add_cog(_autoRole(bot))
