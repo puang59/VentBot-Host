@@ -11,6 +11,7 @@ class _commands(commands.Cog):
     """General server commands"""
     def __init__(self, bot):
         self.bot = bot
+        self.conn = None
     
     # config = configparser.ConfigParser()
     # config.read('_ventV2.0/config.ini')
@@ -25,6 +26,11 @@ class _commands(commands.Cog):
     prof = db["ventProf"]
     inbox = db['ventInbox']
 
+    # Getting back the connection from launcher file
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.conn = await self.bot.get_db_connection()
+
     @commands.command(aliases=["rep"])
     @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def reputation(self, ctx, member: discord.Member):
@@ -32,19 +38,19 @@ class _commands(commands.Cog):
         if member == None:
             member = ctx.author
 
-        if prof.find_one({"user": member.id}):
-            results = prof.find_one({"user": member.id})
-            rep = results["reputation"]
+        query = "SELECT * FROM reputation WHERE userID = $1;"
+        data = await self.conn.fetchrow(query, str(member.id))
+        if data:
+            rep = data['reputation']
             embed = discord.Embed(
                 description=f"Server Reputation:```{rep} rep```", colour=discord.Colour.lighter_grey())
             embed.set_author(name=member.name, icon_url=member.avatar.url)
             await ctx.send(embed=embed)
         else:
-            e_txt = await ctx.send("<:disagree:943603027854626816> User not found!")
-            await asyncio.sleep(5)
-            await e_txt.delete()
+            insert_query = "INSERT INTO reputation (userID, reputation) VALUES ($1, $2)"
+            await self.conn.execute(insert_query, str(member.id), "0")
+            await ctx.send("You don't have any server activity as of now.")
 
-            
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def lb(self, ctx):

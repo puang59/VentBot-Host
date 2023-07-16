@@ -8,6 +8,7 @@ import subprocess
 import datetime 
 import contextlib
 
+import asyncpg
 import config
 
 cluster = MongoClient(config.mongoURI)
@@ -18,6 +19,8 @@ intents = discord.Intents.all()
 intents.members = True
 ventText = stories.find_one({"guild": "vent"})
 
+async def create_db_pool():
+    return await asyncpg.create_pool(config.postgresURI)
 
 class HelpEmbed(discord.Embed):  # Our embed with some preset attributes to avoid setting it multiple times
     def __init__(self, **kwargs):
@@ -134,6 +137,26 @@ class VentBot(commands.Bot):
             'cogs._utility',
             'jishaku'
         ]
+        self.db_pool = None
+        self.db_connection = None
+
+    # Setting up database with table queries
+    async def setup_db(self):
+        self.db_pool = await create_db_pool()
+        self.db_connection = await self.db_pool.acquire()
+        # Create tables if not exists
+        queries = [
+            """
+            CREATE TABLE IF NOT EXISTS reputation(
+                userID VARCHAR(20) PRIMARY KEY,
+                reputation VARCHAR(20)
+            );
+            """,
+        ]
+
+        async with self.db_pool.acquire() as connection:
+            for query in queries:
+                await connection.execute(query)
 
     global check_if_allowed
     def check_if_allowed(ctx):
@@ -148,6 +171,33 @@ class VentBot(commands.Bot):
         print("  \ V /| _|| .` | | |   |___| \__ \  _/ _` | || |  / _ \| ' \/ _ \ ' \ || | '  \/ _ \ || (_-<")
         print("   \_/ |___|_|\_| |_|         |___/\__\__,_|\_, | /_/ \_\_||_\___/_||_\_, |_|_|_\___/\_,_/__/")
         print("                                            |__/                      |__/                   ")
+
+    async def start(self, *args, **kwargs):
+        await self.setup_db()
+        await super().start(*args, **kwargs)
+
+    async def close(self):
+        await self.db_pool.release(self.db_connection)
+        await self.db_pool.close()
+        await super().close()
+
+    async def get_db_connection(self):
+        return self.db_connection
+
+    async def on_connect(self):
+        print("Connected to Discord!")
+
+    async def on_disconnect(self):
+        print("Disconnected from Discord!")
+
+    async def on_resumed(self):
+        print("Resumed!")
+
+    async def on_error(self, event_method, *args, **kwargs):
+        error_message = f"Error in event {event_method}:"
+        error_message += f"\n{args}"
+        error_message += f"\n{kwargs}"
+        print(error_message)
 
 bot = VentBot()
 
