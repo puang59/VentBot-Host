@@ -52,6 +52,27 @@ class _commands(commands.Cog):
             await ctx.send("You don't have any server activity as of now.")
 
     @commands.command()
+    @commands.check(lambda ctx: ctx.author.id in config.ownerIds)
+    async def setrep(self, ctx, member: discord.Member, rep: str):
+        """Modifies reputation points of mentioned user"""
+        query = """
+            SELECT * FROM reputation 
+            WHERE userId = $1;
+        """ 
+        data = await self.conn.fetchrow(query, str(member.id))
+        if data:
+            update_query = """
+                UPDATE reputation
+                SET reputation = $1
+                WHERE userID = $2;
+            """
+            await self.conn.execute(update_query, rep, str(member.id))
+            await ctx.send("Updated data")
+        else: 
+            await ctx.send("User does not exist!")
+            
+
+    @commands.command()
     @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def lb(self, ctx):
         """Shows reputation leaderboard"""
