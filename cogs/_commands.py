@@ -38,6 +38,7 @@ class _commands(commands.Cog):
         if member is None:
             member = ctx.author
 
+        confirmation = await ctx.send("Fetching...")
         query = "SELECT * FROM reputation WHERE userID = $1;"
         data = await self.conn.fetchrow(query, member.id)
         if data:
@@ -45,30 +46,35 @@ class _commands(commands.Cog):
             embed = discord.Embed(
                 description=f"Server Reputation:```{rep} rep```", colour=discord.Colour.lighter_grey())
             embed.set_author(name=member.name, icon_url=member.avatar.url)
+            await confirmation.delete()
             await ctx.send(embed=embed)
         else:
             insert_query = "INSERT INTO reputation (userID, rep) VALUES ($1, $2)"
             await self.conn.execute(insert_query, member.id, 0) 
+            await confirmation.delete()
             await ctx.send("You don't have any server activity as of now.")
 
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in config.ownerIds)
-    async def setrep(self, ctx, member: discord.Member, rep: str):
+    async def setrep(self, ctx, member: discord.Member, rep: int):
         """Modifies reputation points of mentioned user"""
+        confirmation = await ctx.send("Updating...")
         query = """
             SELECT * FROM reputation 
             WHERE userId = $1;
         """ 
-        data = await self.conn.fetchrow(query, str(member.id))
+        data = await self.conn.fetchrow(query, member.id)
         if data:
             update_query = """
                 UPDATE reputation
-                SET reputation = $1
+                SET rep = $1
                 WHERE userID = $2;
             """
-            await self.conn.execute(update_query, rep, str(member.id))
+            await self.conn.execute(update_query, rep, member.id)
+            await confirmation.delete()
             await ctx.send("Updated data")
         else: 
+            await confirmation.delete()
             await ctx.send("User does not exist!")
             
 
