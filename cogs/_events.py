@@ -22,8 +22,11 @@ class _events(commands.Cog):
     # config = configparser.ConfigParser()
     # config.read('_ventV2.0/config.ini')
 
-    @commands.Cog.listener()
-    async def on_ready(self):
+    # @commands.Cog.listener()
+    # async def on_ready(self):
+    #     self.conn = await self.bot.get_db_connection()
+
+    async def cog_load(self):
         self.conn = await self.bot.get_db_connection()
 
     global collection

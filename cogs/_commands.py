@@ -27,8 +27,11 @@ class _commands(commands.Cog):
     inbox = db['ventInbox']
 
     # Getting back the connection from launcher file
-    @commands.Cog.listener()
-    async def on_ready(self):
+    # @commands.Cog.listener()
+    # async def on_ready(self):
+    #     self.conn = await self.bot.get_db_connection()
+
+    async def cog_load(self):
         self.conn = await self.bot.get_db_connection()
 
     @commands.command(aliases=["rep"])
