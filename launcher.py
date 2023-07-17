@@ -11,6 +11,8 @@ import contextlib
 import asyncpg
 import config
 
+import time
+
 cluster = MongoClient(config.mongoURI)
 db = cluster["Discord"]
 stories = db['webVent']
@@ -200,6 +202,7 @@ class VentBot(commands.Bot):
         print(error_message)
 
 bot = VentBot()
+bot.start_time = time.time()
 
 @bot.command()
 @commands.check(check_if_allowed)
