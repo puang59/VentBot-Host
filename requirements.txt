@@ -5,3 +5,4 @@ RoboArt==0.1.4
 asyncpg==0.25.0
 pygit2==1.12.2
 parsedatetime==2.6
+python-dateutil==2.8.2
