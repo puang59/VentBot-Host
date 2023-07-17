@@ -35,20 +35,20 @@ class _commands(commands.Cog):
     @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def reputation(self, ctx, member: discord.Member):
         """Shows reputation earned by the specificed user"""
-        if member == None:
+        if member is None:
             member = ctx.author
 
         query = "SELECT * FROM reputation WHERE userID = $1;"
-        data = await self.conn.fetchrow(query, str(member.id))
+        data = await self.conn.fetchrow(query, member.id)
         if data:
-            rep = data['reputation']
+            rep = data['rep']
             embed = discord.Embed(
                 description=f"Server Reputation:```{rep} rep```", colour=discord.Colour.lighter_grey())
             embed.set_author(name=member.name, icon_url=member.avatar.url)
             await ctx.send(embed=embed)
         else:
-            insert_query = "INSERT INTO reputation (userID, reputation) VALUES ($1, $2)"
-            await self.conn.execute(insert_query, str(member.id), "0")
+            insert_query = "INSERT INTO reputation (userID, rep) VALUES ($1, $2)"
+            await self.conn.execute(insert_query, member.id, 0) 
             await ctx.send("You don't have any server activity as of now.")
 
     @commands.command()

@@ -201,18 +201,18 @@ class _events(commands.Cog):
                 if not isinstance(msg.channel, discord.channel.DMChannel):
                     # Increasing user reputation
                     query = """
-                        INSERT INTO reputation (userID, reputation)
-                        VALUES ($1, $2::VARCHAR)
+                        INSERT INTO reputation (userID, rep)
+                        VALUES ($1, $2)
                         ON CONFLICT (userID)
-                        DO UPDATE SET reputation = (reputation.reputation::INTEGER + $2::INTEGER)::VARCHAR;
+                        DO UPDATE SET rep = (reputation.rep + $2);
                     """
 
                     if msg.channel.category.id in [943581279973167155, 987993408138248243, 987993582701019166, 996458874255187978, 996459675589554206]:
-                        reputation_value = '5'
+                        reputation_value = 5
                     else:
-                        reputation_value = '1'
+                        reputation_value = 1
 
-                    await self.conn.execute(query, str(msg.author.id), reputation_value)
+                    await self.conn.execute(query, msg.author.id, reputation_value)
 
             if not msg.author.id == 943928873412870154:
                 if msg.channel.id != 943556439195152477:
@@ -546,12 +546,12 @@ class _events(commands.Cog):
             if not payload.member.bot:
                 if payload.emoji.name == "🫂":
                     query = """
-                        INSERT INTO reputation (userID, reputation)
-                        VALUES ($1, $2::VARCHAR)
+                        INSERT INTO reputation (userID, rep)
+                        VALUES ($1, $2)
                         ON CONFLICT (userID)
-                        DO UPDATE SET reputation = (reputation.reputation::INTEGER + 1)::VARCHAR;
+                        DO UPDATE SET rep = (reputation.rep + 1);
                     """
-                    await self.conn.execute(query, str(payload.member.id), '1')
+                    await self.conn.execute(query, payload.member.id, 1)
 
                 if payload.emoji.name == "🔍":
                     channel = self.bot.get_channel(payload.channel_id)
@@ -585,12 +585,12 @@ class _events(commands.Cog):
                 if payload.emoji.name == "💬":
 
                     query = """
-                        INSERT INTO reputation (userID, reputation)
-                        VALUES ($1, $2::VARCHAR)
+                        INSERT INTO reputation (userID, rep)
+                        VALUES ($1, $2)
                         ON CONFLICT (userID)
-                        DO UPDATE SET reputation = (reputation.reputation::INTEGER + 1)::VARCHAR;
+                        DO UPDATE SET rep = (reputation.rep + 1);
                     """
-                    await self.conn.execute(query, str(payload.member.id), '1')
+                    await self.conn.execute(query, payload.member.id, 1)
 
                     channel = self.bot.get_channel(payload.channel_id)
                     message = channel.get_partial_message(payload.message_id)
@@ -853,13 +853,13 @@ class _events(commands.Cog):
 
             try: 
                 query = """
-                    INSERT INTO reputation (userID, reputation)
-                    SELECT $1, $2::VARCHAR
+                    INSERT INTO reputation (userID, rep)
+                    SELECT $1, $2
                     WHERE NOT EXISTS (
                         SELECT 1 FROM reputation WHERE userID = $1
                     );
                 """
-                await self.conn.execute(query, str(member.id), '0')
+                await self.conn.execute(query, member.id, 0)
             except Exception as e:
                 print(e)
 
