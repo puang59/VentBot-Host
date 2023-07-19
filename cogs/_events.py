@@ -556,6 +556,24 @@ class _events(commands.Cog):
                     """
                     await self.conn.execute(query, payload.member.id, 1)
 
+                if payload.emoji.name == "🗣️":
+                    query = """
+                        INSERT INTO reputation (userID, rep)
+                        VALUES ($1, $2)
+                        ON CONFLICT (userID)
+                        DO UPDATE SET rep = (reputation.rep + 1);
+                    """
+                    await self.conn.execute(query, payload.member.id, 1)
+
+                if payload.emoji.name == "⬆️":
+                    query = """
+                        INSERT INTO reputation (userID, rep)
+                        VALUES ($1, $2)
+                        ON CONFLICT (userID)
+                        DO UPDATE SET rep = (reputation.rep + 1);
+                    """
+                    await self.conn.execute(query, payload.member.id, 1)
+
                 if payload.emoji.name == "🔍":
                     channel = self.bot.get_channel(payload.channel_id)
                     message = channel.get_partial_message(payload.message_id)
