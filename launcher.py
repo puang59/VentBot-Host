@@ -29,7 +29,6 @@ ventText = stories.find_one({"guild": "vent"})
 async def create_db_pool():
     return await asyncpg.create_pool(config.postgresURI)
         
-# Update the VentBot class definition
 class VentBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
