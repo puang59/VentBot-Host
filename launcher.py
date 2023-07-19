@@ -58,8 +58,8 @@ class VentBot(commands.Bot):
         queries = [
             """
             CREATE TABLE IF NOT EXISTS reputation(
-                userID NUMERIC(18, 0) PRIMARY KEY,
-                rep NUMERIC(5, 0) 
+                userID NUMERIC(50, 0) PRIMARY KEY,
+                rep NUMERIC(10, 0) 
             );
             """,
         ]
