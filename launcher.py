@@ -5,11 +5,14 @@ import os
 from random import *
 from pymongo import MongoClient
 import subprocess
-import datetime 
+from datetime import datetime
 import contextlib
 
 import asyncpg
 import config
+
+import pygit2
+import itertools
 
 import time
 
@@ -210,6 +213,8 @@ async def reload(ctx):
     '''Pulls changes from github and reloads cogs'''
 
     confirmation = await ctx.send("Reloading...")
+    
+    repository = pygit2.Repository('.git')
     try:
         subprocess.run(["git", "pull", "origin", "master"])
         cogsList = []
@@ -217,8 +222,12 @@ async def reload(ctx):
             await bot.reload_extension(ext)
             cogsList.append(f"[+] {ext}\n")
         await confirmation.delete()
+        latest_commit = repository[repository.head.target]
+        commit_time = latest_commit.commit_time
+        commit_date = datetime.utcfromtimestamp(commit_time).strftime('%d-%m-%Y %H:%M')
         em = discord.Embed(color=0x2e3137)
         em.add_field(name="🔁 Reloaded modules", value=f"```fix\n{''.join(cogsList)}```")
+        em.add_field(name="\U0001f6e0 Lastest commit", value=f"```({latest_commit.author.name}) {latest_commit.hex[0:6]} - {latest_commit.message} ({commit_date})```")
         await ctx.send(embed=em)
 
     except commands.ExtensionFailed as e:
