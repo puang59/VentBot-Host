@@ -227,7 +227,7 @@ async def reload(ctx):
         commit_date = datetime.utcfromtimestamp(commit_time).strftime('%d-%m-%Y %H:%M')
         em = discord.Embed(color=0x2e3137)
         em.add_field(name="🔁 Reloaded modules", value=f"```fix\n{''.join(cogsList)}```")
-        em.add_field(name="\U0001f6e0 Lastest commit", value=f"```({latest_commit.author.name})```\n```{latest_commit.hex[0:6]} - {latest_commit.message}```\n```({commit_date})```")
+        em.add_field(name="\U0001f6e0 Lastest commit", value=f"```({latest_commit.author.name})``````{latest_commit.hex[0:6]} - {latest_commit.message}``````({commit_date})```")
         await ctx.send(embed=em)
 
     except commands.ExtensionFailed as e:
