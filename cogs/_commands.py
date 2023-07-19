@@ -4,6 +4,7 @@ import asyncio
 
 from pymongo import MongoClient
 from random import *
+import datetime
 
 import config
 
@@ -80,54 +81,37 @@ class _commands(commands.Cog):
             await confirmation.delete()
             await ctx.send("User does not exist!")
             
-
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def lb(self, ctx):
         """Shows reputation leaderboard"""
-        results = prof.find({}).sort("reputation", -1)
+        query = "SELECT * FROM reputation ORDER BY rep DESC LIMIT 10;"
+        results = await self.conn.fetch(query)
+
         temp = ""
         i = 1
-        arg = 50
         guild = self.bot.get_guild(943556434644328498)
+
         for result in results:
-            if i == 1:
-                member = guild.get_member(result['user'])
-                embed_show = "🥇 `" + \
-                    "{:,}".format(
-                        result["reputation"]) + " rep` - " + f'{member.name}' + "\n"
-                temp += embed_show
-            elif i == 2:
-                member = guild.get_member(result['user'])
-                embed_show = "🥈 `" + \
-                    "{:,}".format(result["reputation"]) + \
-                    " rep` - " + f'{member.name}' + "\n"
-                temp += embed_show
-            elif i == 3:
-                member = guild.get_member(result['user'])
-                embed_show = "🥉 `" + \
-                    "{:,}".format(result["reputation"]) + \
-                    " rep` - " + f'{member.name}' + "\n"
-                temp += embed_show
+            member = guild.get_member(result['userid'])  # Modify the key here
+            if i <= 3:
+                place = ["🥇", "🥈", "🥉"][i-1]
             else:
-                member = guild.get_member(result['user'])
-                embed_show = "<:blank:988101402314297384>  `" + \
-                    "{:,}".format(result["reputation"]) + \
-                    " rep` - " + f'{member.name}' + "\n"
-                temp += embed_show
-                
+                place = f"<:blank:988101402314297384>"
+            
+            embed_show = f"{place} `{result['rep']:,} rep` - {member.name}\n"
+            temp += embed_show
 
-            # Top 10 users
-            if i == arg:
-                break
-            else:
-                i += 1
+            i += 1
+
         if temp:
-            embed = discord.Embed(description=f"{temp}", color=0xFFFFFF)
-            embed.set_author(name="Reputation Leaderboard",
-                                icon_url="https://cdn.discordapp.com/icons/943556434644328498/901cbfed0350db86feaee903637f477b.webp?size=240")
+            embed = discord.Embed(description=f"{temp}")
+            embed.colour = 0x2e3137
+            embed.set_author(
+                name="Reputation Leaderboard",
+                icon_url=guild.icon.url
+            )
             await ctx.send(embed=embed)
-
 
 async def setup(bot):
     await bot.add_cog(_commands(bot))

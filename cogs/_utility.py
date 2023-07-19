@@ -9,6 +9,7 @@ from pymongo import MongoClient
 from random import *
 
 import config
+import tabulate
 
 admins = config.admins
 heads = config.ownerIds
@@ -17,9 +18,13 @@ class _utility(commands.Cog):
     """Commands for server moderation"""
     def __init__(self, bot):
         self.bot = bot
+        self.conn = None
 
     # config = configparser.ConfigParser()
     # config.read('_ventV2.0/config.ini')
+
+    async def cog_load(self):
+        self.conn = await self.bot.get_db_connection()
 
     global collection
     global prof
@@ -475,6 +480,32 @@ class _utility(commands.Cog):
                     kick_count += 1
 
         await ctx.send(f"`Total members kicked: {kick_count}`")
+
+    @commands.command()
+    @commands.is_owner()
+    async def dbexec(self, ctx, *, query: str):
+        """Executes an SQL query and returns the result in a table form"""
+        try:
+            result = await self.conn.fetch(query)
+        except asyncpg.PostgresError as e:
+            await ctx.send(f"Error executing the query: {e}")
+            return
+
+        # Get the column names from the record keys
+        headers = result[0].keys()
+
+        # Format the result in a table form
+        rows = [list(row.values()) for row in result]
+
+        # Paginate the table
+        table = tabulate.tabulate(rows[:10], headers, tablefmt="fancy_grid")
+        message = f"```{table}```"
+        await ctx.send(message)
+
+        for i in range(10, len(rows), 10):
+            table = tabulate.tabulate(rows[i:i+10], headers, tablefmt="fancy_grid")
+            message = f"```{table}```"
+            await ctx.send(message)
 
 async def setup(bot):
     await bot.add_cog(_utility(bot))
