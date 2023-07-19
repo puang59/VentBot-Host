@@ -29,14 +29,10 @@ ventText = stories.find_one({"guild": "vent"})
 async def create_db_pool():
     return await asyncpg.create_pool(config.postgresURI)
         
+# Update the VentBot class definition
 class VentBot(commands.Bot):
-    def __init__(self):
-        super().__init__(command_prefix=".", 
-                         intents=intents, 
-                         help_command=MyHelp,
-                         activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories"), 
-                         owner_ids=config.ownerIds
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.initial_extensions = [
             'cogs._autoRole',
             'cogs._commands',
@@ -53,6 +49,7 @@ class VentBot(commands.Bot):
         ]
         self.db_pool = None
         self.db_connection = None
+        ...
 
     # Setting up database with table queries
     async def setup_db(self):
@@ -113,7 +110,14 @@ class VentBot(commands.Bot):
         error_message += f"\n{kwargs}"
         print(error_message)
 
-bot = VentBot()
+bot = VentBot(
+    command_prefix=".", 
+    intents=intents,
+    activity=discord.Activity(type=discord.ActivityType.listening, name=f"{ventText['stories']}+ stories"), 
+    owner_ids=config.ownerIds
+)
+help_command = MyHelp(bot)
+bot.help_command = help_command
 bot.start_time = time.time()
 
 @bot.command()

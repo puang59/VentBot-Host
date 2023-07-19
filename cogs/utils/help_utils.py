@@ -1,41 +1,38 @@
 import discord
 from discord.ext import commands
 
-class HelpEmbed(discord.Embed):  # Our embed with some preset attributes to avoid setting it multiple times
+class HelpEmbed(discord.Embed):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-#        self.timestamp = datetime.datetime.utcnow()
         text = "Use help [command] or help [category] for more information | <> is required | [] is optional"
         self.set_footer(text=text)
         self.color = discord.Color.blurple()
 
 class MyHelp(commands.HelpCommand):
-    def __init__(self):
-        super().__init__(  # create our class with some aliases and cooldown
+    def __init__(self, bot):
+        super().__init__(
             command_attrs={
                 "help": "The help command for the bot",
                 "cooldown": commands.CooldownMapping.from_cooldown(1, 3.0, commands.BucketType.user),
                 "aliases": ['commands']
             }
         )
+        self.bot = bot
 
     async def send(self, **kwargs):
-        """a shortcut to sending to get_destination"""
         await self.get_destination().send(**kwargs)
 
     async def send_bot_help(self, mapping):
-        """triggers when a `<prefix>help` is called"""
         ctx = self.context
         embed = HelpEmbed(title=f"{ctx.me.display_name} Help")
         embed.set_thumbnail(url=ctx.me.display_avatar)
         usable = 0
 
-        for cog, commands in mapping.items():  # iterating through our mapping of cog: commands
+        for cog, commands in mapping.items():
             if filtered_commands := await self.filter_commands(commands):
-                # if no commands are usable in this category, we don't want to display it
                 amount_commands = len(filtered_commands)
                 usable += amount_commands
-                if cog:  # getting attributes dependent on if a cog exists or not
+                if cog:
                     name = cog.qualified_name
                     description = cog.description or "No description"
                 else:
@@ -44,29 +41,25 @@ class MyHelp(commands.HelpCommand):
 
                 embed.add_field(name=f"{name} Category [{amount_commands}]", value=description, inline=False)
 
-        embed.description = f"{len(bot.commands)} commands | {usable} usable"
+        embed.description = f"{len(self.context.bot.commands)} commands | {usable} usable"
 
         await self.send(embed=embed)
 
     async def send_command_help(self, command):
-        """triggers when a `<prefix>help <command>` is called"""
-        signature = self.get_command_signature(
-            command)  # get_command_signature gets the signature of a command in <required> [optional]
+        signature = self.get_command_signature(command)
         embed = HelpEmbed(title=signature, description=command.help or "No help found...")
 
         if cog := command.cog:
             embed.add_field(name="Category", value=cog.qualified_name, inline=False)
 
         can_run = "No"
-        # command.can_run to test if the cog is usable
         with contextlib.suppress(commands.CommandError):
             if await command.can_run(self.context):
                 can_run = "Yes"
 
         embed.add_field(name="Usable", value=can_run, inline=False)
 
-        if command._buckets and (
-        cooldown := command._buckets._cooldown):  # use of internals to get the cooldown of the command
+        if command._buckets and (cooldown := command._buckets._cooldown):
             embed.add_field(
                 name="Cooldown",
                 value=f"{cooldown.rate} per {cooldown.per:.0f} seconds", inline=False,
@@ -74,7 +67,7 @@ class MyHelp(commands.HelpCommand):
 
         await self.send(embed=embed)
 
-    async def send_help_embed(self, title, description, commands):  # a helper function to add commands to an embed
+    async def send_help_embed(self, title, description, commands):
         embed = HelpEmbed(title=title, description=description or "No help found...")
 
         if filtered_commands := await self.filter_commands(commands):
@@ -84,17 +77,14 @@ class MyHelp(commands.HelpCommand):
         await self.send(embed=embed)
 
     async def send_group_help(self, group):
-        """triggers when a `<prefix>help <group>` is called"""
         title = self.get_command_signature(group)
         await self.send_help_embed(title, group.help, group.commands)
 
     async def send_cog_help(self, cog):
-        """triggers when a `<prefix>help <cog>` is called"""
         title = cog.qualified_name or "No"
         await self.send_help_embed(f'{title} Category', cog.description, cog.get_commands())
 
     async def send_error_message(self, error):
-        embed = discord.Embed(title="Error", description=f"Please make sure you are using correct command name. If you are searching for category, make sure you put `_` before category name like `.help _utility`.\n```{error}```")
+        embed = discord.Embed(title="Error", description=f"Please make sure you are using the correct command name. If you are searching for a category, make sure you put `_` before the category name like `.help _utility`.\n```{error}```")
         channel = self.get_destination()
         await channel.send(embed=embed)
-
