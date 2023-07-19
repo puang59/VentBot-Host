@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 
+import contextlib
+
 class HelpEmbed(discord.Embed):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
