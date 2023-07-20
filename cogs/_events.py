@@ -815,12 +815,18 @@ class _events(commands.Cog):
             leaveChannel = self.bot.get_channel(1089639606091259994)
             em = discord.Embed(description=f"<:disagree:943603027854626816> {member.name} ({member.id}) left!", colour=discord.Colour.red())
             x = await leaveChannel.send(embed=em)
+
+            # Getting uniqueUserId 
+            if ventUserId.find_one({"user": member.id}):
+                data = ventUserId.find_one({"user": member.id})
+                uId = data["uniqueId"]
+
             try: 
                 try:
                     try: 
                         memberName = f"{member.name}".lower()
                         modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
-                        channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent-{member.discriminator}')
+                        channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent-{uId[0:7]}')
                         await channel.delete()
                         collection.delete_many({'author_id': member.id})
                         prof.delete_one({"user": member.id})
@@ -829,7 +835,7 @@ class _events(commands.Cog):
                         await x.add_reaction("✔")
                     except: 
                         memberName = f"{member.name}".lower()
-                        channel = discord.utils.get(guild.channels, name=f'{memberName}s-vent-{member.discriminator}')
+                        channel = discord.utils.get(guild.channels, name=f'{memberName}s-vent-{uId[0:7]}')
                         await channel.delete()
                         collection.delete_many({'author_id': member.id})
                         prof.delete_one({"user": member.id})
@@ -839,7 +845,7 @@ class _events(commands.Cog):
                 except: 
                     memberName = f"{member.name}".lower()
                     modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
-                    channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent')
+                    channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent-{member.discriminator}')
                     await channel.delete()
                     collection.delete_many({'author_id': member.id})
                     prof.delete_one({"user": member.id})
