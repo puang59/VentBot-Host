@@ -2,10 +2,6 @@ from discord.ext import commands
 import discord
 import asyncio
 
-from pymongo import MongoClient
-from random import *
-import datetime
-
 import config
 
 class _commands(commands.Cog):
@@ -14,24 +10,6 @@ class _commands(commands.Cog):
         self.bot = bot
         self.conn = None
     
-    # config = configparser.ConfigParser()
-    # config.read('_ventV2.0/config.ini')
-
-    global collection
-    global prof
-    global inbox
-    cluster = MongoClient(config.mongoURI)
-    db = cluster["Discord"]
-
-    collection = db["vent"]
-    prof = db["ventProf"]
-    inbox = db['ventInbox']
-
-    # Getting back the connection from launcher file
-    # @commands.Cog.listener()
-    # async def on_ready(self):
-    #     self.conn = await self.bot.get_db_connection()
-
     async def cog_load(self):
         self.conn = await self.bot.get_db_connection()
 
