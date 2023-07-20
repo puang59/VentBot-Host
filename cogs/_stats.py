@@ -44,6 +44,16 @@ class _stats(commands.Cog):
         commits = list(itertools.islice(repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL), count))
         return '\n'.join(self.format_commit(c) for c in commits)
 
+    @commands.command(aliases=["commit", "git", "changes"])
+    async def commits(self, ctx, count=3):
+        """Shows commit History"""
+
+        revision = self.get_last_commits(count)
+        embed = discord.Embed(description='Commit History:\n' + revision)
+        embed.set_author(name="GitHub", icon_url="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png")
+        embed.timestamp = discord.utils.utcnow()
+        await ctx.send(embed=embed) 
+
     @commands.command()
     async def about(self, ctx):
         """Tells you information about the bot itself."""
