@@ -820,6 +820,17 @@ class _events(commands.Cog):
             if ventUserId.find_one({"user": member.id}):
                 data = ventUserId.find_one({"user": member.id})
                 uId = data["uniqueId"]
+    
+            # Removing reputation
+            try: 
+                query = """
+                    DELETE FROM reputation
+                    WHERE userid = $1;
+                """
+                await self.conn.execute(query, member.id)
+                await leaveChannel.send("Reputation data removed from DB!")
+            except Exception as e:
+                await leaveChannel.send(f"Faced issue while deleting rep data: {e}")
 
             try: 
                 try:
