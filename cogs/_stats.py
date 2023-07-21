@@ -104,7 +104,7 @@ class _stats(commands.Cog):
         await ctx.send(f"Uptime: **{uptime}**")
 
     @commands.command()
-    async def latency(self, ctx): 
+    async def latency(self, ctx):
         """Shows the latency of the bot"""
         await ctx.send(f'Pong! In `{round(self.bot.latency * 1000)}ms`')
 
