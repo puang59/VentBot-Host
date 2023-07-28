@@ -384,10 +384,11 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     @commands.cooldown(4, 300, commands.BucketType.member)
-    async def ban(self, ctx, user, *, reason):
+    async def ban(self, ctx, user, *, reason=None):
         """Removes the existence of the user specified"""
         if reason == None: 
             reason = "None"
+
         guild = self.bot.get_guild(943556434644328498)
 
         # Check if user input is a member ID
