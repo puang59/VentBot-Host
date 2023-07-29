@@ -15,7 +15,7 @@ class _commands(commands.Cog):
 
     @commands.command(aliases=["rep"])
     @commands.check(lambda ctx: ctx.author.id in config.admins)
-    async def reputation(self, ctx, member: discord.Member):
+    async def reputation(self, ctx, member: discord.Member = None):
         """Shows reputation earned by the specificed user"""
         if member is None:
             member = ctx.author
