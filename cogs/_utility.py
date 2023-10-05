@@ -43,6 +43,24 @@ class _utility(commands.Cog):
     ventUserId = db['ventId']
     ventInboxProtection = db['ventInboxProtection']
 
+    @commands.command()
+    @commands.check(lambda ctx: ctx.author.id in config.ownerIds)
+    async def reveal(self, ctx, uniqueId: str):
+        confirmation = await ctx.send("Searching...")
+        try:
+            if ventUserId.find_one({"uniqueId": str(uniqueId)}):
+                data = ventUserId.find_one({"uniqueId": str(uniqueId)})
+                await confirmation.delete()
+                await ctx.author.send(f"<@{data['user']}> - `{uniqueId}`")
+                await ctx.message.add_reaction("\U0001f44d")
+            else:
+                await confirmation.delete()
+                await ctx.message.add_reaction("\U0001f44e")
+                await ctx.send("Cannot find the matching user id")
+        except:
+            await confirmation.delete()
+            await ctx.message.add_reaction("\U0001f44e")
+            await ctx.send("Cannot find the matching user id")
 
     @commands.command(description = "Removes every instance of a user")
     @commands.check(lambda ctx: ctx.author.id in heads)
@@ -388,7 +406,6 @@ class _utility(commands.Cog):
         """Removes the existence of the user specified"""
         if reason == None: 
             reason = "None"
-
         guild = self.bot.get_guild(943556434644328498)
 
         # Check if user input is a member ID
@@ -422,7 +439,7 @@ class _utility(commands.Cog):
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def cleanDb (self, ctx):
-        """Delets all data from ventInboxProtection DB permanently"""
+        """Deletes all data from ventInboxProtection DB permanently"""
         ventInboxProtection.delete_many({})
         await ctx.send('Done')
 
