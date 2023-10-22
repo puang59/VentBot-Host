@@ -471,33 +471,48 @@ class _utility(commands.Cog):
         kick_count = 0
 
         async def kick_member(member, reason):
-            em = discord.Embed(color=discord.Color.red())
-            em.add_field(name="Reason:", value=f"Inactivity in the server since {cutoff_date.date()}", inline=False)
-            try:
-                await member.send("You have been kicked out from the server. If you think it was applied in error or you wish to stay active in the server by helping others and yourself, you can rejoin the server from this link: https://disboard.org/server/943556434644328498", embed=em)
-                await member.kick(reason=reason)
+            try: 
+                nonlocal kick_count  # Mark 'kick_count' as nonlocal
+                em = discord.Embed(color=discord.Color.red())
+                em.add_field(name="Reason:", value=f"Inactivity in the server since {cutoff_date.date()}", inline=False)
+                try:
+                    await member.send("You have been kicked out from the server. If you think it was applied in error or you wish to stay active in the server by helping others and yourself, you can rejoin the server from this link: https://disboard.org/server/943556434644328498", embed=em)
+                    await member.kick(reason=reason)
+                    kick_count += 1
+                except:
+                    await member.kick(reason=reason)
             except:
-                await member.kick(reason=reason)
+                pass
 
-        for member in ctx.guild.members:
-            if member.bot:
-                continue
-            if not ctx.guild.me.guild_permissions.kick_members:
-                continue
+        async def process_members(member_list):
+            for member in member_list:
+                if member.bot:
+                    continue
+                if not ctx.guild.me.guild_permissions.kick_members:
+                    continue
 
-            joined_at = member.joined_at
-            if joined_at is not None and joined_at.replace(tzinfo=pytz.utc) < cutoff_date:
-                rep = prof.find_one({"user": member.id})
-                if rep and rep['reputation'] < cutoffRep:
-                    await kick_member(member, f"Inactivity in the server since {cutoff_date.date()}")
-                    await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity")
-                    kick_count += 1
-                elif not rep:
-                    await kick_member(member, f"Inactivity in the server since {cutoff_date.date()} (no reputation record found)")
-                    await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity (no reputation record found)")
-                    kick_count += 1
+                joined_at = member.joined_at
+                if joined_at is not None and joined_at.replace(tzinfo=pytz.utc) < cutoff_date:
+                    rep = prof.find_one({"user": member.id})
+                    if rep and rep['reputation'] < cutoffRep:
+                        await kick_member(member, f"Inactivity in the server since {cutoff_date.date()}")
+                        await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity")
+                    elif not rep:
+                        await kick_member(member, f"Inactivity in the server since {cutoff_date.date()} (no reputation record found)")
+                        await ctx.send(f"`{member.display_name}` has been kicked - due to inactivity (no reputation record found)")
+
+        # Process members in batches to avoid rate limits
+        batch_size = 100
+        member_list = ctx.guild.members
+        for i in range(0, len(member_list), batch_size):
+            await process_members(member_list[i:i+batch_size])
 
         await ctx.send(f"`Total members kicked: {kick_count}`")
+
+    @clean.error
+    async def clean_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send("You do not have permission to use this command.")
 
     @commands.command()
     @commands.is_owner()
