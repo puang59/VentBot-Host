@@ -14,7 +14,7 @@ class _commands(commands.Cog):
         self.conn = await self.bot.get_db_connection()
 
     @commands.command(aliases=["rep"])
-    @commands.check(lambda ctx: ctx.author.id in config.admins)
+    # @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def reputation(self, ctx, member: discord.Member = None):
         """Shows reputation earned by the specificed user"""
         if member is None:
