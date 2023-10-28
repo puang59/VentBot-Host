@@ -39,8 +39,6 @@ class dmsupport(commands.Cog):
     async def on_message(self, message):
         if message.author.bot:
             return  
-        # if message.guild.id == 999682901308342342:
-        #     return
 
         if isinstance(message.channel, discord.DMChannel):
 
@@ -115,17 +113,18 @@ class dmsupport(commands.Cog):
                     confirmation = await message.author.send("Please confirm this is NOT a __vent message__")
                     await confirmation.add_reaction("\U00002705")
                 
-                global ifnotvent
-                async def ifnotvent(): 
-                    try: 
-                        await confirmation.delete()
-                    except: 
-                        pass
-                    if message.attachments:
-                        await ifattachments()
-                    else: 
-                        await ifnotattachments()
             else: #if channel already exists
+                if message.attachments:
+                    await ifattachments()
+                else: 
+                    await ifnotattachments()
+
+            global ifnotvent
+            async def ifnotvent(): 
+                try: 
+                    await confirmation.delete()
+                except: 
+                    pass
                 if message.attachments:
                     await ifattachments()
                 else: 
