@@ -19,7 +19,7 @@ class dmsupport(commands.Cog):
     collection = db["vent"]
     ventUserId = db['ventId']
 
-    async def ifnotvent(): 
+    async def ifnotvent(self, confirmation): 
         try: 
             await confirmation.delete()
         except: 
@@ -33,7 +33,8 @@ class dmsupport(commands.Cog):
     async def on_reaction_add(self, reaction, user): 
         if not user.bot: 
             if reaction.emoji == "\U00002705":
-                await ifnotvent()
+                if self.confirmation:
+                    await self.ifnotvent(self.confirmation)
 
     global unique_id_finder
     def unique_id_finder(discordId):
