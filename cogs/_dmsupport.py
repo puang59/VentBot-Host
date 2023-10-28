@@ -11,6 +11,7 @@ import config
 class dmsupport(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.confirmation = None 
 
     global ventUserId
     cluster = MongoClient(config.mongoURI)
@@ -24,10 +25,10 @@ class dmsupport(commands.Cog):
             await confirmation.delete()
         except: 
             pass
-        if message.attachments:
-            await ifattachments()
+        if self.message.attachments:
+            await self.ifattachments()
         else: 
-            await ifnotattachments()
+            await self.ifnotattachments()
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user): 
@@ -121,8 +122,8 @@ class dmsupport(commands.Cog):
 
             if not channel:
                 if not message.content.startswith("."):
-                    confirmation = await message.author.send("Please confirm this is NOT a __vent message__")
-                    await confirmation.add_reaction("\U00002705")
+                    self.confirmation = await message.author.send("Please confirm this is NOT a __vent message__")
+                    await self.confirmation.add_reaction("\U00002705")
 
         elif isinstance(message.channel, discord.TextChannel):
             try: 
