@@ -19,6 +19,16 @@ class dmsupport(commands.Cog):
     collection = db["vent"]
     ventUserId = db['ventId']
 
+    async def ifnotvent(): 
+        try: 
+            await confirmation.delete()
+        except: 
+            pass
+        if message.attachments:
+            await ifattachments()
+        else: 
+            await ifnotattachments()
+
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user): 
         if not user.bot: 
@@ -109,26 +119,9 @@ class dmsupport(commands.Cog):
 
 
             if not channel:
-                if not msg.content.startswith("."):
+                if not message.content.startswith("."):
                     confirmation = await message.author.send("Please confirm this is NOT a __vent message__")
                     await confirmation.add_reaction("\U00002705")
-                
-            else: #if channel already exists
-                if message.attachments:
-                    await ifattachments()
-                else: 
-                    await ifnotattachments()
-
-            global ifnotvent
-            async def ifnotvent(): 
-                try: 
-                    await confirmation.delete()
-                except: 
-                    pass
-                if message.attachments:
-                    await ifattachments()
-                else: 
-                    await ifnotattachments()
 
         elif isinstance(message.channel, discord.TextChannel):
             try: 
