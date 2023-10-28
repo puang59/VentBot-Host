@@ -172,7 +172,7 @@ class _utility(commands.Cog):
     #         except Exception as e:
     #             print("Failed to send message:", str(e))
     #             await ctx.send(f"<:disagree:943603027854626816> Message couldn't be sent to {target_member.mention}")
-    #
+
     @commands.command(description="Removes a user from the DB to maintain lb search")
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def rem(self, ctx, member):
@@ -190,7 +190,6 @@ class _utility(commands.Cog):
         else: 
             await ctx.send("Cannot find the person!")
 
-# checks
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
     async def close(self, ctx):

@@ -22,9 +22,7 @@ class dmsupport(commands.Cog):
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user): 
         if not user.bot: 
-            if reaction.emoji == "✅":
-                await ifvent()
-            elif reaction.emoji == "❌":
+            if reaction.emoji == "\U00002705":
                 await ifnotvent()
 
     global unique_id_finder
@@ -113,16 +111,10 @@ class dmsupport(commands.Cog):
 
 
             if not channel:
-                confirmation = await message.author.send("Is this a vent message?")
-                await confirmation.add_reaction("✅")
-                await confirmation.add_reaction("❌")
-            
-                global ifvent
-                async def ifvent(): 
-                    await confirmation.delete()
-                    await message.author.send("Please use your private vent channel in the server. Bot DMs are for server related help or for reporting someone.")
-                    return 
-
+                if not msg.content.startswith("."):
+                    confirmation = await message.author.send("Please confirm this is NOT a __vent message__")
+                    await confirmation.add_reaction("\U00002705")
+                
                 global ifnotvent
                 async def ifnotvent(): 
                     try: 
