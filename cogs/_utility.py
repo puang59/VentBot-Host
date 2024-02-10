@@ -213,25 +213,39 @@ class _utility(commands.Cog):
     async def bin(self, ctx):
         """Closes the inbox channel - Public command"""
         ventsrv = ["📨 INBOX", "📨 INBOX (2)", "📨 INBOX (3)"]
+
         if ctx.channel.category.name in ventsrv:
-            topic = ctx.channel.topic
-            if "Reporter" in topic or "REPORTED" in topic: 
-                await ctx.send('We are still investigating the issue!')
-                return
-            topicID = ""
-            for i, v in enumerate(topic):
-                if v in "0123456789":
-                    topicID += v
-            guild = self.bot.get_guild(943556434644328498)
-            other_chn = guild.get_channel(int(topicID))
+            try: 
+                topic = ctx.channel.topic
 
-            #Deleting data from DB 
-            inbox.delete_one({"channel":f"{ctx.channel.name}".upper()})
+                # if the user is reported 
+                if "Reporter" in topic or "REPORTED" in topic: 
+                    await ctx.send('We are still investigating the issue!')
+                    return
 
-            await ctx.send("Deleting the channel in 10 seconds!")
-            await asyncio.sleep(10)
-            await ctx.channel.delete()
-            await other_chn.delete()
+                topicID = ""
+                for i, v in enumerate(topic):
+                    if v in "0123456789":
+                        topicID += v
+                guild = self.bot.get_guild(943556434644328498)
+                other_chn = guild.get_channel(int(topicID))
+
+                #Deleting data from DB 
+                inbox.delete_one({"channel":f"{ctx.channel.name}".upper()})
+
+                await ctx.send("Deleting the channel in 10 seconds!")
+                await asyncio.sleep(10)
+                await ctx.channel.delete()
+                await other_chn.delete()
+            except Exception as e:
+                guild = self.bot.get_guild(943556434644328498)
+                usr = guild.get_member(config.admins[3]); 
+                await usr.send(f"A inbox channel was forcefully closed!!\n```{e}```") 
+
+                await ctx.send(f"An Unexpected error occured:\n```{e}````\n**(forcefully closing the channel in 10 seconds)**")
+                channel = self.bot.get_channel(ctx.message.channel.id) 
+                await asyncio.sleep(10)
+                await ctx.message.channel.delete() 
 
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)

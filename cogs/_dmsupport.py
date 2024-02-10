@@ -97,11 +97,13 @@ class dmsupport(commands.Cog):
                 categ = utils.get(guild.categories, name="MAILS")
                 channel = utils.get(
                     categ.channels, topic=str(message.author.id))
+                print('')
                 if not channel:
                     channel = await categ.create_text_channel(name=f"{uniqueId}", topic=str(message.author.id))
                     notifyrolesd = discord.utils.get(
                         guild.roles, id=1089638056610500778)
                     await channel.send(f"New Mail sent by Anonymous | {notifyrolesd.mention}")
+                print('')
 
                 embed = discord.Embed(
                     description=message.content, colour=0x696969)
