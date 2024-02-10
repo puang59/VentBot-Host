@@ -25,6 +25,20 @@ class _inboxProtection(commands.Cog):
         currentTime = datetime.utcnow()
         if not payload.member.bot: 
             if payload.emoji.name == "💬":
+                member_joinedDate = payload.member.joined_at
+                if member_joinedDate is not None:
+                    curtime = datetime.datetime.utcnow()
+                    time_diff = curtime - member_joinedDate
+                    if time_diff.days >= 1:
+                        pass
+                    else: 
+                        try:
+                            await member.send("Sorry, you must be a member for at least 1 day to talk to people here.")
+                            return
+                        except discord.errors.Forbidden:
+                            print("Failed to send DM to the user!")
+                            return 
+
                 if inboxDB.find_one({"user": payload.member.id}): # if the user already exist in the database 
                     db_data = inboxDB.find_one({"user": payload.member.id})
                     # Convert the time strings to datetime objects
