@@ -33,25 +33,26 @@ class dmsupport(commands.Cog):
 
         # directing mod's text to dm of the user
         elif isinstance(message.channel, discord.TextChannel):
-            try: 
-                if not message.content.startswith(self.bot.command_prefix):
-                    topic = message.channel.topic # channel topic contains user id
-                    if topic:
-                        member = message.guild.get_member(int(topic)) # getting member object from channel topic
-                        if member:
-                            if message.attachments: # if mod's message contains attachments
-                                link = message.attachments[0].url
-                                embed = discord.Embed(description=message.content)
-                                embed.set_image(url=f"{link}")
-                                embed.set_author(name=f"Mod Team [{message.author.name}]", icon_url="https://discordtemplates.me/icon.png")
-                                await member.send(embed=embed)
-                            else: 
-                                embed = discord.Embed(description=message.content) 
-                                embed.set_author(
-                                    name=f"Mod Team [{message.author.name}]", icon_url="https://discordtemplates.me/icon.png")
-                                await member.send(embed=embed)
-            except Exception as e: 
-               await message.channel.send(f"\U0000274c Failed to send message due to the following error: ```{e}```")
+            if message.channel.category_id == 943588904622256168:
+                try: 
+                    if not message.content.startswith(self.bot.command_prefix):
+                        topic = message.channel.topic # channel topic contains user id
+                        if topic:
+                            member = message.guild.get_member(int(topic)) # getting member object from channel topic
+                            if member:
+                                if message.attachments: # if mod's message contains attachments
+                                    link = message.attachments[0].url
+                                    embed = discord.Embed(description=message.content)
+                                    embed.set_image(url=f"{link}")
+                                    embed.set_author(name=f"Mod Team [{message.author.name}]", icon_url="https://discordtemplates.me/icon.png")
+                                    await member.send(embed=embed)
+                                else: 
+                                    embed = discord.Embed(description=message.content) 
+                                    embed.set_author(
+                                        name=f"Mod Team [{message.author.name}]", icon_url="https://discordtemplates.me/icon.png")
+                                    await member.send(embed=embed)
+                except Exception as e: 
+                   await message.channel.send(f"\U0000274c Failed to send message due to the following error: ```{e}```")
                 
     @app_commands.command(name="close")
     @app_commands.default_permissions(administrator=True)
