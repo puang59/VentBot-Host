@@ -1,148 +1,79 @@
+# \U0000274c -> red cross emoji
+
 from discord.ext import commands
-from discord import utils
+from discord import app_commands
 import discord
-import asyncio
+import asyncio 
 
-from pymongo import MongoClient
+from cogs.modmail.attachment_handler import ifattachments, ifnotattachments 
 
-from random import *
-import config
+GUILD_ID = 943556434644328498
+MOD_ROLE = 1089638056610500778
 
 class dmsupport(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot) -> None:
         self.bot = bot
-        self.confirmation = None 
-
-    global ventUserId
-    cluster = MongoClient(config.mongoURI)
-    db = cluster["Discord"]
-
-    collection = db["vent"]
-    ventUserId = db['ventId']
-
-    async def ifnotvent(self, confirmation): 
-        try: 
-            await confirmation.delete()
-        except: 
-            pass
-        if self.message.attachments:
-            await self.ifattachments()
-        else: 
-            await self.ifnotattachments()
 
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user): 
-        if not user.bot: 
-            if reaction.emoji == "\U00002705":
-                if self.confirmation:
-                    await self.ifnotvent(self.confirmation)
+    async def on_message(self, message: discord.Message) -> None:
+        guild = self.bot.get_guild(GUILD_ID)
 
-    global unique_id_finder
-    def unique_id_finder(discordId):
-        try: 
-            uniqueId = ventUserId.find_one({'user': discordId})
-            formattedId = uniqueId['uniqueId'][0:10]
-            return formattedId 
-        except:
-            randomNum = randint(1000000000, 9999999999)
-            return randomNum
-
-    @commands.Cog.listener()
-    async def on_message(self, message):
         if message.author.bot:
             return  
 
-        if isinstance(message.channel, discord.DMChannel):
 
-            uniqueId = unique_id_finder(message.author.id)
-            
-            guild = self.bot.get_guild(943556434644328498)
-            categ = utils.get(guild.categories, name="MAILS")
-            channel = utils.get(
-                categ.channels, topic=str(message.author.id))
+        if isinstance(message.channel, discord.DMChannel): # if message is sent in bot dms
+            categ = discord.utils.get(guild.categories, name="MAILS") # make sure category with name MAILS exists 
+            mod_role = guild.get_role(MOD_ROLE)
 
+            if message.attachments: # checking if there are attachments
+                await ifattachments(message, categ, mod_role)
+            else: 
+                await ifnotattachments(message, categ, mod_role)
 
-            async def ifattachments():
-                link = message.attachments[0].url
-                guild = self.bot.get_guild(943556434644328498)
-                categ = utils.get(guild.categories, name="MAILS")
-                channel = utils.get(
-                    categ.channels, topic=str(message.author.id))
-                if not channel:
-                    channel = await categ.create_text_channel(name=f"{uniqueId}", topic=str(message.author.id))
-
-                    notifyrolesd = discord.utils.get(
-                        guild.roles, id=1089638056610500778)
-                    await channel.send(f"New Mail sent by Anonymous | {notifyrolesd.mention}")
-
-                embed = discord.Embed(
-                    description=message.content, colour=0x696969)
-                embed.set_image(url=f"{link}")
-                embed.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                await channel.send(embed=embed)
-                embeddm = discord.Embed(
-                    description="Your message is successfully sent to the staff team. They'll respond as soon as possible.",
-                    color=discord.Colour.green()
-                )
-                embeddm.set_footer(
-                    text="Note: You are totally anonymous and the staff team has no idea about who you are.")
-                embeddm.set_author(
-                    name="Message Sent", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/640px-Sign-check-icon.png")
-                dmmsg = await message.author.send(embed=embeddm)
-                await asyncio.sleep(20)
-                await dmmsg.delete()
-
-            async def ifnotattachments(): 
-                guild = self.bot.get_guild(943556434644328498)
-                categ = utils.get(guild.categories, name="MAILS")
-                channel = utils.get(
-                    categ.channels, topic=str(message.author.id))
-                print('')
-                if not channel:
-                    channel = await categ.create_text_channel(name=f"{uniqueId}", topic=str(message.author.id))
-                    notifyrolesd = discord.utils.get(
-                        guild.roles, id=1089638056610500778)
-                    await channel.send(f"New Mail sent by Anonymous | {notifyrolesd.mention}")
-                print('')
-
-                embed = discord.Embed(
-                    description=message.content, colour=0x696969)
-                embed.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                await channel.send(embed=embed)
-                embeddm = discord.Embed(
-                    description="Your message is successfully sent to the staff team. They'll respond as soon as possible.",
-                    color=discord.Colour.green()
-                )
-                embeddm.set_footer(
-                    text="Note: You are totally anonymous and the staff team has no idea about who you are.")
-                embeddm.set_author(
-                    name="Message Sent", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/640px-Sign-check-icon.png")
-                dmmsg = await message.author.send(embed=embeddm)
-                await asyncio.sleep(20)
-                await dmmsg.delete()
-
-
-            if not channel:
-                if not message.content.startswith("."):
-                    self.confirmation = await message.author.send("Please confirm this is NOT a __vent message__")
-                    await self.confirmation.add_reaction("\U00002705")
-
+        # directing mod's text to dm of the user
         elif isinstance(message.channel, discord.TextChannel):
             try: 
-                if message.content.startswith(self.bot.command_prefix):
-                    pass
-                else:
-                    topic = message.channel.topic
+                if not message.content.startswith(self.bot.command_prefix):
+                    topic = message.channel.topic # channel topic contains user id
                     if topic:
-                        member = message.guild.get_member(int(topic))
+                        member = message.guild.get_member(int(topic)) # getting member object from channel topic
                         if member:
-                            embed = discord.Embed(
-                                description=message.content, colour=discord.Colour.blue())
-                            embed.set_author(
-                                name="Staff Team", icon_url="https://www.pngrepo.com/png/121262/512/police.png")
-                            await member.send(embed=embed)
-            except: 
-                pass 
+                            if message.attachments: # if mod's message contains attachments
+                                link = message.attachments[0].url
+                                embed = discord.Embed(description=message.content)
+                                embed.set_image(url=f"{link}")
+                                embed.set_author(name=f"Mod Team [{message.author.name}]", icon_url="https://discordtemplates.me/icon.png")
+                                await member.send(embed=embed)
+                            else: 
+                                embed = discord.Embed(description=message.content) 
+                                embed.set_author(
+                                    name=f"Mod Team [{message.author.name}]", icon_url="https://discordtemplates.me/icon.png")
+                                await member.send(embed=embed)
+            except Exception as e: 
+               await message.channel.send(f"\U0000274c Failed to send message due to the following error: ```{e}```")
+                
+    @app_commands.command(name="close")
+    @app_commands.default_permissions(administrator=True)
+    async def closeCommand(self, interaction: discord.Interaction) -> None:
+        """Terminates the help channel"""
+
+        guild = self.bot.get_guild(GUILD_ID)
+        if interaction.channel.category.name == "MAILS":
+            topic = interaction.channel.topic
+            member = guild.get_member(int(topic))
+
+            await interaction.response.send_message("Deleting the channel in 10 seconds!")
+            await asyncio.sleep(10)
+            await interaction.channel.delete()
+
+            embedclose = discord.Embed(
+                description="This thread is closed now. Thank you very much!",
+                colour=discord.Colour.lighter_grey()
+            )
+            embedclose.set_author(
+                name="Issue Resolved", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/640px-Sign-check-icon.png")
+            await member.send(embed=embedclose)
 
 async def setup(bot):
     await bot.add_cog(dmsupport(bot))
