@@ -196,348 +196,349 @@ class _events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, msg):  
-        if not msg.author.bot and msg.guild.id == 943556434644328498:
-            t = time.localtime()
-            current_time = time.strftime("%H:%M", t)
-            print(f"[{msg.author.name}][{msg.channel.name}][{current_time}] - {msg.content}")
-            if not msg.content.startswith(self.bot.command_prefix):
-                if not isinstance(msg.channel, discord.channel.DMChannel):
-                    # Increasing user reputation
-                    query = """
-                        INSERT INTO reputation (userID, rep)
-                        VALUES ($1, $2)
-                        ON CONFLICT (userID)
-                        DO UPDATE SET rep = (reputation.rep + $2);
-                    """
-
-                    if msg.channel.category.id in [943581279973167155, 987993408138248243, 987993582701019166, 996458874255187978, 996459675589554206]:
-                        reputation_value = 5
-                    else:
-                        reputation_value = 1
-
-                    await self.conn.execute(query, msg.author.id, reputation_value)
-
-            if not msg.author.id == 943928873412870154:
-                if msg.channel.id != 943556439195152477:
+        if msg.guild.id == 943556434644328498:
+            if not msg.author.bot:
+                t = time.localtime()
+                current_time = time.strftime("%H:%M", t)
+                print(f"[{msg.author.name}][{msg.channel.name}][{current_time}] - {msg.content}")
+                if not msg.content.startswith(self.bot.command_prefix):
                     if not isinstance(msg.channel, discord.channel.DMChannel):
-                        if not msg.channel.category.id in [950646823654137897, 987983272069976114, 987986457069240401, 943588904622256168, 1089639116704059473, 943909186734022676, 1108828456353026088]:
-                            if not msg.content.startswith(self.bot.command_prefix): #checking if msg is a commands 
-                                # Storing unqiue user id
-                                if not ventUserId.find_one({"user": msg.author.id}):
-                                    characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
-                                    uniqueId = "".join(choice(characters)
-                                                    for x in range(randint(20, 25)))
-                                    userSavePost = {"user": msg.author.id, "uniqueId": uniqueId}
-                                    ventUserId.insert_one(userSavePost)
-                                else: 
-                                    pass
+                        # Increasing user reputation
+                        query = """
+                            INSERT INTO reputation (userID, rep)
+                            VALUES ($1, $2)
+                            ON CONFLICT (userID)
+                            DO UPDATE SET rep = (reputation.rep + $2);
+                        """
 
-                                if len(msg.clean_content) < 10:
-                                    x = await msg.channel.send("<:disagree:943603027854626816> Your message is too small. (Message should have more than 10 characters)")
-                                    await asyncio.sleep(10)
-                                    await x.delete()
-                                else:
-                                    characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-                                    msg_code = "".join(choice(characters)
-                                                    for x in range(randint(4, 10)))
+                        if msg.channel.category.id in [943581279973167155, 987993408138248243, 987993582701019166, 996458874255187978, 996459675589554206]:
+                            reputation_value = 5
+                        else:
+                            reputation_value = 1
 
-                                    member = msg.author
-                                    if msg.author.id == 852797584812670996:
+                        await self.conn.execute(query, msg.author.id, reputation_value)
+
+                if not msg.author.id == 943928873412870154:
+                    if msg.channel.id != 943556439195152477:
+                        if not isinstance(msg.channel, discord.channel.DMChannel):
+                            if not msg.channel.category.id in [950646823654137897, 987983272069976114, 987986457069240401, 943588904622256168, 1089639116704059473, 943909186734022676, 1108828456353026088]:
+                                if not msg.content.startswith(self.bot.command_prefix): #checking if msg is a commands 
+                                    # Storing unqiue user id
+                                    if not ventUserId.find_one({"user": msg.author.id}):
+                                        characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+                                        uniqueId = "".join(choice(characters)
+                                                        for x in range(randint(20, 25)))
+                                        userSavePost = {"user": msg.author.id, "uniqueId": uniqueId}
+                                        ventUserId.insert_one(userSavePost)
+                                    else: 
                                         pass
+
+                                    if len(msg.clean_content) < 10:
+                                        x = await msg.channel.send("<:disagree:943603027854626816> Your message is too small. (Message should have more than 10 characters)")
+                                        await asyncio.sleep(10)
+                                        await x.delete()
                                     else:
-                                        role = discord.utils.get(
-                                            msg.guild.roles, name="Blocked")
+                                        characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+                                        msg_code = "".join(choice(characters)
+                                                        for x in range(randint(4, 10)))
 
-                                    vent_channel = self.bot.get_channel(943556439195152477)
-                                    casual_channel = self.bot.get_channel(1014201909118251098)
-                                    help_channel = self.bot.get_channel(1035490966934659093)
-                                    wok_channel = self.bot.get_channel(1108828942019858582)
-                                    
-                                    typeMsg = await msg.channel.send("```Select vent type:```\n`🤍` - <#943556439195152477>\n`🌻` - <#1014201909118251098>\n`📮` - <#1035490966934659093>\n----------\n`\U0001f48c` - <#1108828942019858582>")
-                                    await typeMsg.add_reaction('🤍')
-                                    await typeMsg.add_reaction('🌻')
-                                    await typeMsg.add_reaction('📮')
-                                    await typeMsg.add_reaction('\U0001f48c')
+                                        member = msg.author
+                                        if msg.author.id == 852797584812670996:
+                                            pass
+                                        else:
+                                            role = discord.utils.get(
+                                                msg.guild.roles, name="Blocked")
 
-                                    global casual 
-                                    async def casual(): 
-                                        post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "casual"}
-                                        vType.insert_one(post)
-                                    
-                                    global serious 
-                                    async def serious(): 
-                                        post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "serious"}
-                                        vType.insert_one(post)
-
-                                    global helpchn 
-                                    async def helpchn():
-                                        post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "help"}
-                                        vType.insert_one(post)
-
-
-                                    global wokchn 
-                                    async def wokchn():
-                                        post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "wok"}
-                                        vType.insert_one(post)
+                                        vent_channel = self.bot.get_channel(943556439195152477)
+                                        casual_channel = self.bot.get_channel(1014201909118251098)
+                                        help_channel = self.bot.get_channel(1035490966934659093)
+                                        wok_channel = self.bot.get_channel(1108828942019858582)
                                         
-                                    global tagEmbedMessage
-                                    async def tagEmbedMessage():
-                                        vCheck.insert_one({"user": msg.author.id, "tags": "> "})
-                                        tagEm = discord.Embed(
-                                            description=f"Click on the tags (press 'None' if you want no tag) and when you are done, press 'Done' button\n**Note:** You can select multiple tags."
-                                        )
-                                        tagEm.set_author(name="Choose Tags", icon_url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fhawcons%2F32%2F698889-icon-146-tag-512.png&f=1&nofb=1")
-                                        await msg.channel.send(embed=tagEm, view=tagButtons())
-                                    
-                                    global cross
-                                    async def cross():
-                                        tagData = vCheck.find_one({"user": msg.author.id})
-                                        ventTypeCheck = vType.find_one({'author_id': msg.author.id})
-                                        try: 
-                                            if ventTypeCheck['type'] == "serious": 
-                                                if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
-                                                    em = discord.Embed(
-                                                        description=f"{tagData['tags']}\n\n{msg.content}"
-                                                    )
+                                        typeMsg = await msg.channel.send("```Select vent type:```\n`🤍` - <#943556439195152477>\n`🌻` - <#1014201909118251098>\n`📮` - <#1035490966934659093>\n----------\n`\U0001f48c` - <#1108828942019858582>")
+                                        await typeMsg.add_reaction('🤍')
+                                        await typeMsg.add_reaction('🌻')
+                                        await typeMsg.add_reaction('📮')
+                                        await typeMsg.add_reaction('\U0001f48c')
+
+                                        global casual 
+                                        async def casual(): 
+                                            post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "casual"}
+                                            vType.insert_one(post)
+                                        
+                                        global serious 
+                                        async def serious(): 
+                                            post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "serious"}
+                                            vType.insert_one(post)
+
+                                        global helpchn 
+                                        async def helpchn():
+                                            post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "help"}
+                                            vType.insert_one(post)
+
+
+                                        global wokchn 
+                                        async def wokchn():
+                                            post = {"author_id": msg.author.id, "msg_id": msg.id, "type": "wok"}
+                                            vType.insert_one(post)
+                                            
+                                        global tagEmbedMessage
+                                        async def tagEmbedMessage():
+                                            vCheck.insert_one({"user": msg.author.id, "tags": "> "})
+                                            tagEm = discord.Embed(
+                                                description=f"Click on the tags (press 'None' if you want no tag) and when you are done, press 'Done' button\n**Note:** You can select multiple tags."
+                                            )
+                                            tagEm.set_author(name="Choose Tags", icon_url="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.iconfinder.com%2Fdata%2Ficons%2Fhawcons%2F32%2F698889-icon-146-tag-512.png&f=1&nofb=1")
+                                            await msg.channel.send(embed=tagEm, view=tagButtons())
+                                        
+                                        global cross
+                                        async def cross():
+                                            tagData = vCheck.find_one({"user": msg.author.id})
+                                            ventTypeCheck = vType.find_one({'author_id': msg.author.id})
+                                            try: 
+                                                if ventTypeCheck['type'] == "serious": 
+                                                    if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
+                                                        em = discord.Embed(
+                                                            description=f"{tagData['tags']}\n\n{msg.content}"
+                                                        )
+                                                    else: 
+                                                        em = discord.Embed(
+                                                            description=f"{msg.content}"
+                                                        )
                                                 else: 
                                                     em = discord.Embed(
                                                         description=f"{msg.content}"
-                                                    )
-                                            else: 
+                                                    )      
+                                            except: 
                                                 em = discord.Embed(
                                                     description=f"{msg.content}"
-                                                )      
-                                        except: 
-                                            em = discord.Embed(
-                                                description=f"{msg.content}"
-                                            )                                              
+                                                )                                              
 
-                                        # Checking vent type
-                                        if ventTypeCheck['type'] == "serious": 
-                                            em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                                            x = await vent_channel.send(embed=em)
-                                            await x.add_reaction('🫂')
-                                            #await x.add_reaction('💬')
-                                        elif ventTypeCheck['type'] == "casual": 
-                                            em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                                            y = await casual_channel.send(embed=em)
-                                            await y.add_reaction('🗣')
-                                            #await y.add_reaction('💬')
-                                        elif ventTypeCheck['type'] == "help": 
-                                            em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                                            z = await help_channel.send(embed=em)
-                                            await z.add_reaction('⬆️')
-                                            #await z.add_reaction('💬')
-                                        elif ventTypeCheck['type'] == "wok": 
-                                            ra = roboart()
-                                            authorname = str(msg.author.name)
-                                            first_word = authorname.split()[0]
-                                            em.set_author(name="Anonymous", icon_url=ra.kitten(f"{first_word}"))
-                                            value = randint(0, 0xffffff)
-                                            em.color = value 
-                                            w = await wok_channel.send(embed=em)
-                                            await w.add_reaction('\U0001f49e')
-
-                                        #logger.logInput('type', f"{ventTypeCheck['type']}")
-                                        vType.delete_many({'author_id':msg.author.id})
-                                        vCheck.delete_many({'user': msg.author.id})
-                                        stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
-
-                                        uIdData = ventUserId.find_one({"user": msg.author.id})
-                                        try: 
-                                            try: 
-                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
-                                                        "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                                collection.insert_one(post)
-                                            except: 
-                                                post = {"author_id": msg.author.id,  "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
-                                                        "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                                collection.insert_one(post)
-                                        except:
-                                            try: 
-                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
-                                                        "msg_link": f"{z.jump_url}", "msg_id": z.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                                collection.insert_one(post)    
-                                            except:
-                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
-                                                        "msg_link": f"{w.jump_url}", "msg_id": w.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                                collection.insert_one(post)    
-                                        try:
-                                            await cofirm.delete()
-                                        except:
-                                            pass
-                                        dataforlink = collection.find_one({"code": msg_code})
-                                        linktodisplay = dataforlink['msg_link']
-                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
-                                                        {linktodisplay}")
-                                        
-                                        try:
-                                            data = collection.find_one(
-                                                {"code": msg_code})
-                                            link = data["msg_link"]
-                                            emdm = discord.Embed(
-                                                description=f"||{msg_code}|| - {link}")
-                                            await msg.author.send("<:agree:943603027313565757> Your vent was posted successfully! Heres the vent link with token just incase.", embed=emdm)
-                                        except:
-                                            print("DMs closed")
-
-                                        logs = self.bot.get_channel(1089639606091259994)
-                                        print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
-                                        logsEmbed = discord.Embed(
-                                            description=f"```NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC```\n \
-                                                {linktodisplay}"
-                                        )
-                                        await logs.send(embed = logsEmbed)
-                                        ########## LOGGING ##########
-                                        #logger.logInput('at', "null")
-                                        #logger.logInput('by', f"{msg.author.name}")
-                                        #try: 
-                                        #    logger.logInput('messageid', f"{x.id}")
-                                        #except: 
-                                        #    logger.logInput('messageid', f"{y.id}")
-
-                                    global accept
-                                    async def accept():
-                                        tagData = vCheck.find_one({"user": msg.author.id})
-                                        ventTypeCheck = vType.find_one({'author_id': msg.author.id})
-                                        # check if tag is empty - if yes then remove tags from embed - if no then continue
-                                        try: 
+                                            # Checking vent type
                                             if ventTypeCheck['type'] == "serious": 
-                                                if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
-                                                    em = discord.Embed(
-                                                        description=f"{tagData['tags']}\n\n{msg.content}"
-                                                    )
+                                                em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                                x = await vent_channel.send(embed=em)
+                                                await x.add_reaction('🫂')
+                                                #await x.add_reaction('💬')
+                                            elif ventTypeCheck['type'] == "casual": 
+                                                em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                                y = await casual_channel.send(embed=em)
+                                                await y.add_reaction('🗣')
+                                                #await y.add_reaction('💬')
+                                            elif ventTypeCheck['type'] == "help": 
+                                                em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                                z = await help_channel.send(embed=em)
+                                                await z.add_reaction('⬆️')
+                                                #await z.add_reaction('💬')
+                                            elif ventTypeCheck['type'] == "wok": 
+                                                ra = roboart()
+                                                authorname = str(msg.author.name)
+                                                first_word = authorname.split()[0]
+                                                em.set_author(name="Anonymous", icon_url=ra.kitten(f"{first_word}"))
+                                                value = randint(0, 0xffffff)
+                                                em.color = value 
+                                                w = await wok_channel.send(embed=em)
+                                                await w.add_reaction('\U0001f49e')
+
+                                            #logger.logInput('type', f"{ventTypeCheck['type']}")
+                                            vType.delete_many({'author_id':msg.author.id})
+                                            vCheck.delete_many({'user': msg.author.id})
+                                            stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
+
+                                            uIdData = ventUserId.find_one({"user": msg.author.id})
+                                            try: 
+                                                try: 
+                                                    post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                            "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                    collection.insert_one(post)
+                                                except: 
+                                                    post = {"author_id": msg.author.id,  "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                            "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                    collection.insert_one(post)
+                                            except:
+                                                try: 
+                                                    post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                            "msg_link": f"{z.jump_url}", "msg_id": z.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                    collection.insert_one(post)    
+                                                except:
+                                                    post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                            "msg_link": f"{w.jump_url}", "msg_id": w.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                    collection.insert_one(post)    
+                                            try:
+                                                await cofirm.delete()
+                                            except:
+                                                pass
+                                            dataforlink = collection.find_one({"code": msg_code})
+                                            linktodisplay = dataforlink['msg_link']
+                                            await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
+                                                            {linktodisplay}")
+                                            
+                                            try:
+                                                data = collection.find_one(
+                                                    {"code": msg_code})
+                                                link = data["msg_link"]
+                                                emdm = discord.Embed(
+                                                    description=f"||{msg_code}|| - {link}")
+                                                await msg.author.send("<:agree:943603027313565757> Your vent was posted successfully! Heres the vent link with token just incase.", embed=emdm)
+                                            except:
+                                                print("DMs closed")
+
+                                            logs = self.bot.get_channel(1089639606091259994)
+                                            print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
+                                            logsEmbed = discord.Embed(
+                                                description=f"```NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC```\n \
+                                                    {linktodisplay}"
+                                            )
+                                            await logs.send(embed = logsEmbed)
+                                            ########## LOGGING ##########
+                                            #logger.logInput('at', "null")
+                                            #logger.logInput('by', f"{msg.author.name}")
+                                            #try: 
+                                            #    logger.logInput('messageid', f"{x.id}")
+                                            #except: 
+                                            #    logger.logInput('messageid', f"{y.id}")
+
+                                        global accept
+                                        async def accept():
+                                            tagData = vCheck.find_one({"user": msg.author.id})
+                                            ventTypeCheck = vType.find_one({'author_id': msg.author.id})
+                                            # check if tag is empty - if yes then remove tags from embed - if no then continue
+                                            try: 
+                                                if ventTypeCheck['type'] == "serious": 
+                                                    if "Neutral" in tagData['tags'] or "Negative" in tagData['tags'] or "Sexual" in tagData['tags'] or "Suicidal" in tagData['tags'] or "Gore" in tagData['tags'] or "Self-Harm" in tagData['tags']:
+                                                        em = discord.Embed(
+                                                            description=f"{tagData['tags']}\n\n{msg.content}"
+                                                        )
+                                                    else: 
+                                                        em = discord.Embed(
+                                                            description=f"{msg.content}"
+                                                        )
                                                 else: 
                                                     em = discord.Embed(
                                                         description=f"{msg.content}"
                                                     )
-                                            else: 
+                                            except:  
                                                 em = discord.Embed(
                                                     description=f"{msg.content}"
                                                 )
-                                        except:  
-                                            em = discord.Embed(
-                                                description=f"{msg.content}"
-                                            )
 
-                                        em.set_footer(
-                                            text="You can click on speech-bubble emoji to reply to this vent and talk to the author anonymously.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
-                                        
-                                        # Checking vent type
-                                        if ventTypeCheck['type'] == "serious": 
-                                            em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                                            x = await vent_channel.send(embed=em)
-                                            await x.add_reaction('🫂')
-                                            await x.add_reaction('💬')
-                                        elif ventTypeCheck['type'] == "casual": 
-                                            em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                                            y = await casual_channel.send(embed=em)
-                                            await y.add_reaction('🗣')
-                                            await y.add_reaction('💬')
-                                        elif ventTypeCheck['type'] == "help": 
-                                            em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
-                                            z = await help_channel.send(embed=em)
-                                            await z.add_reaction('⬆️')
-                                            await z.add_reaction('💬')
-                                        elif ventTypeCheck['type'] == "wok": 
-                                            ra = roboart() 
-                                            authorname = str(msg.author.name)
-                                            first_word = authorname.split()[0]
-                                            em.set_author(name="Anonymous", icon_url=ra.kitten(f"{first_word}"))
-                                            value = randint(0, 0xffffff)
-                                            em.color = value 
-                                            w = await wok_channel.send(embed=em)
-                                            await w.add_reaction('\U0001f49e')
-                                            await w.add_reaction('💬')
+                                            em.set_footer(
+                                                text="You can click on speech-bubble emoji to reply to this vent and talk to the author anonymously.", icon_url="https://kidsattennis.ca/wp-content/uploads/2020/05/greenball.png")
+                                            
+                                            # Checking vent type
+                                            if ventTypeCheck['type'] == "serious": 
+                                                em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                                x = await vent_channel.send(embed=em)
+                                                await x.add_reaction('🫂')
+                                                await x.add_reaction('💬')
+                                            elif ventTypeCheck['type'] == "casual": 
+                                                em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                                y = await casual_channel.send(embed=em)
+                                                await y.add_reaction('🗣')
+                                                await y.add_reaction('💬')
+                                            elif ventTypeCheck['type'] == "help": 
+                                                em.set_author(name="Anonymous", icon_url="https://res.cloudinary.com/teepublic/image/private/s--UymRXkch--/t_Resized%20Artwork/c_fit,g_north_west,h_1054,w_1054/co_ffffff,e_outline:53/co_ffffff,e_outline:inner_fill:53/co_bbbbbb,e_outline:3:1000/c_mpad,g_center,h_1260,w_1260/b_rgb:eeeeee/c_limit,f_auto,h_630,q_90,w_630/v1570281377/production/designs/6215195_0.jpg")
+                                                z = await help_channel.send(embed=em)
+                                                await z.add_reaction('⬆️')
+                                                await z.add_reaction('💬')
+                                            elif ventTypeCheck['type'] == "wok": 
+                                                ra = roboart() 
+                                                authorname = str(msg.author.name)
+                                                first_word = authorname.split()[0]
+                                                em.set_author(name="Anonymous", icon_url=ra.kitten(f"{first_word}"))
+                                                value = randint(0, 0xffffff)
+                                                em.color = value 
+                                                w = await wok_channel.send(embed=em)
+                                                await w.add_reaction('\U0001f49e')
+                                                await w.add_reaction('💬')
 
-                                        #logger.logInput('type', f"{ventTypeCheck['type']}")
-                                        vType.delete_many({'author_id':msg.author.id})
-                                        vCheck.delete_many({'user': msg.author.id})
-                                        stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
+                                            #logger.logInput('type', f"{ventTypeCheck['type']}")
+                                            vType.delete_many({'author_id':msg.author.id})
+                                            vCheck.delete_many({'user': msg.author.id})
+                                            stories.update_one({"guild": "vent"}, {"$inc": {"stories": 1}})
 
-                                        uIdData = ventUserId.find_one({"user": msg.author.id})
-                                        try: 
+                                            uIdData = ventUserId.find_one({"user": msg.author.id})
                                             try: 
-                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
-                                                        "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                                collection.insert_one(post)
+                                                try: 
+                                                    post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                            "msg_link": f"{x.jump_url}", "msg_id": x.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                    collection.insert_one(post)
+                                                except: 
+                                                    post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                            "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                    collection.insert_one(post)
                                             except: 
-                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
-                                                        "msg_link": f"{y.jump_url}", "msg_id": y.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                                collection.insert_one(post)
-                                        except: 
-                                            try: 
-                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
-                                                        "msg_link": f"{z.jump_url}", "msg_id": z.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                                collection.insert_one(post)    
+                                                try: 
+                                                    post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                            "msg_link": f"{z.jump_url}", "msg_id": z.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                    collection.insert_one(post)    
+                                                except:
+                                                    post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
+                                                            "msg_link": f"{w.jump_url}", "msg_id": w.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
+                                                    collection.insert_one(post)    
+
+                                            try:
+                                                await cofirm.delete()
                                             except:
-                                                post = {"author_id": msg.author.id, "uniqueId": uIdData['uniqueId'], "code": f"{msg_code}",
-                                                        "msg_link": f"{w.jump_url}", "msg_id": w.id, "channel_id": msg.channel.id, "owner_name": f"{msg.author.name}#{msg.author.discriminator}", "ident": "vent"}
-                                                collection.insert_one(post)    
+                                                pass
+                                            dataforlink = collection.find_one({"code": msg_code})
+                                            linktodisplay = dataforlink['msg_link']
+                                            await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
+                                                            {linktodisplay}")
 
-                                        try:
-                                            await cofirm.delete()
-                                        except:
-                                            pass
-                                        dataforlink = collection.find_one({"code": msg_code})
-                                        linktodisplay = dataforlink['msg_link']
-                                        await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
-                                                        {linktodisplay}")
+                                            try:
+                                                data = collection.find_one(
+                                                    {"code": msg_code})
+                                                link = data["msg_link"]
+                                                emdm = discord.Embed(
+                                                    description=f"||{msg_code}|| - {link}")
+                                                await msg.author.send("<:agree:943603027313565757> Your vent was posted successfully! Heres the vent link with token just incase.", embed=emdm)
+                                            except:
+                                                print("DMs closed")
+                                            
+                                            logs = self.bot.get_channel(1089639606091259994)
+                                            print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
+                                            logsEmbed = discord.Embed(
+                                                description=f"```NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC```\n \
+                                                    {linktodisplay}"
+                                            )
+                                            await logs.send(embed = logsEmbed)
+                                            ########## LOGGING ##########
+                                            #logger.logInput('at', "null")
+                                            #logger.logInput('by', f"{msg.author.name}")
+                                            #try: 
+                                            #    try: 
+                                            #        logger.logInput('messageid', f"{x.id}")
+                                            #    except: 
+                                            #        logger.logInput('messageid', f"{y.id}")
+                                            #except: 
+                                            #    logger.logInput('messageid', f"{z.id}")
 
-                                        try:
-                                            data = collection.find_one(
-                                                {"code": msg_code})
-                                            link = data["msg_link"]
-                                            emdm = discord.Embed(
-                                                description=f"||{msg_code}|| - {link}")
-                                            await msg.author.send("<:agree:943603027313565757> Your vent was posted successfully! Heres the vent link with token just incase.", embed=emdm)
-                                        except:
-                                            print("DMs closed")
-                                        
-                                        logs = self.bot.get_channel(1089639606091259994)
-                                        print(f"---------- NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC ----------")
-                                        logsEmbed = discord.Embed(
-                                            description=f"```NEW VENT RECORDED {datetime.datetime.utcnow().time()} UTC```\n \
-                                                {linktodisplay}"
-                                        )
-                                        await logs.send(embed = logsEmbed)
-                                        ########## LOGGING ##########
-                                        #logger.logInput('at', "null")
-                                        #logger.logInput('by', f"{msg.author.name}")
-                                        #try: 
-                                        #    try: 
-                                        #        logger.logInput('messageid', f"{x.id}")
-                                        #    except: 
-                                        #        logger.logInput('messageid', f"{y.id}")
-                                        #except: 
-                                        #    logger.logInput('messageid', f"{z.id}")
-
-                # Inbox
-                if isinstance(msg.channel, discord.TextChannel):
-                    if msg.channel.category is not None:
-                        if msg.channel.category.id == 950646823654137897 or msg.channel.category.id == 987983272069976114 or msg.channel.category.id == 987986457069240401: 
-                            if not msg.author.bot:
-                                if msg.content.startswith("."):
-                                    pass
-                                else:
-                                    if "REPORTED" in msg.channel.topic:
-                                        await msg.add_reaction("<:disagree:943603027854626816>")
-                                    elif "Reporter" in msg.channel.topic:
-                                        print("Reporter channel detected")
+                    # Inbox
+                    if isinstance(msg.channel, discord.TextChannel):
+                        if msg.channel.category is not None:
+                            if msg.channel.category.id == 950646823654137897 or msg.channel.category.id == 987983272069976114 or msg.channel.category.id == 987986457069240401: 
+                                if not msg.author.bot:
+                                    if msg.content.startswith("."):
+                                        pass
                                     else:
-                                        topic = msg.channel.topic
-                                        
-                                        msgContent = msg.content
-                                        chn = msg.guild.get_channel(int(topic))
-                                        em = discord.Embed(
-                                            description=msg.content
-                                        )
-                                        em.set_author(
-                                            name="Stranger", icon_url="https://image.similarpng.com/very-thumbnail/2020/08/Emoji-social-media-Reaction-heart-icon-vector-PNG.png")
-                                        x = await chn.send(embed=em, view=ReportBtn())
-                                        await msg.add_reaction("<:agree:943603027313565757>")
+                                        if "REPORTED" in msg.channel.topic:
+                                            await msg.add_reaction("<:disagree:943603027854626816>")
+                                        elif "Reporter" in msg.channel.topic:
+                                            print("Reporter channel detected")
+                                        else:
+                                            topic = msg.channel.topic
+                                            
+                                            msgContent = msg.content
+                                            chn = msg.guild.get_channel(int(topic))
+                                            em = discord.Embed(
+                                                description=msg.content
+                                            )
+                                            em.set_author(
+                                                name="Stranger", icon_url="https://image.similarpng.com/very-thumbnail/2020/08/Emoji-social-media-Reaction-heart-icon-vector-PNG.png")
+                                            x = await chn.send(embed=em, view=ReportBtn())
+                                            await msg.add_reaction("<:agree:943603027313565757>")
 
-                #await self.bot.process_commands(msg)
+                    #await self.bot.process_commands(msg)
 
 
     #################### REACTION MONITOR ####################
