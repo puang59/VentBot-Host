@@ -51,7 +51,7 @@ class _events(commands.Cog):
     global logger
     logger = _logger(commands.Bot)
 
-    @tasks.loop(seconds=60)  # Adjust the interval as needed
+    @tasks.loop(seconds=120)  # Adjust the interval as needed
     async def check_delete_channels(self):
         guild = self.bot.get_guild(GUILD_ID)
         privatespace = discord.utils.get(guild.categories, name="YOUR PRIVATE SPACE")
@@ -61,13 +61,15 @@ class _events(commands.Cog):
         
         # Read channel creation times from the file
         channel_creation_times = {}
-        if os.path.exists("channel_creation_times.txt"):
-            with open("channel_creation_times.txt", "r") as file:
+        if os.path.exists("channelLife.txt"):
+            with open("channelLife.txt", "r") as file:
                 lines = file.readlines()
                 for line in lines:
                     channel_id, creation_time = line.strip().split(",")
                     channel_creation_times[int(channel_id)] = float(creation_time)
-        
+
+        print(channel_creation_times) 
+
         # Iterate through text channels in the private space category
         for channel in privatespace.text_channels:
             channel_id = channel.id
@@ -75,10 +77,12 @@ class _events(commands.Cog):
             if channel_id in channel_creation_times:
                 creation_time = channel_creation_times[channel_id]
                 # Check if the channel has existed for more than 24 hours
-                # if current_time - creation_time >= 24 * 3600:  # 24 hours in seconds
-                if current_time - creation_time >= 65:  # 24 hours in seconds
+                if current_time - creation_time >= 24 * 3600:  # 24 hours in seconds
                     # Delete the channel
-                    await channel.delete()
+                    try:
+                        await channel.delete()
+                    except:
+                        pass
                     # Remove the channel's creation time from the dictionary and the file
                     del channel_creation_times[channel_id]
                     with open("channelLife.txt", "w") as file:
@@ -88,8 +92,8 @@ class _events(commands.Cog):
     @check_delete_channels.before_loop
     async def before_check_delete_channels(self):
         await self.bot.wait_until_ready()
-    #################### BUTTONS ####################
 
+    #################### BUTTONS ####################
 
     global cofirm   
     global tagButtons
@@ -403,7 +407,29 @@ class _events(commands.Cog):
                                         pass
                                     dataforlink = collection.find_one({"code": msg_code})
                                     linktodisplay = dataforlink['msg_link']
+
+                                    # channel life
+                                    with open("channelLife.txt", "r") as file:
+                                        lines = file.readlines()
+                                    channel_id_to_remove = msg.channel.id
+
+                                    new_lines = [line for line in lines if not line.startswith(str(channel_id_to_remove))]
+
+                                    with open("channelLife.txt", "w") as file:
+                                        file.writelines(new_lines)
+
+                                    # user channel 
+                                    with open("userChannel.txt", "r") as file:
+                                        lines = file.readlines()
+                                    user_id_to_remove = msg.author.id 
+
+                                    new_lines = [line for line in lines if not line.startswith(str(user_id_to_remove))]
+
+                                    with open("userChannel.txt", "w") as file:
+                                        file.writelines(new_lines)
+
                                     await msg.channel.delete()
+
                                     # await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
                                     #                 {linktodisplay}")
                                     
@@ -517,7 +543,29 @@ class _events(commands.Cog):
                                         pass
                                     dataforlink = collection.find_one({"code": msg_code})
                                     linktodisplay = dataforlink['msg_link']
+
+                                    # channel life
+                                    with open("channelLife.txt", "r") as file:
+                                        lines = file.readlines()
+                                    channel_id_to_remove = msg.channel.id
+
+                                    new_lines = [line for line in lines if not line.startswith(str(channel_id_to_remove))]
+
+                                    with open("channelLife.txt", "w") as file:
+                                        file.writelines(new_lines)
+
+                                    # user channel 
+                                    with open("userChannel.txt", "r") as file:
+                                        lines = file.readlines()
+                                    user_id_to_remove = msg.author.id 
+
+                                    new_lines = [line for line in lines if not line.startswith(str(user_id_to_remove))]
+
+                                    with open("userChannel.txt", "w") as file:
+                                        file.writelines(new_lines)
+
                                     await msg.channel.delete()
+
                                     # await msg.reply(f"<:agree:943603027313565757> ||{msg_code}|| - is your message code. __Keep it safe somewhere and dont share.__\n \
                                     #                 {linktodisplay}")
 
@@ -581,6 +629,18 @@ class _events(commands.Cog):
                         message = channel.get_partial_message(payload.message_id)
                         await message.remove_reaction(payload.emoji ,payload.member)
 
+                        # Read the userChannel.txt file
+                        with open("userChannel.txt", "r") as file:
+                            lines = file.readlines()
+
+                        # Check if the user ID is stored in the file
+                        user_id_to_check = str(payload.user_id)
+                        for line in lines:
+                            user_id, channel_id = line.strip().split(",")
+                            if user_id == user_id_to_check:
+                                await payload.member.send(f"Your channel is already active - <#{channel_id}>")
+                                return
+
                         guild = self.bot.get_guild(payload.guild_id)
                         privatespace = discord.utils.get(guild.categories, name="YOUR PRIVATE SPACE")
 
@@ -609,6 +669,8 @@ class _events(commands.Cog):
                         try:
                             with open("channelLife.txt", "a") as file:
                                 file.write(f"{text_channel.id},{time.time()}\n")
+                            with open("userChannel.txt", "a") as file:
+                                file.write(f"{payload.user_id},{text_channel.id}\n")
                         except Exception as e:
                             print("Error writing to file:", e)
 
@@ -826,11 +888,11 @@ class _events(commands.Cog):
                 await reaction.message.delete()
         if not user.bot:
             if reaction.emoji == "📩":
-                await accept()
                 try:
+                    await accept()
                     await reaction.message.delete()
-                except: 
-                    pass
+                except Exception as e: 
+                    print(e)
         if not user.bot:
             if reaction.emoji == "☘️":
                 await cross()
@@ -871,6 +933,36 @@ class _events(commands.Cog):
                 data = ventUserId.find_one({"user": member.id})
                 uId = data["uniqueId"]
     
+            # Read the userChannel.txt file
+            with open("userChannel.txt", "r") as user_file:
+                user_lines = user_file.readlines()
+
+            # Check if the user ID is stored in the file
+            user_id_to_remove = str(member.id)
+            updated_user_lines = []
+            channel_id_to_remove = None
+            for user_line in user_lines:
+                user_id, channel_id = user_line.strip().split(",")
+                if user_id != user_id_to_remove:
+                    updated_user_lines.append(user_line)
+                else:
+                    channel_id_to_remove = channel_id
+
+            # Write the updated user lines back to the file
+            with open("userChannel.txt", "w") as user_file:
+                user_file.writelines(updated_user_lines)
+
+            # Delete the associated text channel
+            if channel_id_to_remove:
+                try:
+                    channel_to_delete = guild.get_channel(int(channel_id_to_remove))
+                    await channel_to_delete.delete()
+                    await leaveChannel.send(f"Text channel {channel_to_delete.name} ({channel_id_to_remove}) deleted.")
+                except Exception as e:
+                    await leaveChannel.send(f"Error deleting channel: {e}")
+            else:
+                await leaveChannel.send(f"No associated channel found for user {member.name} ({member.id}).")
+
             # Removing reputation
             try: 
                 query = """
