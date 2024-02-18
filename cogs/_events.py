@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 import discord
 import asyncio
 
@@ -7,6 +7,7 @@ from random import *
 # import configparser
 from RoboArt import roboart
 import time
+import os
 import datetime
 
 import traceback 
@@ -15,16 +16,13 @@ import config
 
 from ._logger import _logger
 
+GUILD_ID = 943556434644328498
+
 class _events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.conn = None
-    # config = configparser.ConfigParser()
-    # config.read('_ventV2.0/config.ini')
-
-    # @commands.Cog.listener()
-    # async def on_ready(self):
-    #     self.conn = await self.bot.get_db_connection()
+        self.check_delete_channels.start()
 
     async def cog_load(self):
         self.conn = await self.bot.get_db_connection()
@@ -53,8 +51,49 @@ class _events(commands.Cog):
     global logger
     logger = _logger(commands.Bot)
 
-    #################### BUTTONS ####################
+    @tasks.loop(seconds=120)  # Adjust the interval as needed
+    async def check_delete_channels(self):
+        guild = self.bot.get_guild(GUILD_ID)
+        privatespace = discord.utils.get(guild.categories, name="YOUR PRIVATE SPACE")
+        
+        # Get the current time
+        current_time = time.time()
+        
+        # Read channel creation times from the file
+        channel_creation_times = {}
+        if os.path.exists("channelLife.txt"):
+            with open("channelLife.txt", "r") as file:
+                lines = file.readlines()
+                for line in lines:
+                    channel_id, creation_time = line.strip().split(",")
+                    channel_creation_times[int(channel_id)] = float(creation_time)
 
+        print(channel_creation_times) 
+
+        # Iterate through text channels in the private space category
+        for channel in privatespace.text_channels:
+            channel_id = channel.id
+            # Check if the channel exists in the creation times dictionary
+            if channel_id in channel_creation_times:
+                creation_time = channel_creation_times[channel_id]
+                # Check if the channel has existed for more than 24 hours
+                if current_time - creation_time >= 24 * 3600:  # 24 hours in seconds
+                    # Delete the channel
+                    try:
+                        await channel.delete()
+                    except:
+                        pass
+                    # Remove the channel's creation time from the dictionary and the file
+                    del channel_creation_times[channel_id]
+                    with open("channelLife.txt", "w") as file:
+                        for ch_id, cr_time in channel_creation_times.items():
+                            file.write(f"{ch_id},{cr_time}\n")
+
+    @check_delete_channels.before_loop
+    async def before_check_delete_channels(self):
+        await self.bot.wait_until_ready()
+
+    #################### BUTTONS ####################
 
     global cofirm   
     global tagButtons
@@ -797,21 +836,6 @@ class _events(commands.Cog):
                 await logchannel.send(f"<:disagree:943603027854626816> Failed to change {after.name}#{after.discriminator}'s channel name because __`before.name` did not match `after.name`__\
                 \n```{traceback.format_exc()}```")
 
-    '''
-    @commands.Cog.listener()
-    async def on_member_update(self, before, after):
-        if after.timeout: 
-            if inbox.find_one({"reactor":after.id}):
-                data = inbox.find({"reactor":after.id})
-                for name in data:
-                    print(name['channel'].lower())
-                    guild = self.bot.get_guild(943556434644328498)
-                    existing_channel = discord.utils.get(guild.channels, name=name['channel'].lower())
-                    await existing_channel.delete()
-                inbox.delete_many({"reactor": after.id})
-                logchannel = self.bot.get_channel(1089639606091259994)
-                await logchannel.send(f"__{after.name}({after.id}) was ratelimited for creating multiple inbox channels!__\nUser spam inbox channels were deleted automatically.")
-    '''
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         if member.guild.id == 943556434644328498:
@@ -825,6 +849,36 @@ class _events(commands.Cog):
                 data = ventUserId.find_one({"user": member.id})
                 uId = data["uniqueId"]
     
+            # Read the userChannel.txt file
+            with open("userChannel.txt", "r") as user_file:
+                user_lines = user_file.readlines()
+
+            # Check if the user ID is stored in the file
+            user_id_to_remove = str(member.id)
+            updated_user_lines = []
+            channel_id_to_remove = None
+            for user_line in user_lines:
+                user_id, channel_id = user_line.strip().split(",")
+                if user_id != user_id_to_remove:
+                    updated_user_lines.append(user_line)
+                else:
+                    channel_id_to_remove = channel_id
+
+            # Write the updated user lines back to the file
+            with open("userChannel.txt", "w") as user_file:
+                user_file.writelines(updated_user_lines)
+
+            # Delete the associated text channel
+            if channel_id_to_remove:
+                try:
+                    channel_to_delete = guild.get_channel(int(channel_id_to_remove))
+                    await channel_to_delete.delete()
+                    await leaveChannel.send(f"Text channel {channel_to_delete.name} ({channel_id_to_remove}) deleted.")
+                except Exception as e:
+                    await leaveChannel.send(f"Error deleting channel: {e}")
+            else:
+                await leaveChannel.send(f"No associated channel found for user {member.name} ({member.id}).")
+
             # Removing reputation
             try: 
                 query = """
@@ -837,47 +891,12 @@ class _events(commands.Cog):
                 await leaveChannel.send(f"Faced issue while deleting rep data: {e}")
 
             try: 
-                try:
-                    try: 
-                        memberName = f"{member.name}".lower()
-                        modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
-                        channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent-{uId[0:7]}')
-                        await channel.delete()
-                        collection.delete_many({'author_id': member.id})
-                        prof.delete_one({"user": member.id})
-                        if ventUserId.find_one({'user': member.id}): 
-                            ventUserId.delete_one({'user': member.id})
-                        await x.add_reaction("✔")
-                    except: 
-                        memberName = f"{member.name}".lower()
-                        channel = discord.utils.get(guild.channels, name=f'{memberName}s-vent-{uId[0:7]}')
-                        await channel.delete()
-                        collection.delete_many({'author_id': member.id})
-                        prof.delete_one({"user": member.id})
-                        if ventUserId.find_one({'user': member.id}): 
-                            ventUserId.delete_one({'user': member.id})
-                        await x.add_reaction("✔")#
-                except: 
-                    memberName = f"{member.name}".lower()
-                    modifiedName = ''.join(char for char in memberName if char.isalnum() or char in " ").replace(" ", "-")
-                    channel = discord.utils.get(guild.channels, name=f'{modifiedName}s-vent-{member.discriminator}')
-                    await channel.delete()
-                    collection.delete_many({'author_id': member.id})
-                    prof.delete_one({"user": member.id})
-                    if ventUserId.find_one({'user': member.id}): 
-                        ventUserId.delete_one({'user': member.id})
-                    await x.add_reaction("✔")
+                collection.delete_many({'author_id': member.id})
+                prof.delete_one({"user": member.id})
+                if ventUserId.find_one({'user': member.id}): 
+                    ventUserId.delete_one({'user': member.id})
             except:
-                if not member == None:
-                    if ventUserId.find_one({'user': member.id}): 
-                        ventUserId.delete_one({'user': member.id})
-                    try: 
-                        prof.delete_one({'user': int(member)})
-                    except: 
-                        post = {"userId": member.id}
-                        logdb.insert_one(post)
-                        await x.add_reaction('❌')
-
+                pass
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -907,20 +926,6 @@ class _events(commands.Cog):
 
             start_time = time.time()
             if member.guild.id == 943556434644328498:
-                # try: 
-                #     print("first try")
-                #     if collection.find_one({"author_id": member.id}):
-                #         data = collection.find_one({"author_id": member.id})
-                #         ch = self.bot.get_channel(int(data["channel_id"]))
-                #         await ch.set_permissions(member, send_messages=True, view_channel=True)
-                # except:
-                guild = member.guild
-                user_a = member
-                role_b = discord.utils.get(member.guild.roles, name="Blocked")
-
-                categories = ["PRIVATE SPACE (1)", "PRIVATE SPACE (2)", "PRIVATE SPACE (3)","PRIVATE SPACE (4)","PRIVATE SPACE (5)",\
-                            "PRIVATE SPACE (6)","PRIVATE SPACE (7)", "PRIVATE SPACE (8)","PRIVATE SPACE (9)","PRIVATE SPACE (10)"]
-
                 # Storing unqiue user id
                 if not ventUserId.find_one({"user": member.id}):
                     characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
@@ -930,37 +935,12 @@ class _events(commands.Cog):
                     ventUserId.insert_one(userSavePost)
                 else: 
                     pass
-
-                for categName in categories:
-                    try:
-                        categ = discord.utils.get(guild.categories, name=categName)
-                        text_channel = await categ.create_text_channel(f"{member.name}s vent {uniqueId[0:7]}") 
-                        await text_channel.set_permissions(user_a, send_messages=True, view_channel=True)
-                        await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
-                        await text_channel.set_permissions(role_b, send_messages=False)
-                        await text_channel.edit(topic=f"Custom PRIVATE Vent channel for {member.name}")
-                        await text_channel.edit(slowmode_delay=7200)
-
-                        ema = discord.Embed(
-                            description="1) Make your text fit in one single message because you will be locked out for `2 Hours` after you vent to prevent spams.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
-                        )
-                        ema.set_author(name="Instruction: ",
-                                    icon_url=guild.icon)
-                        ema.set_footer(
-                            text="Note: We dont save your details and message in any separate database.")
-                        await text_channel.send(f"Welcome {member.mention}!  (≧◡≦)")
-                        a = await text_channel.send(embed=ema)
-                        await a.add_reaction('🔍')
-                        break 
-                    except:
-                        pass            
             end_time = time.time()
             elapsed_time = end_time - start_time
-            await joinChannel.send(f"Channel created successfully, `Elapsed time: {elapsed_time:.2f}s`")  
+            await joinChannel.send(f"`Elapsed time: {elapsed_time:.2f}s`")  
             await x.add_reaction('\U00002714')
-            # except Exception as e:
-            #     print(e)
-            #     await x.add_reaction('\U0000274c')
+
+            # if channels are exceeding 
             if len(member.guild.text_channels) == 500: 
                 await joinChannel.send(f'\U000026a0 <@{943928873412870154}><@{852797584812670996} server channel limit exceeding!')
 
