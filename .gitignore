@@ -1,5 +1,7 @@
 #local files
 config.py
+channelLife.txt
+userChannel.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
