@@ -210,6 +210,35 @@ class _utility(commands.Cog):
 
 
     @commands.command()
+    async def kill(self, ctx):
+        """Closes private space"""
+        if ctx.channel.category.name == "YOUR PRIVATE SPACE":
+            await ctx.send("Deleting the channel in 10 seconds!", delete_after=10)
+
+            with open("channelLife.txt", "r") as file:
+                lines = file.readlines()
+            channel_id_to_remove = msg.channel.id
+
+            new_lines = [line for line in lines if not line.startswith(str(channel_id_to_remove))]
+
+            with open("channelLife.txt", "w") as file:
+                file.writelines(new_lines)
+
+            # user channel 
+            with open("userChannel.txt", "r") as file:
+                lines = file.readlines()
+            user_id_to_remove = msg.author.id 
+
+            new_lines = [line for line in lines if not line.startswith(str(user_id_to_remove))]
+
+            with open("userChannel.txt", "w") as file:
+                file.writelines(new_lines)
+
+            await ctx.channel.delete()
+        else: 
+            await ctx.send("You cannot kill this channel!", delete_after=10)
+
+    @commands.command()
     async def bin(self, ctx):
         """Closes the inbox channel - Public command"""
         ventsrv = ["📨 INBOX", "📨 INBOX (2)", "📨 INBOX (3)"]
