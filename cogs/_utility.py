@@ -217,7 +217,7 @@ class _utility(commands.Cog):
 
             with open("channelLife.txt", "r") as file:
                 lines = file.readlines()
-            channel_id_to_remove = msg.channel.id
+            channel_id_to_remove = ctx.channel.id
 
             new_lines = [line for line in lines if not line.startswith(str(channel_id_to_remove))]
 
@@ -227,7 +227,7 @@ class _utility(commands.Cog):
             # user channel 
             with open("userChannel.txt", "r") as file:
                 lines = file.readlines()
-            user_id_to_remove = msg.author.id 
+            user_id_to_remove = ctx.author.id 
 
             new_lines = [line for line in lines if not line.startswith(str(user_id_to_remove))]
 
