@@ -55,10 +55,10 @@ class _events(commands.Cog):
     async def check_delete_channels(self):
         guild = self.bot.get_guild(GUILD_ID)
         privatespace = discord.utils.get(guild.categories, name="YOUR PRIVATE SPACE")
-        
+
         # Get the current time
         current_time = time.time()
-        
+
         # Read channel creation times from the file
         channel_creation_times = {}
         if os.path.exists("channelLife.txt"):
@@ -68,7 +68,14 @@ class _events(commands.Cog):
                     channel_id, creation_time = line.strip().split(",")
                     channel_creation_times[int(channel_id)] = float(creation_time)
 
-        print(channel_creation_times) 
+        # Read user channel data from the file
+        user_channel_data = {}
+        if os.path.exists("userChannel.txt"):
+            with open("userChannel.txt", "r") as file:
+                lines = file.readlines()
+                for line in lines:
+                    user_id, channel_id = line.strip().split(",")
+                    user_channel_data[int(user_id)] = int(channel_id)
 
         # Iterate through text channels in the private space category
         for channel in privatespace.text_channels:
@@ -85,9 +92,20 @@ class _events(commands.Cog):
                         pass
                     # Remove the channel's creation time from the dictionary and the file
                     del channel_creation_times[channel_id]
+                    # Remove the channel's data from the user_channel_data dictionary and the file
+                    if channel_id in user_channel_data.values():
+                        for user_id, ch_id in list(user_channel_data.items()):
+                            if ch_id == channel_id:
+                                del user_channel_data[user_id]
+                                break
+                    # Write the remaining channel creation times to the file
                     with open("channelLife.txt", "w") as file:
                         for ch_id, cr_time in channel_creation_times.items():
                             file.write(f"{ch_id},{cr_time}\n")
+                    # Write the remaining user channel data to the file
+                    with open("userChannel.txt", "w") as file:
+                        for user_id, ch_id in user_channel_data.items():
+                            file.write(f"{user_id},{ch_id}\n")
 
     @check_delete_channels.before_loop
     async def before_check_delete_channels(self):
@@ -422,7 +440,7 @@ class _events(commands.Cog):
                                     with open("userChannel.txt", "r") as file:
                                         lines = file.readlines()
                                     user_id_to_remove = msg.author.id 
-
+k
                                     new_lines = [line for line in lines if not line.startswith(str(user_id_to_remove))]
 
                                     with open("userChannel.txt", "w") as file:
@@ -931,7 +949,7 @@ class _events(commands.Cog):
             if ventUserId.find_one({"user": member.id}):
                 data = ventUserId.find_one({"user": member.id})
                 uId = data["uniqueId"]
-    
+
             # Read the userChannel.txt file
             with open("userChannel.txt", "r") as user_file:
                 user_lines = user_file.readlines()
@@ -939,17 +957,35 @@ class _events(commands.Cog):
             # Check if the user ID is stored in the file
             user_id_to_remove = str(member.id)
             updated_user_lines = []
-            channel_id_to_remove = None
             for user_line in user_lines:
                 user_id, channel_id = user_line.strip().split(",")
                 if user_id != user_id_to_remove:
                     updated_user_lines.append(user_line)
-                else:
-                    channel_id_to_remove = channel_id
+                elif channel_id_to_remove and channel_id == channel_id_to_remove:
+                    # Remove the line containing the channel_id to be deleted
+                    continue
 
             # Write the updated user lines back to the file
             with open("userChannel.txt", "w") as user_file:
                 user_file.writelines(updated_user_lines)
+
+            # Read the channelLife.txt file
+            with open("channelLife.txt", "r") as channel_file:
+                channel_lines = channel_file.readlines()
+
+            # Check if the channel ID is stored in the file
+            channel_id_to_remove = None
+            updated_channel_lines = []
+            for channel_line in channel_lines:
+                channel_id, _, _ = channel_line.strip().split(",")
+                if channel_id != str(channel_to_delete.id):
+                    updated_channel_lines.append(channel_line)
+                else:
+                    channel_id_to_remove = channel_id
+
+            # Write the updated channel lines back to the file
+            with open("channelLife.txt", "w") as channel_file:
+                channel_file.writelines(updated_channel_lines)
 
             # Delete the associated text channel
             if channel_id_to_remove:
