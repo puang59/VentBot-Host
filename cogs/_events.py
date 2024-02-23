@@ -440,7 +440,7 @@ class _events(commands.Cog):
                                     with open("userChannel.txt", "r") as file:
                                         lines = file.readlines()
                                     user_id_to_remove = msg.author.id 
-k
+
                                     new_lines = [line for line in lines if not line.startswith(str(user_id_to_remove))]
 
                                     with open("userChannel.txt", "w") as file:
