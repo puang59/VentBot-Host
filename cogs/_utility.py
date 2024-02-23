@@ -214,6 +214,7 @@ class _utility(commands.Cog):
         """Closes private space"""
         if ctx.channel.category.name == "YOUR PRIVATE SPACE":
             await ctx.send("Deleting the channel in 10 seconds!")
+            await asyncio.sleep(10)
 
             with open("channelLife.txt", "r") as file:
                 lines = file.readlines()
@@ -234,7 +235,6 @@ class _utility(commands.Cog):
             with open("userChannel.txt", "w") as file:
                 file.writelines(new_lines)
 
-            asyncio.sleep(10)
             await ctx.channel.delete()
         else: 
             await ctx.send("You cannot kill this channel!", delete_after=10)

@@ -680,7 +680,7 @@ class _events(commands.Cog):
                         ema.set_footer(
                             text="Note: We dont save your details and message in any separate database.")
                         await text_channel.send(f"Welcome {payload.member.mention}!  (≧◡≦)")
-                        a = await text_channel.send(embed=ema)
+                        a = await text_channel.send("You can use command `.kill` to get rid of this channel if it was created by mistake!", embed=ema)
                         await a.add_reaction('🔍')
 
                         # Store channel ID and creation time in the file
@@ -730,7 +730,7 @@ class _events(commands.Cog):
                                 icon_url="https://99gifshop.neocities.org/items/new/reverseearth.gif")
                     channel = self.bot.get_channel(payload.channel_id)
                     txt = await channel.fetch_message(payload.message_id)
-                    await txt.edit(embed=em)
+                    await txt.edit("You can use command `.kill` to get rid of this channel if it was created by mistake!", embed=em)
                     await txt.add_reaction('\U00002b05')
                 if payload.emoji.name == '\U00002b05':
                     server = self.bot.get_guild(payload.guild_id)
@@ -746,7 +746,7 @@ class _events(commands.Cog):
                         text="Note: We dont save your details and message in any separate database.")
                     channel = self.bot.get_channel(payload.channel_id)
                     txt = await channel.fetch_message(payload.message_id) 
-                    await txt.edit(embed=ema)
+                    await txt.edit("You can use command `.kill` to get rid of this channel if it was created by mistake!", embed=ema)
                     await txt.add_reaction('🔍')
 
                 if payload.emoji.name == "💬":
