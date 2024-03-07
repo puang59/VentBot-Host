@@ -63,19 +63,25 @@ class _events(commands.Cog):
         channel_creation_times = {}
         if os.path.exists("channelLife.txt"):
             with open("channelLife.txt", "r") as file:
-                lines = file.readlines()
-                for line in lines:
-                    channel_id, creation_time = line.strip().split(",")
-                    channel_creation_times[int(channel_id)] = float(creation_time)
+                try:
+                    lines = file.readlines()
+                    for line in lines:
+                        channel_id, creation_time = line.strip().split(",")
+                        channel_creation_times[int(channel_id)] = float(creation_time)
+                except:
+                    print("File is empty!!")
 
         # Read user channel data from the file
         user_channel_data = {}
         if os.path.exists("userChannel.txt"):
             with open("userChannel.txt", "r") as file:
-                lines = file.readlines()
-                for line in lines:
-                    user_id, channel_id = line.strip().split(",")
-                    user_channel_data[int(user_id)] = int(channel_id)
+                try: 
+                    lines = file.readlines()
+                    for line in lines:
+                        user_id, channel_id = line.strip().split(",")
+                        user_channel_data[int(user_id)] = int(channel_id)
+                except: 
+                    print("File is empty!!")
 
         # Iterate through text channels in the private space category
         for channel in privatespace.text_channels:
