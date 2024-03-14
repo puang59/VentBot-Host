@@ -263,7 +263,7 @@ class _events(commands.Cog):
 
             ## Profanity Filter
             if msg.content.lower() in config.slurs:
-                if msg.channel.id == "1109394738257338378": 
+                if msg.channel.id == 1109394738257338378: 
                     await msg.delete()
                     duration = datetime.timedelta(minutes=20)
                     await member.timeout(duration, reason="Profanity")
