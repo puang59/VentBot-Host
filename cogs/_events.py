@@ -260,6 +260,15 @@ class _events(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, msg):  
         if not msg.author.bot:
+
+            ## Profanity Filter
+            if msg.content.lower() in config.slurs:
+                if msg.channel.id == "1109394738257338378": 
+                    await msg.delete()
+                    duration = datetime.timedelta(minutes=20)
+                    await member.timeout(duration, reason="Profanity")
+                    await msg.author.send("Please avoid using that term in global chats")
+
             t = time.localtime()
             current_time = time.strftime("%H:%M", t)
             print(f"[{msg.author.name}][{msg.channel.name}][{current_time}] - {msg.content}")
