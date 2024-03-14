@@ -266,7 +266,7 @@ class _events(commands.Cog):
                 if msg.channel.id == 1109394738257338378: 
                     await msg.delete()
                     duration = datetime.timedelta(minutes=20)
-                    await member.timeout(duration, reason="Profanity")
+                    await msg.author.timeout(duration, reason="Profanity")
                     await msg.author.send("Please avoid using that term in global chats")
 
             t = time.localtime()
