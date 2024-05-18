@@ -291,7 +291,7 @@ class _utility(commands.Cog):
 
 
     @commands.command(description="Deletes a vent message when code is provided")
-    @commands.check(lambda ctx: ctx.author.id in admins)
+    # @commands.check(lambda ctx: ctx.author.id in admins)
     async def delete(self, ctx, code):
         """Deletes a vent message when code is provided"""
         data = collection.find_one({"code": code})
