@@ -54,7 +54,7 @@ class _events(commands.Cog):
     try:
         channel_id = 1089639606091259994
         channel = discord.utils.get(interaction.guild.channels, id=channel_id)
-        asynd def watcher():
+        async def watcher():
             with collection.watch() as stream:
                 for change in stream:
                     await channel.send("Triggered!")
