@@ -54,10 +54,12 @@ class _events(commands.Cog):
     try:
         channel_id = 1089639606091259994
         channel = discord.utils.get(interaction.guild.channels, id=channel_id)
-        with collection.watch() as stream:
-            for change in stream:
-                await channel.send("Triggered!")
-                # await channel.send(f"New vent recorded: {change['fullDocument']['code']}")
+        asynd def watcher():
+            with collection.watch() as stream:
+                for change in stream:
+                    await channel.send("Triggered!")
+                    # await channel.send(f"New vent recorded: {change['fullDocument']['code']}")
+        self.bot.loop.create_task(watcher())
     except Exception as e:
         await channel.send(f"Error: {e}")
 
