@@ -51,6 +51,16 @@ class _events(commands.Cog):
     global logger
     logger = _logger(commands.Bot)
 
+    try:
+        channel_id = 1089639606091259994
+        channel = discord.utils.get(interaction.guild.channels, id=channel_id)
+        with collection.watch() as stream:
+            for change in stream:
+                await channel.send("Triggered!")
+                # await channel.send(f"New vent recorded: {change['fullDocument']['code']}")
+    except Exception as e:
+        await channel.send(f"Error: {e}")
+
     @tasks.loop(seconds=120)  # Adjust the interval as needed
     async def check_delete_channels(self):
         guild = self.bot.get_guild(GUILD_ID)
