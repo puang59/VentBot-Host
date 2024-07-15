@@ -51,17 +51,22 @@ class _events(commands.Cog):
     global logger
     logger = _logger(commands.Bot)
 
-    try:
+    async def watcher(self):
+        await self.bot.wait_until_ready()
+        guild = self.bot.get_guild(GUILD_ID)
         channel_id = 1089639606091259994
-        channel = discord.utils.get(interaction.guild.channels, id=channel_id)
-        async def watcher():
+        channel = discord.utils.get(guild.channels, id=channel_id)
+        if channel is None:
+            logger.error(f"Channel with ID {channel_id} not found.")
+            return
+
+        try:
             with collection.watch() as stream:
                 for change in stream:
                     await channel.send("Triggered!")
                     # await channel.send(f"New vent recorded: {change['fullDocument']['code']}")
-        self.bot.loop.create_task(watcher())
-    except Exception as e:
-        await channel.send(f"Error: {e}")
+        except Exception as e:
+            logger.error(f"Error in watcher: {e}")
 
     @tasks.loop(seconds=120)  # Adjust the interval as needed
     async def check_delete_channels(self):
