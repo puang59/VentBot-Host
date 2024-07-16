@@ -1032,6 +1032,17 @@ class _events(commands.Cog):
             except:
                 pass
 
+
+    @commands.Cog.listener()
+    async def on_raw_message_delete(self, payload):
+        try:
+            async for entry in payload.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
+                deleter = entry.user
+                guild = self.bot.get_guild(payload.guild_id)
+                channel = self.bot.get_channel(1089639606091259994)
+                await channel.send(message=f"Message deleted by {deleter.name}#{deleter.discriminator}")
+
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         if member.guild.id == 943556434644328498:
@@ -1077,6 +1088,8 @@ class _events(commands.Cog):
             # if channels are exceeding
             if len(member.guild.text_channels) == 500:
                 await joinChannel.send(f'\U000026a0 <@{943928873412870154}><@{852797584812670996} server channel limit exceeding!')
+
+
 
 async def setup(bot):
     await bot.add_cog(_events(bot))

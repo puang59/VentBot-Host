@@ -2,7 +2,7 @@
 config.py
 channelLife.txt
 userChannel.txt
-
+ventvenv
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
