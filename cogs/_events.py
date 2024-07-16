@@ -1041,7 +1041,8 @@ class _events(commands.Cog):
                 guild = self.bot.get_guild(payload.guild_id)
                 channel = self.bot.get_channel(1089639606091259994)
                 await channel.send(message=f"Message deleted by {deleter.name}#{deleter.discriminator}")
-
+        except:
+            await channel.send("Message deleted by someone")
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
