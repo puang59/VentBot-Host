@@ -1035,14 +1035,26 @@ class _events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
+        channel_id = 1089639606091259994
+        guild_id = payload.guild_id
+        guild = self.bot.get_guild(guild_id)
+
+        if guild is None:
+            return
+
         try:
-            async for entry in payload.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
+            channel = self.bot.get_channel(channel_id)
+            if channel is None:
+                return
+
+            async for entry in guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
                 deleter = entry.user
-                guild = self.bot.get_guild(payload.guild_id)
-                channel = self.bot.get_channel(1089639606091259994)
-                await channel.send(message=f"Message deleted by {deleter.name}#{deleter.discriminator}")
-        except:
+                await channel.send(f"Message deleted by {deleter.name}#{deleter.discriminator}")
+                return
+        except Exception as e:
             await channel.send("Message deleted by someone")
+            print(f"An error occurred: {e}")
+
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
