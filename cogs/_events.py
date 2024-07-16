@@ -1034,6 +1034,14 @@ class _events(commands.Cog):
 
 
     @commands.Cog.listener()
+    async def on_message_delete(self, message):
+        channel_id = 1089639606091259994
+        guild_id = payload.guild_id
+        guild = self.bot.get_guild(guild_id)
+        channel = self.bot.get_channel(channel_id)
+        await channel.send("**Message deleted** \n\n " + message.content)
+
+    @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
         channel_id = 1089639606091259994
         guild_id = payload.guild_id
@@ -1046,7 +1054,7 @@ class _events(commands.Cog):
             channel = self.bot.get_channel(channel_id)
             if channel is None:
                 return
-
+            await channel.send()
             async for entry in guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
                 deleter = entry.user
                 await channel.send(f"Message deleted by {deleter.name}#{deleter.discriminator}")
