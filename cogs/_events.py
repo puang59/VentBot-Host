@@ -1041,7 +1041,7 @@ class _events(commands.Cog):
 
         if guild is None or channel is None:
             return
-        if not message.author.id == 962603846696337408
+        if not message.author.id == 962603846696337408:
             await channel.send(f"**Message deleted**\n{message.content}")
 
     # @commands.Cog.listener()
