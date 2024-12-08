@@ -27,7 +27,8 @@ class _commands(commands.Cog):
             rep = data['rep']
             embed = discord.Embed(
                 description=f"Server Reputation:```{rep} rep```", colour=discord.Colour.lighter_grey())
-            embed.set_author(name=member.name, icon_url=member.avatar.url)
+            embed.set_author(name=member.name, icon_url=member.avatar.url if member.avatar else None)
+
             await confirmation.delete()
             await ctx.send(embed=embed)
         else:
@@ -59,10 +60,9 @@ class _commands(commands.Cog):
             await ctx.send("User does not exist!")
 
     @commands.command()
-    @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def lb(self, ctx):
         """Shows reputation leaderboard"""
-        query = "SELECT * FROM reputation ORDER BY rep DESC LIMIT 10;"
+        query = "SELECT * FROM reputation ORDER BY rep DESC LIMIT 20;"
         results = await self.conn.fetch(query)
 
         temp = ""
