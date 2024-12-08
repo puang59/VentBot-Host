@@ -13,10 +13,6 @@ class _commands(commands.Cog):
     async def cog_load(self):
         self.conn = await self.bot.get_db_connection()
 
-    @commands.command()
-    async def psqlTest(self, ctx):
-        await ctx.send("This command is working")
-
     @commands.command(aliases=["rep"])
     # @commands.check(lambda ctx: ctx.author.id in config.admins)
     async def reputation(self, ctx, member: discord.Member = None):
@@ -74,7 +70,11 @@ class _commands(commands.Cog):
         guild = self.bot.get_guild(943556434644328498)
 
         for result in results:
-            member = guild.get_member(result['userid'])
+            try:
+                member = guild.get_member(result['userid'])
+            except:
+                continue
+
             if i <= 3:
                 place = ["🥇", "🥈", "🥉"][i-1]
             else:
