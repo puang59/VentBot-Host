@@ -70,9 +70,8 @@ class _commands(commands.Cog):
         guild = self.bot.get_guild(943556434644328498)
 
         for result in results:
-            try:
-                member = guild.get_member(result['userid'])
-            except:
+            member = guild.get_member(result['userid'])
+            if not member:
                 continue
 
             if i <= 3:
