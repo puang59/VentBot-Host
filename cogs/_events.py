@@ -261,6 +261,7 @@ class _events(commands.Cog):
     async def on_message(self, msg):
         if not msg.author.bot:
 
+<<<<<<< HEAD
             # ## Profanity Filter
             # if msg.content.lower() in config.slurs:
             #     if msg.channel.id == 1109394738257338378:
@@ -268,6 +269,15 @@ class _events(commands.Cog):
             #         duration = datetime.timedelta(minutes=20)
             #         await msg.author.timeout(duration, reason="Profanity")
             #         await msg.author.send("Please avoid using that term in global chats")
+=======
+            ## Profanity Filter
+            if msg.content.lower() in config.slurs:
+                if msg.channel.id == 1109394738257338378:
+                    await msg.delete()
+                    duration = datetime.timedelta(minutes=20)
+                    await msg.author.timeout(duration, reason="Profanity")
+                    await msg.author.send("Please avoid using that term in global chats")
+>>>>>>> b27d30de63089145e8f3a02731fe304d7f66c723
 
             t = time.localtime()
             current_time = time.strftime("%H:%M", t)
@@ -685,7 +695,7 @@ class _events(commands.Cog):
                         await text_channel.set_permissions(payload.member, send_messages=True, view_channel=True)
                         await text_channel.set_permissions(guild.default_role, send_messages=False, view_channel=False)
                         await text_channel.edit(topic=f"Custom PRIVATE Vent channel for {payload.member.name}")
-                        await text_channel.edit(slowmode_delay=7200)
+                        # await text_channel.edit(slowmode_delay=7200)
 
                         ema = discord.Embed(
                             description="1) Make your text fit in one single message because the channel will be deleted once your vent is posted in public channels.\n\n2) Dm <@962603846696337408> to get your message deleted or edited (A staff member will assist you).\n\n3) You can DM <@962603846696337408> bot for any help related to the server.\n\nPlease vent here in this channel and not in bot's DM.\n__React with 🔍 emoji for more information__"
