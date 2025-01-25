@@ -1,11 +1,11 @@
 from discord.ext import commands
 import discord
-import time 
+import time
 
 from .utils import timeFile, formats
 
 import pkg_resources
-import datetime 
+import datetime
 
 import config
 
@@ -16,8 +16,7 @@ class _stats(commands.Cog):
     """Bot statistics"""
     def __init__(self, bot):
         self.bot = bot
-        # self.start_time = time.time()
-
+        self.start_time = time.time()
 
     def bot_uptime(self):
         current_time = time.time()
@@ -52,7 +51,7 @@ class _stats(commands.Cog):
         embed = discord.Embed(description='Commit History:\n' + revision)
         embed.set_author(name="GitHub", icon_url="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png")
         embed.timestamp = discord.utils.utcnow()
-        await ctx.send(embed=embed) 
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def about(self, ctx):
@@ -63,7 +62,7 @@ class _stats(commands.Cog):
         embed.title = 'VentBot-Host'
         embed.url = 'https://github.com/puang59/VentBot-Host'
         embed.colour = discord.Colour.blurple()
-       
+
         ownerId = config.ownerIds
         botOwner = ctx.guild.get_member(ownerId[1])
         embed.set_author(name=str(botOwner.name), icon_url=botOwner.display_avatar.url)
