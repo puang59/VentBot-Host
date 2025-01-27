@@ -10,7 +10,7 @@ import contextlib
 
 from cogs.utils.help_utils import HelpEmbed, MyHelp
 
-# import asyncpg
+import asyncpg
 import config
 
 import pygit2
@@ -26,8 +26,8 @@ intents = discord.Intents.all()
 intents.members = True
 ventText = stories.find_one({"guild": "vent"})
 
-# async def create_db_pool():
-#     return await asyncpg.create_pool(config.postgresURI)
+async def create_db_pool():
+    return await asyncpg.create_pool(config.postgresURI)
 
 class VentBot(commands.Bot):
     def __init__(self, *args, **kwargs):
@@ -46,27 +46,26 @@ class VentBot(commands.Bot):
             'cogs._utility',
             'jishaku'
         ]
-        # self.db_pool = None
-        # self.db_connection = None
-        ...
+        self.db_pool = None
+        self.db_connection = None
 
     # Setting up database with table queries
-    # async def setup_db(self):
-    #     self.db_pool = await create_db_pool()
-    #     self.db_connection = await self.db_pool.acquire()
-    #     # Create tables if not exists
-    #     queries = [
-    #         """
-    #         CREATE TABLE IF NOT EXISTS reputation(
-    #             userID NUMERIC(50, 0) PRIMARY KEY,
-    #             rep NUMERIC(10, 0)
-    #         );
-    #         """,
-    #     ]
-    #
-    #     async with self.db_pool.acquire() as connection:
-    #         for query in queries:
-    #             await connection.execute(query)
+    async def setup_db(self):
+        self.db_pool = await create_db_pool()
+        self.db_connection = await self.db_pool.acquire()
+        # Create tables if not exists
+        queries = [
+            """
+            CREATE TABLE IF NOT EXISTS reputation(
+                userID NUMERIC(50, 0) PRIMARY KEY,
+                rep NUMERIC(10, 0)
+            );
+            """,
+        ]
+
+        async with self.db_pool.acquire() as connection:
+            for query in queries:
+                await connection.execute(query)
 
     global check_if_allowed
     def check_if_allowed(ctx):
@@ -83,16 +82,16 @@ class VentBot(commands.Bot):
         print("                                            |__/                      |__/                   ")
 
     async def start(self, *args, **kwargs):
-        # await self.setup_db()
+        await self.setup_db()
         await super().start(*args, **kwargs)
 
     async def close(self):
-        # await self.db_pool.release(self.db_connection)
-        # await self.db_pool.close()
+        await self.db_pool.release(self.db_connection)
+        await self.db_pool.close()
         await super().close()
 
-    # async def get_db_connection(self):
-    #     return self.db_connection
+    async def get_db_connection(self):
+        return self.db_connection
 
     async def on_connect(self):
         print("Connected to Discord!")

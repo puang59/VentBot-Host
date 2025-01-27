@@ -24,8 +24,8 @@ class _events(commands.Cog):
         self.conn = None
         self.check_delete_channels.start()
 
-    async def cog_load(self):
-        self.conn = await self.bot.get_db_connection()
+    # async def cog_load(self):
+    #     self.conn = await self.bot.get_db_connection()
 
     global collection
     global prof
