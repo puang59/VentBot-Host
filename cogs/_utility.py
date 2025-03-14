@@ -14,8 +14,10 @@ import tabulate
 admins = config.admins
 heads = config.ownerIds
 
+
 class _utility(commands.Cog):
     """Commands for server moderation"""
+
     def __init__(self, bot):
         self.bot = bot
         self.conn = None
@@ -62,27 +64,27 @@ class _utility(commands.Cog):
             await ctx.message.add_reaction("\U0001f44e")
             await ctx.send("Cannot find the matching user id")
 
-    @commands.command(description = "Removes every instance of a user")
+    @commands.command(description="Removes every instance of a user")
     @commands.check(lambda ctx: ctx.author.id in heads)
     async def hardclean(self, ctx, user):
         """Cleans every initials of a member from each database collection"""
         counter = 0
         try:
-            collection.delete_many({'author_id': user}) # all vent
+            collection.delete_many({'author_id': user})  # all vent
             await ctx.channel.send("Cleaned all previous vent messages ..")
             counter += 1
         except Exception as e:
             await ctx.channel.send(f"Failed to clean vent messages: {e}")
 
         try:
-            prof.delete_many({'user': user}) # reputation log
+            prof.delete_many({'user': user})  # reputation log
             await ctx.channel.send("Cleaned all reputation log ... ")
             counter += 1
         except Exception as e:
             await ctx.channel.send(f"Failed to clean reputation log: {e}")
 
         try:
-            logdb.delete_many({'userId': user}) # log delete
+            logdb.delete_many({'userId': user})  # log delete
             await ctx.channel.send("Cleaned all related log ...")
             counter += 1
         except Exception as e:
@@ -97,7 +99,7 @@ class _utility(commands.Cog):
 
         await ctx.channel.send(f"`SuccessCode: {counter}/4`")
 
-    @commands.command(description = "DMs everyone in the server | .textall <message>")
+    @commands.command(description="DMs everyone in the server | .textall <message>")
     @commands.check(lambda ctx: ctx.author.id in heads)
     async def textall(self, ctx, *, message):
         """DMs everyone in the server"""
@@ -111,7 +113,8 @@ class _utility(commands.Cog):
 
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in heads)
-    async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg):
+    async def text(
+        self, ctx, members: commands.Greedy[discord.Member], *, msg):
      """DMs specified members of the server"""
      for member in members:
          # Check if user input is a member ID
@@ -135,11 +138,10 @@ class _utility(commands.Cog):
          except:
              await ctx.send(f"<:disagree:943603027854626816> Message couldn't be sent to {target_member.mention}")
 
-
-
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in heads)
-    async def text(self, ctx, members: commands.Greedy[discord.Member], *, msg):
+    async def text(
+        self, ctx, members: commands.Greedy[discord.Member], *, msg):
         """DMs specified members of the server"""
         if not members:
             await ctx.send('No members provided.')
@@ -155,7 +157,8 @@ class _utility(commands.Cog):
             except commands.errors.MemberNotFound:
                 # Check if user input is a unique ID containing alphabets
                 if not any(char.isalpha() for char in member):
-                    print("Invalid input: member ID or unique ID containing alphabets required")
+                    print(
+                        "Invalid input: member ID or unique ID containing alphabets required")
                     await ctx.send('Invalid input. Please provide a valid member ID or unique ID containing alphabets.')
                     return
                 data = ventUserId.find_one({'uniqueId': member})
@@ -208,7 +211,6 @@ class _utility(commands.Cog):
                 name="Issue Resolved", icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sign-check-icon.png/640px-Sign-check-icon.png")
             await member.send(embed=embedclose)
 
-
     @commands.command()
     async def kill(self, ctx):
         """Closes private space"""
@@ -220,7 +222,9 @@ class _utility(commands.Cog):
                 lines = file.readlines()
             channel_id_to_remove = ctx.channel.id
 
-            new_lines = [line for line in lines if not line.startswith(str(channel_id_to_remove))]
+            new_lines = [
+    line for line in lines if not line.startswith(
+        str(channel_id_to_remove))]
 
             with open("channelLife.txt", "w") as file:
                 file.writelines(new_lines)
@@ -230,7 +234,9 @@ class _utility(commands.Cog):
                 lines = file.readlines()
             user_id_to_remove = ctx.author.id
 
-            new_lines = [line for line in lines if not line.startswith(str(user_id_to_remove))]
+            new_lines = [
+    line for line in lines if not line.startswith(
+        str(user_id_to_remove))]
 
             with open("userChannel.txt", "w") as file:
                 file.writelines(new_lines)
@@ -260,8 +266,8 @@ class _utility(commands.Cog):
                 guild = self.bot.get_guild(943556434644328498)
                 other_chn = guild.get_channel(int(topicID))
 
-                #Deleting data from DB
-                inbox.delete_one({"channel":f"{ctx.channel.name}".upper()})
+                # Deleting data from DB
+                inbox.delete_one({"channel": f"{ctx.channel.name}".upper()})
 
                 await ctx.send("Deleting the channel in 10 seconds!")
                 await asyncio.sleep(10)
@@ -288,7 +294,6 @@ class _utility(commands.Cog):
             await ctx.send(embed=em)
         except:
             await ctx.send("<:disagree:943603027854626816> Message cannot be found.")
-
 
     @commands.command(description="Deletes a vent message when code is provided")
     # @commands.check(lambda ctx: ctx.author.id in admins)
@@ -318,17 +323,17 @@ class _utility(commands.Cog):
         collection.delete_one({"code": code})
         await ctx.send("<:agree:943603027313565757> Deleted")
 
-
-    @commands.command(aliases=["reset"])
+    @commands.command(name="reset")
     @commands.check(lambda ctx: ctx.author.id in admins)
-    async def edit(self, ctx, code):
+    @commands.cooldown(4, 300, commands.BucketType.member)
+    async def reset(self, ctx, user, *, reason = None):
         """Resets the channel cooldown just incase someone requests to edit their vent message"""
         guild = self.bot.get_guild(943556434644328498)
         data = collection.find_one({"code": code})
         member = guild.get_member(int(data["author_id"]))
         ch = self.bot.get_channel(int(data["channel_id"]))
-        #role = discord.utils.get(ctx.guild.roles, name="Blocked")
-        #await member.remove_roles(role)
+        # role = discord.utils.get(ctx.guild.roles, name="Blocked")
+        # await member.remove_roles(role)
         await ch.set_permissions(member, send_messages=True, view_channel=True)
 
         # deleting message from vent channel
@@ -365,7 +370,11 @@ class _utility(commands.Cog):
         """Deletes a vent message when messageid is provided"""
         if collection.find_one({'msg_id': int(id)}):
             data = collection.find_one({'msg_id': int(id)})
-            ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093, 1108828942019858582]
+            ventChannleIDs = [
+    943556439195152477,
+    1014201909118251098,
+    1035490966934659093,
+     1108828942019858582]
             for ids in ventChannleIDs:
                 try:
                     channel = self.bot.get_channel(ids)
@@ -376,7 +385,11 @@ class _utility(commands.Cog):
                 except:
                     continue
         else:
-            ventChannleIDs = [943556439195152477, 1014201909118251098, 1035490966934659093, 1108828942019858582]
+            ventChannleIDs = [
+    943556439195152477,
+    1014201909118251098,
+    1035490966934659093,
+     1108828942019858582]
             for ids in ventChannleIDs:
                 try:
                     channel = self.bot.get_channel(ids)
@@ -417,30 +430,30 @@ class _utility(commands.Cog):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(f'This command is on cooldown. Try again in {error.retry_after:.2f}s')
 
-   @commands.command()
-   @commands.check(lambda ctx: ctx.author.id in admins)
-   @commands.cooldown(4, 300, commands.BucketType.member)
-   async def ban(self, ctx, user, *, reason = None):
-       characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    @commands.command()
+    @commands.check(lambda ctx: ctx.author.id in admins)
+    @commands.cooldown(4, 300, commands.BucketType.member)
+    async def ban(self, ctx, user, *, reason = None):
+        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
-       guild = self.bot.get_guild(943556434644328498)
-       for char in user:
-           if char in characters:
-               try:
-                   data = ventUserId.find_one({'uniqueId': str(user)})
-                   member = guild.get_member(int(data['user']))
-                   await member.ban(reason=reason)
-                   await ctx.send("Banned successfully!")
-                   break
-               except Exception as err:
-                   await ctx.send(err)
-           else:
-               try:
-                   member = guild.get_member(int(user))
-                   await member.ban(reason=reason)
-                   await ctx.send('Banned successfully')
-               except Exception as err:
-                   await ctx.send(err)
+        guild = self.bot.get_guild(943556434644328498)
+        for char in user:
+            if char in characters:
+                try:
+                    data = ventUserId.find_one({'uniqueId': str(user)})
+                    member = guild.get_member(int(data['user']))
+                    await member.ban(reason=reason)
+                    await ctx.send("Banned successfully!")
+                    break
+                except Exception as err:
+                    await ctx.send(err)
+            else:
+                try:
+                    member = guild.get_member(int(user))
+                    await member.ban(reason=reason)
+                    await ctx.send('Banned successfully')
+                except Exception as err:
+                    await ctx.send(err)
 
     @commands.command()
     @commands.check(lambda ctx: ctx.author.id in admins)
